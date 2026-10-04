@@ -48,7 +48,7 @@ public class TripBudgetEstimate {
     private LocalDate generatedAt;
 
     @OneToOne
-    @MapsId
+    @JoinColumn(name = "trip_id", nullable = false, unique = true)
     @JsonIgnore
     private Trip trip;
 

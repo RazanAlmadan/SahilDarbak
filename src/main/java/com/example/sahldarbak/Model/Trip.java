@@ -61,13 +61,12 @@ public class Trip {
     private Set<TripPlace> tripPlace;
 
     @OneToOne
-    @MapsId
+    @JoinColumn(name = "travel_request_id", unique = true)
     @JsonIgnore
     private TravelRequest travelRequest;
 
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "trip")
-    @PrimaryKeyJoinColumn
     private TripBudgetEstimate tripBudgetEstimate;
 
 
