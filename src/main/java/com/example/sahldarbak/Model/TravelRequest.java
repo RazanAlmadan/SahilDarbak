@@ -71,6 +71,5 @@ public class TravelRequest {
     private Set<Child> children;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "travelRequest")
-    @PrimaryKeyJoinColumn
     private Trip trip;
 }
