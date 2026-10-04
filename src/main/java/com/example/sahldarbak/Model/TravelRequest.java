@@ -45,7 +45,6 @@ public class TravelRequest {
     @Positive(message = "adults count must be greater than zero")
     private Integer adultsCount;
 
-    @NotEmpty(message = "status is required")
     @Pattern(regexp = "^(open|completed|cancelled)$", message = "status must be open, completed, or cancelled")
     @Column(columnDefinition = "varchar(10) not null")
     private String status;
@@ -70,6 +69,6 @@ public class TravelRequest {
     @OneToMany(mappedBy = "travelRequest", cascade = CascadeType.ALL)
     private Set<Child> children;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "travelRequest")
+    @OneToOne(mappedBy = "travelRequest")
     private Trip trip;
 }
