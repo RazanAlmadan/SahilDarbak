@@ -3,6 +3,7 @@ package com.example.sahldarbak.Service;
 
 import com.example.sahldarbak.Api.ApiException;
 import com.example.sahldarbak.Model.TravelRequest;
+import com.example.sahldarbak.Repository.ChildRepository;
 import com.example.sahldarbak.Repository.TravelRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.List;
 public class TravelRequestService {
 
     private final TravelRequestRepository travelRequestRepository;
+    private final ChildRepository childRepository;
 
 
     //CRUD METHOD
@@ -55,20 +57,29 @@ public class TravelRequestService {
             travelRequest.setGroupSize(null);
         }
 
-        // status is set automatically when creating a new travel request
-        travelRequest.setStatus("open");
+        // request is incomplete until the user submits all preferences
+        travelRequest.setStatus("draft");
         travelRequestRepository.save(travelRequest);
     }
 
 
     //UPDATE
-    public void updateTravelRequest(Integer travel_request_id, TravelRequest travelRequest){
+    public void updateTravelRequest(Integer travelRequestId, TravelRequest travelRequest){
 
-        TravelRequest oldTravelRequest = travelRequestRepository.findTravelRequestById(travel_request_id);
+        TravelRequest oldTravelRequest = travelRequestRepository.findTravelRequestById(travelRequestId);
 
         // check if travel request exists
         if (oldTravelRequest == null) {
             throw new ApiException("travel request not found");
+        }
+
+        // completed or cancelled request cannot be updated
+        if (oldTravelRequest.getStatus().equals("completed") || oldTravelRequest.getStatus().equals("cancelled")) {
+            throw new ApiException("completed or cancelled travel request cannot be updated");
+        }
+        // cannot change family travel type while children are still linked
+        if (oldTravelRequest.getTravelType().equals("family") && !travelRequest.getTravelType().equals("family") && childRepository.countChildByTravelRequest_Id(travelRequestId) > 0) {
+            throw new ApiException("remove children before changing travel type from family");
         }
 
         // end date must be after start date
@@ -107,22 +118,57 @@ public class TravelRequestService {
         oldTravelRequest.setTravelType(travelRequest.getTravelType());
         oldTravelRequest.setGroupSize(travelRequest.getGroupSize());
         oldTravelRequest.setAdultsCount(travelRequest.getAdultsCount());
-
-        // status is not changed through normal update
+        // any update makes the request incomplete again
+        oldTravelRequest.setStatus("draft");
         travelRequestRepository.save(oldTravelRequest);
     }
 
 
     //DELETE
-    public void deleteTravelRequest(Integer travel_request_id){
+    public void deleteTravelRequest(Integer travelRequestId){
 
-        TravelRequest travelRequest = travelRequestRepository.findTravelRequestById(travel_request_id);
+        TravelRequest travelRequest = travelRequestRepository.findTravelRequestById(travelRequestId);
+
+        // check if travel request exists
+        if (travelRequest == null) {
+            throw new ApiException("travel request not found");
+        }
+        // cannot delete travel request if a trip was created from it
+        if (travelRequest.getTrip() != null) {
+            throw new ApiException("cannot delete travel request because it is linked to a trip");
+        }
+
+        travelRequestRepository.delete(travelRequest);
+    }
+
+
+    // SUBMIT TRAVEL REQUEST
+    public void submitTravelRequest(Integer travelRequestId) {
+
+        TravelRequest travelRequest = travelRequestRepository.findTravelRequestById(travelRequestId);
 
         // check if travel request exists
         if (travelRequest == null) {
             throw new ApiException("travel request not found");
         }
 
-        travelRequestRepository.delete(travelRequest);
+        // completed or cancelled request cannot be submitted
+        if (travelRequest.getStatus().equals("completed") || travelRequest.getStatus().equals("cancelled")) {
+            throw new ApiException("completed or cancelled travel request cannot be submitted");
+        }
+
+        // check if general preference is added
+        if (travelRequest.getGeneralPreference() == null) {
+            throw new ApiException("general preference is required");
+        }
+
+        // family travel must have at least one child
+        if (travelRequest.getTravelType().equals("family") && (travelRequest.getChildren() == null || travelRequest.getChildren().isEmpty())) {
+            throw new ApiException("family travel must include at least one child");
+        }
+
+        // request is complete and ready for recommendation
+        travelRequest.setStatus("open");
+        travelRequestRepository.save(travelRequest);
     }
 }

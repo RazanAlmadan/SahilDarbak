@@ -45,7 +45,7 @@ public class TravelRequest {
     @Positive(message = "adults count must be greater than zero")
     private Integer adultsCount;
 
-    @Pattern(regexp = "^(open|completed|cancelled)$", message = "status must be open, completed, or cancelled")
+    @Pattern(regexp = "^(draft|open|completed|cancelled)$", message = "status must be draft, open, completed, or cancelled")
     @Column(columnDefinition = "varchar(10) not null")
     private String status;
 
