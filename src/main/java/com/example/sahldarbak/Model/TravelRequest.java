@@ -69,4 +69,8 @@ public class TravelRequest {
 
     @OneToMany(mappedBy = "travelRequest", cascade = CascadeType.ALL)
     private Set<Child> children;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "travelRequest")
+    @PrimaryKeyJoinColumn
+    private Trip trip;
 }
