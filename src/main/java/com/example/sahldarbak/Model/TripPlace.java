@@ -3,6 +3,7 @@ package com.example.sahldarbak.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +30,7 @@ public class TripPlace {
     @Column(columnDefinition = "varchar(50) not null")
     private String name;
 
-    @NotEmpty(message = "scheduled at cannot be empty")
+    @NotNull(message = "scheduled at cannot be empty")
     private LocalDate scheduledAt;
 
     private String notes;

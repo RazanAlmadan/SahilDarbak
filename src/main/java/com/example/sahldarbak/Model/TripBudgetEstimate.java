@@ -45,6 +45,7 @@ public class TripBudgetEstimate {
     @Column(columnDefinition = "double not null")
     private Double totalEstimate;
 
+
     private LocalDate generatedAt;
 
     @OneToOne
