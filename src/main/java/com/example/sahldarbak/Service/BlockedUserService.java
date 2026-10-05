@@ -18,6 +18,7 @@ public class BlockedUserService {
     private final UserRepository userRepository;
 
 //    CRUD without update is no need for it
+
     public List<BlockedUser> get(){ return blockedUserRepository.findAll();}
 
     public void add(Integer blockerId, Integer blockedId) {
@@ -53,3 +54,5 @@ public class BlockedUserService {
 
 
 }
+
+// Extra endpoints

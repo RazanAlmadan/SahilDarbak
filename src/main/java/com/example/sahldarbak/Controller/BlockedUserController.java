@@ -12,6 +12,7 @@ public class BlockedUserController {
 
     private final BlockedUserService blockedUserService;
 
+// CRUD without update as block action only needs removing
     @GetMapping("/get")
     public ResponseEntity<?> get() {
         return ResponseEntity.status(200).body(blockedUserService.get());

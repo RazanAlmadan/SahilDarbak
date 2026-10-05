@@ -22,25 +22,9 @@ public class TravelMatchService {
     private final BlockedUserRepository blockedUserRepository;
     private final ProfileRepository profileRepository;
 
-//    return the profiles of people in which they are in the same city and country the user is in.
-public List<Profile> getMatches(Integer userId) {
-    TravelPresence mine = travelPresenceRepository.findTravelPresenceById(userId);
-    if (mine == null)
-        throw new ApiException("check in to a city first");
 
-    List<Integer> ids = new ArrayList<>();
-    for (TravelPresence p : travelPresenceRepository.findByCountryAndCity(mine.getCountry(), mine.getCity())) {
-        Integer otherId = p.getId();
-        if (otherId.equals(userId))
-            continue;
-        if (blockedUserRepository.existsByBlockerIdAndBlockedId(userId, otherId)
-                || blockedUserRepository.existsByBlockerIdAndBlockedId(otherId, userId))
-            continue;
-        ids.add(otherId);
-    }
-    return profileRepository.findAllById(ids);
-}
 
+// CRUD without get and delete
 
     // send an invite after you see the profiles given from the TravelPresence getMatches method
     public void add(Integer senderId, Integer receiverId, String message) {
@@ -91,4 +75,25 @@ public List<Profile> getMatches(Integer userId) {
     }
 
     // no delete: a rejected row must stay, and rows are removed by the user-delete cascade
+
+//    Extra endpoints:
+
+//    return the profiles of people in which they are in the same city and country the user is in.
+public List<Profile> getMatches(Integer userId) {
+    TravelPresence mine = travelPresenceRepository.findTravelPresenceById(userId);
+    if (mine == null)
+        throw new ApiException("check in to a city first");
+
+    List<Integer> ids = new ArrayList<>();
+    for (TravelPresence p : travelPresenceRepository.findByCountryAndCity(mine.getCountry(), mine.getCity())) {
+        Integer otherId = p.getId();
+        if (otherId.equals(userId))
+            continue;
+        if (blockedUserRepository.existsByBlockerIdAndBlockedId(userId, otherId)
+                || blockedUserRepository.existsByBlockerIdAndBlockedId(otherId, userId))
+            continue;
+        ids.add(otherId);
+    }
+    return profileRepository.findAllById(ids);
+}
 }

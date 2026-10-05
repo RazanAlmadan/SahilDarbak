@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.*;
 public class TravelMatchController {
     private final TravelMatchService travelMatchService;
 
-    @GetMapping("/matches/{userId}")
-    public ResponseEntity<?> getMatches(@PathVariable Integer userId) {
-        return ResponseEntity.status(200).body(travelMatchService.getMatches(userId));
-    }
 
+//
     @PostMapping("/add/{senderId}/{receiverId}")
     public ResponseEntity<?> add(@PathVariable Integer senderId,
                                  @PathVariable Integer receiverId,
