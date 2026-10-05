@@ -39,8 +39,8 @@ public class TravelPresenceService {
             throw new ApiException("this user already has a travel presence");
 
         TravelPresence travelPresence= new TravelPresence();
-        travelPresence.setCity(travelPresenceDTO.getCity());
-        travelPresence.setCountry(travelPresenceDTO.getCountry());
+        travelPresence.setCity(travelPresenceDTO.getCity().trim().toLowerCase());
+        travelPresence.setCountry(travelPresenceDTO.getCountry().trim().toLowerCase());
         travelPresence.setUser(user);
         travelPresenceRepository.save(travelPresence);
 
@@ -52,8 +52,8 @@ public class TravelPresenceService {
         if (presence == null)
             throw new ApiException("user is not checked in anywhere");
 
-        presence.setCountry(presenceDTO.getCountry());
-        presence.setCity(presenceDTO.getCity());
+        presence.setCountry(presenceDTO.getCountry().trim().toLowerCase());
+        presence.setCity(presenceDTO.getCity().trim().toLowerCase());
 
         travelPresenceRepository.save(presence);
     }

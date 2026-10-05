@@ -2,8 +2,10 @@ package com.example.sahldarbak.Service;
 
 import com.example.sahldarbak.Api.ApiException;
 import com.example.sahldarbak.Model.BlockedUser;
+import com.example.sahldarbak.Model.TravelMatch;
 import com.example.sahldarbak.Model.User;
 import com.example.sahldarbak.Repository.BlockedUserRepository;
+import com.example.sahldarbak.Repository.TravelMatchRepository;
 import com.example.sahldarbak.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.List;
 public class BlockedUserService {
     private final BlockedUserRepository blockedUserRepository;
     private final UserRepository userRepository;
+    private final TravelMatchRepository travelMatchRepository;
 
 //    CRUD without update is no need for it
 
@@ -40,6 +43,17 @@ public class BlockedUserService {
         blockedUser.setBlocker(blocker);
         blockedUser.setBlocked(blocked);
         blockedUser.setBlockedAt(LocalDate.now());
+
+        // cancel pending invites between the two users, in both directions
+        TravelMatch sent = travelMatchRepository
+                .findTravelMatchBySenderIdAndReceiverIdAndStatus(blockerId, blockedId, "pending");
+        if (sent != null)
+            travelMatchRepository.delete(sent);
+
+        TravelMatch received = travelMatchRepository
+                .findTravelMatchBySenderIdAndReceiverIdAndStatus(blockedId, blockerId, "pending");
+        if (received != null)
+            travelMatchRepository.delete(received);
 
         blockedUserRepository.save(blockedUser);
     }

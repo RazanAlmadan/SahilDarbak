@@ -42,11 +42,34 @@ public class TravelMatchService {
         if (receiver == null)
             throw new ApiException("receiver user not found");
 
+        // same-city gate
+        TravelPresence senderPresence = travelPresenceRepository.findTravelPresenceById(senderId);
+        if (senderPresence == null)
+            throw new ApiException("check in to a city first");
+
+        TravelPresence receiverPresence = travelPresenceRepository.findTravelPresenceById(receiverId);
+        if (receiverPresence == null)
+            throw new ApiException("this user is not checked in anywhere");
+
+        if (!senderPresence.getCountry().equals(receiverPresence.getCountry())
+                || !senderPresence.getCity().equals(receiverPresence.getCity()))
+            throw new ApiException("you and this user are not in the same city");
+
+        // block gate (both directions)
+        if (blockedUserRepository.existsByBlockerIdAndBlockedId(senderId, receiverId)
+                || blockedUserRepository.existsByBlockerIdAndBlockedId(receiverId, senderId))
+            throw new ApiException("you cannot invite this user");
+
+        // duplicate in the same direction (any status)
         if (travelMatchRepository.existsBySenderIdAndReceiverId(senderId, receiverId))
             throw new ApiException("you already sent an invite to this user");
 
+        // reverse direction: block if pending or accepted
         if (travelMatchRepository.existsBySenderIdAndReceiverIdAndStatus(receiverId, senderId, "pending"))
             throw new ApiException("this user already sent you a pending invite, respond to it instead");
+
+        if (travelMatchRepository.existsBySenderIdAndReceiverIdAndStatus(receiverId, senderId, "accepted"))
+            throw new ApiException("you are already connected with this user");
 
         TravelMatch match = new TravelMatch();
         match.setSender(sender);
@@ -59,10 +82,13 @@ public class TravelMatchService {
     }
 
     // respond to an invite: only the status changes
-    public void update(Integer id, String status) {
+    public void update(Integer id, Integer userId, String status) {
         TravelMatch match = travelMatchRepository.findTravelMatchById(id);
         if (match == null)
             throw new ApiException("invite not found");
+
+        if (!match.getReceiver().getId().equals(userId))
+            throw new ApiException("only the receiver can respond");
 
         if (!status.equals("accepted") && !status.equals("rejected"))
             throw new ApiException("status must be accepted or rejected");

@@ -21,9 +21,16 @@ public class TravelMatchController {
         return ResponseEntity.status(200).body("invite sent successfully");
     }
 
-    @PutMapping("/update/{id}/{status}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @PathVariable String status) {
-        travelMatchService.update(id, status);
+    @PutMapping("/update/{id}/{userId}/{status}")
+    public ResponseEntity<?> update(@PathVariable Integer id,
+                                    @PathVariable Integer userId,
+                                    @PathVariable String status) {
+        travelMatchService.update(id, userId, status);
         return ResponseEntity.status(200).body("invite updated successfully");
+    }
+
+    @GetMapping("/matches/{userId}")
+    public ResponseEntity<?> getMatches(@PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(travelMatchService.getMatches(userId));
     }
 }
