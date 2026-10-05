@@ -7,8 +7,10 @@ import com.example.sahldarbak.Model.TravelPresence;
 import com.example.sahldarbak.Model.User;
 import com.example.sahldarbak.Repository.*;
 import lombok.RequiredArgsConstructor;
+import com.example.sahldarbak.DTO.ReceivedInviteDTO;
+import com.example.sahldarbak.DTO.ContactDTO;
 import org.springframework.stereotype.Service;
-
+import com.example.sahldarbak.DTO.SentInviteDTO;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -122,4 +124,97 @@ public List<Profile> getMatches(Integer userId) {
     }
     return profileRepository.findAllById(ids);
 }
+
+    // invites I sent, with the receiver's profile
+    public List<SentInviteDTO> getSent(Integer userId) {
+        if (!userRepository.existsById(userId))
+            throw new ApiException("user not found");
+
+        List<SentInviteDTO> result = new ArrayList<>();
+        for (TravelMatch m : travelMatchRepository.findTravelMatchesBySenderId(userId)) {
+            Profile receiverProfile = profileRepository.findProfileById(m.getReceiver().getId());
+            result.add(new SentInviteDTO(m.getId(), m.getMessage(), m.getStatus(), m.getCreatedAt(), receiverProfile));
+        }
+        return result;
+    }
+
+    // invites I received, with the sender's profile
+    public List<ReceivedInviteDTO> getReceived(Integer userId) {
+        if (!userRepository.existsById(userId))
+            throw new ApiException("user not found");
+
+        List<ReceivedInviteDTO> result = new ArrayList<>();
+        for (TravelMatch m : travelMatchRepository.findTravelMatchesByReceiverId(userId)) {
+            Profile senderProfile = profileRepository.findProfileById(m.getSender().getId());
+            result.add(new ReceivedInviteDTO(m.getId(), m.getMessage(), m.getStatus(), m.getCreatedAt(), senderProfile));
+        }
+        return result;
+    }
+
+    // my accepted connections (the other person's profile)
+    public List<Profile> getAccepted(Integer userId) {
+        if (!userRepository.existsById(userId))
+            throw new ApiException("user not found");
+
+        List<Integer> ids = new ArrayList<>();
+
+        for (TravelMatch m : travelMatchRepository.findTravelMatchesBySenderIdAndStatus(userId, "accepted"))
+            ids.add(m.getReceiver().getId());
+
+        for (TravelMatch m : travelMatchRepository.findTravelMatchesByReceiverIdAndStatus(userId, "accepted"))
+            ids.add(m.getSender().getId());
+
+        return profileRepository.findAllById(ids);
+
+
+    }
+
+//    pending count via user id
+    public Integer getPendingCount(Integer userId) {
+        if (!userRepository.existsById(userId))
+            throw new ApiException("user not found");
+
+        return (int) travelMatchRepository.countByReceiverIdAndStatus(userId, "pending");
+    }
+
+    // the other user's phone number, only for an accepted invite I am part of
+    public ContactDTO getContact(Integer inviteId, Integer userId) {
+        TravelMatch match = travelMatchRepository.findTravelMatchById(inviteId);
+        if (match == null)
+            throw new ApiException("invite not found");
+
+        if (!match.getStatus().equals("accepted"))
+            throw new ApiException("the invite is not accepted yet");
+
+        User other;
+        if (match.getSender().getId().equals(userId))
+            other = match.getReceiver();
+        else if (match.getReceiver().getId().equals(userId))
+            other = match.getSender();
+        else
+            throw new ApiException("you are not part of this invite");
+
+        return new ContactDTO(other.getId(), other.getPhoneNumber());
+    }
+
+    // people in my city that I have not invited yet (excludes me and blocked users)
+    public List<Profile> getNotInvited(Integer userId) {
+        TravelPresence mine = travelPresenceRepository.findTravelPresenceById(userId);
+        if (mine == null)
+            throw new ApiException("check in to a city first");
+
+        List<Integer> ids = new ArrayList<>();
+        for (TravelPresence p : travelPresenceRepository.findByCountryAndCity(mine.getCountry(), mine.getCity())) {
+            Integer otherId = p.getId();
+            if (otherId.equals(userId))
+                continue;
+            if (blockedUserRepository.existsByBlockerIdAndBlockedId(userId, otherId)
+                    || blockedUserRepository.existsByBlockerIdAndBlockedId(otherId, userId))
+                continue;
+            if (travelMatchRepository.existsBySenderIdAndReceiverId(userId, otherId))
+                continue;
+            ids.add(otherId);
+        }
+        return profileRepository.findAllById(ids);
+    }
 }

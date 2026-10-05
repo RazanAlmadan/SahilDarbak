@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import java.util.List;
 public class TravelPresenceService {
     private final TravelPresenceRepository travelPresenceRepository;
     private final UserRepository userRepository;
+    private final BlockedUserRepository blockedUserRepository;
 
 
 //    return all
@@ -42,6 +44,7 @@ public class TravelPresenceService {
         travelPresence.setCity(travelPresenceDTO.getCity().trim().toLowerCase());
         travelPresence.setCountry(travelPresenceDTO.getCountry().trim().toLowerCase());
         travelPresence.setUser(user);
+        travelPresence.setCheckedInAt(LocalDate.now());
         travelPresenceRepository.save(travelPresence);
 
     }
@@ -54,7 +57,7 @@ public class TravelPresenceService {
 
         presence.setCountry(presenceDTO.getCountry().trim().toLowerCase());
         presence.setCity(presenceDTO.getCity().trim().toLowerCase());
-
+        presence.setCheckedInAt(LocalDate.now());
         travelPresenceRepository.save(presence);
     }
 
@@ -68,5 +71,28 @@ public class TravelPresenceService {
         presence.getUser().setTravelPresence(null);
         travelPresenceRepository.delete(presence);
     }
+
+    // Extra endpoints
+
+    // number of travelers in my city, excluding me and blocked users
+    public Integer getNearbyCount(Integer userId) {
+        TravelPresence mine = travelPresenceRepository.findTravelPresenceById(userId);
+        if (mine == null)
+            throw new ApiException("check in to a city first");
+
+        int count = 0;
+        for (TravelPresence p : travelPresenceRepository.findByCountryAndCity(mine.getCountry(), mine.getCity())) {
+            Integer otherId = p.getId();
+            if (otherId.equals(userId))
+                continue;
+            if (blockedUserRepository.existsByBlockerIdAndBlockedId(userId, otherId)
+                    || blockedUserRepository.existsByBlockerIdAndBlockedId(otherId, userId))
+                continue;
+            count++;
+        }
+        return count;
+    }
+
+
 
 }

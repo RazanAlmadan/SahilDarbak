@@ -5,10 +5,14 @@ import com.example.sahldarbak.Model.BlockedUser;
 import com.example.sahldarbak.Model.TravelMatch;
 import com.example.sahldarbak.Model.User;
 import com.example.sahldarbak.Repository.BlockedUserRepository;
+import com.example.sahldarbak.Repository.ProfileRepository;
 import com.example.sahldarbak.Repository.TravelMatchRepository;
 import com.example.sahldarbak.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.example.sahldarbak.Model.Profile;
+import com.example.sahldarbak.Repository.ProfileRepository;
+import java.util.ArrayList;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,6 +23,7 @@ public class BlockedUserService {
     private final BlockedUserRepository blockedUserRepository;
     private final UserRepository userRepository;
     private final TravelMatchRepository travelMatchRepository;
+    private final ProfileRepository profileRepository;
 
 //    CRUD without update is no need for it
 
@@ -65,8 +70,29 @@ public class BlockedUserService {
 
         blockedUserRepository.delete(blockedUser);
     }
+// Extra endpoints
 
+    // profiles of the users I blocked
+    public List<Profile> getBlocked(Integer blockerId) {
+        if (!userRepository.existsById(blockerId))
+            throw new ApiException("user not found");
+
+        List<Integer> ids = new ArrayList<>();
+        for (BlockedUser b : blockedUserRepository.findBlockedUsersByBlockerId(blockerId))
+            ids.add(b.getBlocked().getId());
+
+        return profileRepository.findAllById(ids);
+    }
+
+    // true if either user blocked the other
+    public boolean isBlocked(Integer userA, Integer userB) {
+        if (!userRepository.existsById(userA) || !userRepository.existsById(userB))
+            throw new ApiException("user not found");
+
+        return blockedUserRepository.existsByBlockerIdAndBlockedId(userA, userB)
+                || blockedUserRepository.existsByBlockerIdAndBlockedId(userB, userA);
+    }
 
 }
 
-// Extra endpoints
+

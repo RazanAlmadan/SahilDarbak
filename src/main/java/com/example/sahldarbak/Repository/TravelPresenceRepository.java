@@ -12,4 +12,5 @@ public interface TravelPresenceRepository extends JpaRepository<TravelPresence,I
 
     TravelPresence findTravelPresenceById(Integer id);
     List<TravelPresence> findByCountryAndCity(String country, String city);
+
 }
