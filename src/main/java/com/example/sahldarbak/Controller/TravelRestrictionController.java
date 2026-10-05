@@ -19,14 +19,14 @@ public class TravelRestrictionController {
 
 
     // GET ALL
-    @GetMapping("/get-travel-restrictions")
+    @GetMapping("/get")
     public ResponseEntity<?> getTravelRestrictions() {
         return ResponseEntity.status(200).body(travelRestrictionService.getTravelRestrictions());
     }
 
 
     // ADD
-    @PostMapping("/add-travel-restriction/{travelRequestId}")
+    @PostMapping("/add/{travelRequestId}")
     public ResponseEntity<?> addTravelRestriction(@PathVariable Integer travelRequestId, @Valid @RequestBody TravelRestriction travelRestriction) {
         travelRestrictionService.addTravelRestriction(travelRequestId, travelRestriction);
         return ResponseEntity.status(200).body(new ApiResponse("travel restriction added successfully"));
@@ -34,7 +34,7 @@ public class TravelRestrictionController {
 
 
     // UPDATE
-    @PutMapping("/update-travel-restriction/{travelRestrictionId}")
+    @PutMapping("/update/{travelRestrictionId}")
     public ResponseEntity<?> updateTravelRestriction(@PathVariable Integer travelRestrictionId, @Valid @RequestBody TravelRestriction travelRestriction) {
         travelRestrictionService.updateTravelRestriction(travelRestrictionId, travelRestriction);
         return ResponseEntity.status(200).body(new ApiResponse("travel restriction updated successfully"));
@@ -42,7 +42,7 @@ public class TravelRestrictionController {
 
 
     // DELETE
-    @DeleteMapping("/delete-travel-restriction/{travelRestrictionId}")
+    @DeleteMapping("/delete/{travelRestrictionId}")
     public ResponseEntity<?> deleteTravelRestriction(@PathVariable Integer travelRestrictionId) {
         travelRestrictionService.deleteTravelRestriction(travelRestrictionId);
         return ResponseEntity.status(200).body(new ApiResponse("travel restriction deleted successfully"));

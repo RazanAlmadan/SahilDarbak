@@ -19,14 +19,14 @@ public class ActivityPreferenceController {
 
 
     // GET ALL
-    @GetMapping("/get-activity-preferences")
+    @GetMapping("/get")
     public ResponseEntity<?> getActivityPreferences() {
         return ResponseEntity.status(200).body(activityPreferenceService.getActivityPreferences());
     }
 
 
     // ADD
-    @PostMapping("/add-activity-preference/{travelRequestId}")
+    @PostMapping("/add/{travelRequestId}")
     public ResponseEntity<?> addActivityPreference(@PathVariable Integer travelRequestId, @Valid @RequestBody ActivityPreference activityPreference) {
         activityPreferenceService.addActivityPreference(travelRequestId, activityPreference);
         return ResponseEntity.status(200).body(new ApiResponse("activity preference added successfully"));
@@ -34,7 +34,7 @@ public class ActivityPreferenceController {
 
 
     // UPDATE
-    @PutMapping("/update-activity-preference/{activityPreferenceId}")
+    @PutMapping("/update/{activityPreferenceId}")
     public ResponseEntity<?> updateActivityPreference(@PathVariable Integer activityPreferenceId, @Valid @RequestBody ActivityPreference activityPreference) {
         activityPreferenceService.updateActivityPreference(activityPreferenceId, activityPreference);
         return ResponseEntity.status(200).body(new ApiResponse("activity preference updated successfully"));
@@ -42,7 +42,7 @@ public class ActivityPreferenceController {
 
 
     // DELETE
-    @DeleteMapping("/delete-activity-preference/{activityPreferenceId}")
+    @DeleteMapping("/delete/{activityPreferenceId}")
     public ResponseEntity<?> deleteActivityPreference(@PathVariable Integer activityPreferenceId) {
         activityPreferenceService.deleteActivityPreference(activityPreferenceId);
         return ResponseEntity.status(200).body(new ApiResponse("activity preference deleted successfully"));

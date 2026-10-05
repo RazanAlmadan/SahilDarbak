@@ -17,21 +17,22 @@ public class TravelRequestController {
     private final TravelRequestService travelRequestService;
 
     // GET
+    @GetMapping("/get")
     public ResponseEntity<?>getTravelRequests(){
         return ResponseEntity.status(200).body(travelRequestService.getTravelRequests());
     }
 
 
     // ADD
-    @PostMapping("/add-travel-request")
-    public ResponseEntity<?> addTravelRequest(@Valid @RequestBody TravelRequest travelRequest) {
-        travelRequestService.addTravelRequest(travelRequest);
+    @PostMapping("/add/{userId}")
+    public ResponseEntity<?> addTravelRequest(@PathVariable Integer userId,@Valid @RequestBody TravelRequest travelRequest) {
+        travelRequestService.addTravelRequest(userId, travelRequest);
         return ResponseEntity.status(200).body(new ApiResponse("travel request added successfully"));
     }
 
 
     // UPDATE
-    @PutMapping("/update-travel-request/{travelRequestId}")
+    @PutMapping("/update/{travelRequestId}")
     public ResponseEntity<?> updateTravelRequest(@PathVariable Integer travelRequestId, @Valid @RequestBody TravelRequest travelRequest) {
         travelRequestService.updateTravelRequest(travelRequestId, travelRequest);
         return ResponseEntity.status(200).body(new ApiResponse("travel request updated successfully"));
@@ -39,7 +40,7 @@ public class TravelRequestController {
 
 
     // DELETE
-    @DeleteMapping("/delete-travel-request/{travelRequestId}")
+    @DeleteMapping("/delete/{travelRequestId}")
     public ResponseEntity<?> deleteTravelRequest(@PathVariable Integer travelRequestId) {
         travelRequestService.deleteTravelRequest(travelRequestId);
         return ResponseEntity.status(200).body(new ApiResponse("travel request deleted successfully"));
