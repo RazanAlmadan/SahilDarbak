@@ -73,6 +73,8 @@ public class Trip {
     private User user;
 
 
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "trip")
+    private TravelPresence travelPresence;
 
 
 

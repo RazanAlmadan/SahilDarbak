@@ -36,4 +36,10 @@ public class TravelPresence {
     @MapsId
     private User user;
 
+
+    @OneToOne
+    @JoinColumn(name = "trip_id", nullable = false, unique = true)
+    @JsonIgnore
+    private Trip trip;
+
 }
