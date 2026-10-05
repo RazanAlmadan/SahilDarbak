@@ -1,6 +1,7 @@
 package com.example.sahldarbak.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -71,4 +72,9 @@ public class TravelRequest {
 
     @OneToOne(mappedBy = "travelRequest")
     private Trip trip;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private User user;
 }

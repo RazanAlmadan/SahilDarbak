@@ -35,7 +35,7 @@ public class TripPlace {
     private String notes;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "trip_id", nullable = false)
     @JsonIgnore
     private Trip trip;
 }

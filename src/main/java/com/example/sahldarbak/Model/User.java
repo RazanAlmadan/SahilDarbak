@@ -64,6 +64,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private Set<Trip> trips;
 
-
+    @OneToMany(mappedBy = "user")
+    private Set<TravelRequest> travelRequests;
 
 }
