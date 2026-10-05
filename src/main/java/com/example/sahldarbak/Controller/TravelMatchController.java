@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.*;
 public class TravelMatchController {
     private final TravelMatchService travelMatchService;
 
-    @GetMapping("/matches/{userId}")
-    public ResponseEntity<?> getMatches(@PathVariable Integer userId) {
-        return ResponseEntity.status(200).body(travelMatchService.getMatches(userId));
-    }
 
+//
     @PostMapping("/add/{senderId}/{receiverId}")
     public ResponseEntity<?> add(@PathVariable Integer senderId,
                                  @PathVariable Integer receiverId,
@@ -24,9 +21,46 @@ public class TravelMatchController {
         return ResponseEntity.status(200).body("invite sent successfully");
     }
 
-    @PutMapping("/update/{id}/{status}")
-    public ResponseEntity<?> update(@PathVariable Integer id, @PathVariable String status) {
-        travelMatchService.update(id, status);
+    @PutMapping("/update/{inviteId}/{userId}/{status}")
+    public ResponseEntity<?> update(@PathVariable Integer inviteId,
+                                    @PathVariable Integer userId,
+                                    @PathVariable String status) {
+        travelMatchService.update(inviteId, userId, status);
         return ResponseEntity.status(200).body("invite updated successfully");
+    }
+
+    @GetMapping("/matches/{userId}")
+    public ResponseEntity<?> getMatches(@PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(travelMatchService.getMatches(userId));
+    }
+
+    @GetMapping("/sent/{userId}")
+    public ResponseEntity<?> getSent(@PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(travelMatchService.getSent(userId));
+    }
+
+    @GetMapping("/received/{userId}")
+    public ResponseEntity<?> getReceived(@PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(travelMatchService.getReceived(userId));
+    }
+
+    @GetMapping("/accepted/{userId}")
+    public ResponseEntity<?> getAccepted(@PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(travelMatchService.getAccepted(userId));
+    }
+
+    @GetMapping("/pending-count/{userId}")
+    public ResponseEntity<?> getPendingCount(@PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(travelMatchService.getPendingCount(userId));
+    }
+
+    @GetMapping("/contact/{inviteId}/{userId}")
+    public ResponseEntity<?> getContact(@PathVariable Integer inviteId, @PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(travelMatchService.getContact(inviteId, userId));
+    }
+
+    @GetMapping("/not-invited/{userId}")
+    public ResponseEntity<?> getNotInvited(@PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(travelMatchService.getNotInvited(userId));
     }
 }

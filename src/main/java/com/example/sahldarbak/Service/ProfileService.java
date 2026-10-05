@@ -16,10 +16,10 @@ import java.util.List;
 public class ProfileService {
     private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
-//    get all profiles
-    public List<Profile> get(){ return profileRepository.findAll();}
 
-//    add profile
+//    CRUD without delete
+
+    public List<Profile> get(){ return profileRepository.findAll();}
     public void add(ProfileDTO profileDTO){
         User user = userRepository.findUserById(profileDTO.getUserId());
 
@@ -41,8 +41,6 @@ public class ProfileService {
 
 
     }
-
-//    update profile
     public void update(ProfileDTO profileDTO){
         Profile profile = profileRepository.findProfileById(profileDTO.getUserId());
 
@@ -61,5 +59,6 @@ public class ProfileService {
 
 //    no delete method as user can not delete his profile
 
+// Extra endpoints
 
 }

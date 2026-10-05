@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
     private final ProfileService profileService;
 
+//    CRUD without delete as profile cant be deleted unless a user is deleted
     @GetMapping("/get")
     public ResponseEntity<?> get() {
         return ResponseEntity.status(200).body(profileService.get());

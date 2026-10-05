@@ -16,4 +16,14 @@ public interface TravelMatchRepository extends JpaRepository<TravelMatch,Integer
 
     boolean existsBySenderIdAndReceiverIdAndStatus(Integer senderId, Integer receiverId, String status);
 
+    TravelMatch findTravelMatchBySenderIdAndReceiverIdAndStatus(Integer senderId, Integer receiverId, String status);
+
+    List<TravelMatch> findTravelMatchesBySenderId(Integer senderId);
+    List<TravelMatch> findTravelMatchesByReceiverId(Integer receiverId);
+
+    List<TravelMatch> findTravelMatchesBySenderIdAndStatus(Integer senderId, String status);
+
+    List<TravelMatch> findTravelMatchesByReceiverIdAndStatus(Integer receiverId, String status);
+
+    long countByReceiverIdAndStatus(Integer receiverId, String status);
 }

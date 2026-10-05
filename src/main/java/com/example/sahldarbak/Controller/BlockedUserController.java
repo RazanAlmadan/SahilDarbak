@@ -12,6 +12,7 @@ public class BlockedUserController {
 
     private final BlockedUserService blockedUserService;
 
+// CRUD without update as block action only needs removing
     @GetMapping("/get")
     public ResponseEntity<?> get() {
         return ResponseEntity.status(200).body(blockedUserService.get());
@@ -27,5 +28,15 @@ public class BlockedUserController {
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         blockedUserService.delete(id);
         return ResponseEntity.status(200).body("block record deleted successfully");
+    }
+
+    @GetMapping("/get-blocked/{blockerId}")
+    public ResponseEntity<?> getBlocked(@PathVariable Integer blockerId) {
+        return ResponseEntity.status(200).body(blockedUserService.getBlocked(blockerId));
+    }
+
+    @GetMapping("/is-blocked/{userA}/{userB}")
+    public ResponseEntity<?> isBlocked(@PathVariable Integer userA, @PathVariable Integer userB) {
+        return ResponseEntity.status(200).body(blockedUserService.isBlocked(userA, userB));
     }
 }

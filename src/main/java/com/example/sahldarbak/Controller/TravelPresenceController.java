@@ -35,4 +35,9 @@ public class TravelPresenceController {
         travelPresenceService.checkOut(userId);
         return ResponseEntity.status(200).body("checked out successfully");
     }
+
+    @GetMapping("/nearby-count/{userId}")
+    public ResponseEntity<?> getNearbyCount(@PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(travelPresenceService.getNearbyCount(userId));
+    }
 }

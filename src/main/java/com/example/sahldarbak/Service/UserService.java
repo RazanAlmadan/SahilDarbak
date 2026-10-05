@@ -14,21 +14,18 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    //    get all users
+// CRUD
     public List<User> get() {
         return userRepository.findAll();
     }
-
-    //    add a user
     public void add(User user) {
 
-//   exceptions
         if (userRepository.existsByEmail(user.getEmail()))
             throw new ApiException("email already occupied");
 
         if (userRepository.existsByPhoneNumber(user.getPhoneNumber()))
             throw new ApiException("phone number already occupied");
-//        manual date setting
+
         user.setCreatedAt(LocalDate.now());
         user.setId(null);
         userRepository.save(user);
@@ -36,15 +33,9 @@ public class UserService {
 
 
     public void update(Integer id, User user) {
-
-//        access old user
         User oldUser = userRepository.findUserById(id);
-
-//        validate existance of old user
         if (oldUser == null)
             throw new ApiException("no such user exist");
-
-//        validate the new user
         if (userRepository.existsByEmailAndIdNot(user.getEmail(), id)) {
             throw new ApiException("email is already registered");
         }
@@ -68,6 +59,8 @@ public class UserService {
 
         userRepository.delete(user);
     }
+
+//    Extra endpoints
 
 
 }
