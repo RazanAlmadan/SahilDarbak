@@ -45,6 +45,10 @@ public class TravelRequestService {
             travelRequest.setGroupSize(null);
             travelRequest.setAdultsCount(null);
 
+        }else if (travelRequest.getTravelType().equals("couple")) {
+            travelRequest.setGroupSize(null);
+            travelRequest.setAdultsCount(2);
+
         } else if (travelRequest.getTravelType().equals("group")) {
 
             // group size is required when travel type is group

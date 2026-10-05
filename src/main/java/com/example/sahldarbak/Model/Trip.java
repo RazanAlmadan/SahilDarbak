@@ -52,8 +52,6 @@ public class Trip {
     @Column(columnDefinition = "varchar(30) not null")
     private String status;
 
-    @NotEmpty
-    private String travelType;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trip")
     private Set<TripPlace> tripPlace;
