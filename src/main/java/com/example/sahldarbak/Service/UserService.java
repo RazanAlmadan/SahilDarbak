@@ -30,7 +30,7 @@ public class UserService {
             throw new ApiException("phone number already occupied");
 //        manual date setting
         user.setCreatedAt(LocalDate.now());
-
+        user.setId(null);
         userRepository.save(user);
     }
 
@@ -52,12 +52,12 @@ public class UserService {
             throw new ApiException("phone number is already registered");
         }
 
-        // update the olduser
+
         oldUser.setEmail(user.getEmail());
         oldUser.setPhoneNumber(user.getPhoneNumber());
         oldUser.setPassword(user.getPassword());
 
-//        save updates
+
         userRepository.save(oldUser);
     }
 

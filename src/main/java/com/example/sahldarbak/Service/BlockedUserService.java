@@ -17,6 +17,7 @@ public class BlockedUserService {
     private final BlockedUserRepository blockedUserRepository;
     private final UserRepository userRepository;
 
+//    CRUD without update is no need for it
     public List<BlockedUser> get(){ return blockedUserRepository.findAll();}
 
     public void add(Integer blockerId, Integer blockedId) {
@@ -40,6 +41,14 @@ public class BlockedUserService {
         blockedUser.setBlockedAt(LocalDate.now());
 
         blockedUserRepository.save(blockedUser);
+    }
+
+    public void delete(Integer id) {
+        BlockedUser blockedUser = blockedUserRepository.findBlockedUserById(id);
+        if (blockedUser == null)
+            throw new ApiException("block record not found");
+
+        blockedUserRepository.delete(blockedUser);
     }
 
 

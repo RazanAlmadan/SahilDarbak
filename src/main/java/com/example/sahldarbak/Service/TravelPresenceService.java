@@ -1,16 +1,20 @@
 package com.example.sahldarbak.Service;
 
 import com.example.sahldarbak.Api.ApiException;
-import com.example.sahldarbak.DTO.ProfileDTO;
+
 import com.example.sahldarbak.DTO.TravelPresenceDTO;
+import com.example.sahldarbak.Model.Profile;
 import com.example.sahldarbak.Model.TravelPresence;
 import com.example.sahldarbak.Model.User;
+import com.example.sahldarbak.Repository.BlockedUserRepository;
+import com.example.sahldarbak.Repository.ProfileRepository;
 import com.example.sahldarbak.Repository.TravelPresenceRepository;
 import com.example.sahldarbak.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,8 +23,13 @@ public class TravelPresenceService {
     private final TravelPresenceRepository travelPresenceRepository;
     private final UserRepository userRepository;
 
+
+//    return all
     public List<TravelPresence> get(){ return travelPresenceRepository.findAll();}
 
+
+
+//    create a travel presence
     public void add(TravelPresenceDTO travelPresenceDTO){
         User user = userRepository.findUserById(travelPresenceDTO.getUserId());
 
@@ -37,6 +46,7 @@ public class TravelPresenceService {
 
     }
 
+//    update a travel presence
     public void update(TravelPresenceDTO presenceDTO) {
         TravelPresence presence = travelPresenceRepository.findTravelPresenceById(presenceDTO.getUserId());
         if (presence == null)
@@ -48,8 +58,7 @@ public class TravelPresenceService {
         travelPresenceRepository.save(presence);
     }
 
-//    no delete, deletion occur only from the user service side.
-
+//    check-out: removes the presence only to be null, the user stays
     @Transactional
     public void checkOut(Integer userId) {
         TravelPresence presence = travelPresenceRepository.findTravelPresenceById(userId);

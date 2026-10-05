@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
     private final ProfileService profileService;
 
+    @GetMapping("/get")
+    public ResponseEntity<?> get() {
+        return ResponseEntity.status(200).body(profileService.get());
+    }
+
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody @Valid ProfileDTO dto) {
         profileService.add(dto);
