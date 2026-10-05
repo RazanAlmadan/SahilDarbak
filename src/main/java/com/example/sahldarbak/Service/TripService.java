@@ -52,7 +52,6 @@ public class TripService {
         oldTrip.setEndDate(trip.getEndDate());
         oldTrip.setStartDate(trip.getStartDate());
         oldTrip.setStatus(trip.getStatus());
-        oldTrip.setTravelType(trip.getTravelType());
         tripRepository.save(oldTrip);
     }
 
