@@ -33,12 +33,12 @@ public class Trip {
     @Column(columnDefinition = "varchar(30) not null")
     private String city;
 
-    @NotEmpty(message = "start date cannot be empty")
+    @NotNull(message = "start date cannot be empty")
     @FutureOrPresent(message = "start date cannot be in the past")
     @Column(columnDefinition = "date not null")
     private LocalDate startDate;
 
-    @NotEmpty(message = "end date cannot be empty")
+    @NotNull(message = "end date cannot be empty")
     @FutureOrPresent(message = "end date cannot be in the past")
     @Column(columnDefinition = "date not null")
     private LocalDate endDate;
