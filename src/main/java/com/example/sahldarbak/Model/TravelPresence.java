@@ -28,8 +28,8 @@ public class TravelPresence {
     @Column(columnDefinition = "varchar(50) not null")
     private String city;
 
-//    @Column(columnDefinition = "date not null")
-//    private LocalDate checkedInAt;
+    @Column(columnDefinition = "date not null")
+    private LocalDate checkedInAt;
 
     @OneToOne
     @JsonIgnore
@@ -38,7 +38,7 @@ public class TravelPresence {
 
 
     @OneToOne
-    @JoinColumn(name = "trip_id", nullable = false, unique = true)
+    @JoinColumn(name = "trip_id")
     @JsonIgnore
     private Trip trip;
 

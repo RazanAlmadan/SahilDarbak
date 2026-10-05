@@ -42,11 +42,12 @@ public class ProfileService {
 
     }
 
+//    update profile
     public void update(ProfileDTO profileDTO){
         Profile profile = profileRepository.findProfileById(profileDTO.getUserId());
 
         if (profile == null)
-            throw new ApiException("user not found");
+            throw new ApiException("profile not found");
 
         profile.setFullName(profileDTO.getFullName());
         profile.setDateOfBirth(profileDTO.getDateOfBirth());
@@ -57,9 +58,6 @@ public class ProfileService {
 
         profileRepository.save(profile);
     }
-
-
-
 
 //    no delete method as user can not delete his profile
 
