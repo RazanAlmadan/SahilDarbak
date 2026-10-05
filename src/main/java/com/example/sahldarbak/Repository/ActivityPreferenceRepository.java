@@ -1,4 +1,4 @@
-package com.example.sahldarbak.Service;
+package com.example.sahldarbak.Repository;
 
 import com.example.sahldarbak.Model.ActivityPreference;
 import org.springframework.data.jpa.repository.JpaRepository;

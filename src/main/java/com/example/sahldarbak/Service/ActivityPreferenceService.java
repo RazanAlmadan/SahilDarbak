@@ -4,6 +4,7 @@ package com.example.sahldarbak.Service;
 import com.example.sahldarbak.Api.ApiException;
 import com.example.sahldarbak.Model.ActivityPreference;
 import com.example.sahldarbak.Model.TravelRequest;
+import com.example.sahldarbak.Repository.ActivityPreferenceRepository;
 import com.example.sahldarbak.Repository.TravelRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
