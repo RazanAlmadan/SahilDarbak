@@ -61,6 +61,9 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
     private Set<TravelMatch> receivedMatches;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Trip> trips;
+
 
 
 }

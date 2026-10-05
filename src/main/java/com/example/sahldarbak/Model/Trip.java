@@ -22,8 +22,6 @@ public class Trip {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-   // private User user;
-
 
     @NotEmpty(message = "country cannot be empty")
     @Size(min = 3, max = 30, message = "country size cannot be less than 3 or more than 30")
@@ -68,6 +66,11 @@ public class Trip {
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "trip")
     private TripBudgetEstimate tripBudgetEstimate;
+
+    @ManyToOne
+    @JoinColumn
+    @JsonIgnore
+    private User user;
 
 
 
