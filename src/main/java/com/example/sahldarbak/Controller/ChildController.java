@@ -19,14 +19,14 @@ public class ChildController {
 
 
     // GET ALL
-    @GetMapping("/get-children")
+    @GetMapping("/get")
     public ResponseEntity<?> getChildren() {
         return ResponseEntity.status(200).body(childService.getChildren());
     }
 
 
     // ADD
-    @PostMapping("/add-child/{travelRequestId}")
+    @PostMapping("/add/{travelRequestId}")
     public ResponseEntity<?> addChild(@PathVariable Integer travelRequestId, @Valid @RequestBody Child child) {
         childService.addChild(travelRequestId, child);
         return ResponseEntity.status(200).body(new ApiResponse("child added successfully"));
@@ -34,7 +34,7 @@ public class ChildController {
 
 
     // UPDATE
-    @PutMapping("/update-child/{childId}")
+    @PutMapping("/update/{childId}")
     public ResponseEntity<?> updateChild(@PathVariable Integer childId, @Valid @RequestBody Child child) {
         childService.updateChild(childId, child);
         return ResponseEntity.status(200).body(new ApiResponse("child updated successfully"));
@@ -42,7 +42,7 @@ public class ChildController {
 
 
     // DELETE
-    @DeleteMapping("/delete-child/{childId}")
+    @DeleteMapping("/delete/{childId}")
     public ResponseEntity<?> deleteChild(@PathVariable Integer childId) {
         childService.deleteChild(childId);
         return ResponseEntity.status(200).body(new ApiResponse("child deleted successfully"));

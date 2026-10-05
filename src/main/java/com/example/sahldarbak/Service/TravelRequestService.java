@@ -3,8 +3,10 @@ package com.example.sahldarbak.Service;
 
 import com.example.sahldarbak.Api.ApiException;
 import com.example.sahldarbak.Model.TravelRequest;
+import com.example.sahldarbak.Model.User;
 import com.example.sahldarbak.Repository.ChildRepository;
 import com.example.sahldarbak.Repository.TravelRequestRepository;
+import com.example.sahldarbak.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ public class TravelRequestService {
 
     private final TravelRequestRepository travelRequestRepository;
     private final ChildRepository childRepository;
+    private final UserRepository userRepository;
 
 
     //CRUD METHOD
@@ -25,7 +28,12 @@ public class TravelRequestService {
     }
 
     //ADD(create)
-    public void addTravelRequest(TravelRequest travelRequest){
+    public void addTravelRequest(Integer userId,TravelRequest travelRequest){
+
+        User user=userRepository.findUserById(userId);
+        if (user==null){
+            throw new ApiException("didn't find the user");
+        }
 
         // end date must be after start date
         if (!travelRequest.getEndDate().isAfter(travelRequest.getStartDate())) {
@@ -59,6 +67,7 @@ public class TravelRequestService {
 
         // request is incomplete until the user submits all preferences
         travelRequest.setStatus("draft");
+        travelRequest.setUser(user);
         travelRequestRepository.save(travelRequest);
     }
 

@@ -18,14 +18,14 @@ public class FoodPreferenceController {
 
 
     // GET ALL
-    @GetMapping("/get-food-preferences")
+    @GetMapping("/get")
     public ResponseEntity<?> getFoodPreferences() {
         return ResponseEntity.status(200).body(foodPreferenceService.getFoodPreferences());
     }
 
 
     // ADD
-    @PostMapping("/add-food-preference/{travelRequestId}")
+    @PostMapping("/add/{travelRequestId}")
     public ResponseEntity<?> addFoodPreference(@PathVariable Integer travelRequestId, @Valid @RequestBody FoodPreference foodPreference) {
         foodPreferenceService.addFoodPreference(travelRequestId, foodPreference);
         return ResponseEntity.status(200).body(new ApiResponse("food preference added successfully"));
@@ -33,7 +33,7 @@ public class FoodPreferenceController {
 
 
     // UPDATE
-    @PutMapping("/update-food-preference/{foodPreferenceId}")
+    @PutMapping("/update/{foodPreferenceId}")
     public ResponseEntity<?> updateFoodPreference(@PathVariable Integer foodPreferenceId, @Valid @RequestBody FoodPreference foodPreference) {
         foodPreferenceService.updateFoodPreference(foodPreferenceId, foodPreference);
 
@@ -42,7 +42,7 @@ public class FoodPreferenceController {
 
 
     // DELETE
-    @DeleteMapping("/delete-food-preference/{foodPreferenceId}")
+    @DeleteMapping("/delete/{foodPreferenceId}")
     public ResponseEntity<?> deleteFoodPreference(@PathVariable Integer foodPreferenceId) {
         foodPreferenceService.deleteFoodPreference(foodPreferenceId);
         return ResponseEntity.status(200).body(new ApiResponse("food preference deleted successfully"));

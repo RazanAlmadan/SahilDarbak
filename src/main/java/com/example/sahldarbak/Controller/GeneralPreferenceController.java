@@ -19,14 +19,14 @@ public class GeneralPreferenceController {
 
 
     // GET ALL
-    @GetMapping("/get-general-preferences")
+    @GetMapping("/get")
     public ResponseEntity<?> getGeneralPreferences() {
         return ResponseEntity.status(200).body(generalPreferenceService.getGeneralPreferences());
     }
 
 
     // ADD
-    @PostMapping("/add-general-preference/{travelRequestId}")
+    @PostMapping("/add/{travelRequestId}")
     public ResponseEntity<?> addGeneralPreference(@PathVariable Integer travelRequestId, @Valid @RequestBody GeneralPreference generalPreference) {
         generalPreferenceService.addGeneralPreference(travelRequestId, generalPreference);
         return ResponseEntity.status(200).body(new ApiResponse("general preference added successfully"));
@@ -34,7 +34,7 @@ public class GeneralPreferenceController {
 
 
     // UPDATE
-    @PutMapping("/update-general-preference/{generalPreferenceId}")
+    @PutMapping("/update/{generalPreferenceId}")
     public ResponseEntity<?> updateGeneralPreference(@PathVariable Integer generalPreferenceId, @Valid @RequestBody GeneralPreference generalPreference) {
         generalPreferenceService.updateGeneralPreference(generalPreferenceId, generalPreference);
         return ResponseEntity.status(200).body(new ApiResponse("general preference updated successfully"));
@@ -42,7 +42,7 @@ public class GeneralPreferenceController {
 
 
     // DELETE
-    @DeleteMapping("/delete-general-preference/{generalPreferenceId}")
+    @DeleteMapping("/delete/{generalPreferenceId}")
     public ResponseEntity<?> deleteGeneralPreference(@PathVariable Integer generalPreferenceId) {
         generalPreferenceService.deleteGeneralPreference(generalPreferenceId);
         return ResponseEntity.status(200).body(new ApiResponse("general preference deleted successfully"));
