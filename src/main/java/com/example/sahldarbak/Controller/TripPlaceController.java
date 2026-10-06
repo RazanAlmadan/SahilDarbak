@@ -25,9 +25,11 @@ public class TripPlaceController {
     }
 
     // add
-    @PostMapping("/add/{trip_id}")
-    public ResponseEntity<ApiResponse> addTripPlace(@PathVariable Integer trip_id, @Valid @RequestBody TripPlace tripPlace) {
-        tripPlaceService.addTripPlace(trip_id, tripPlace);
+    @PostMapping("/add/{itineraryId}")
+    public ResponseEntity<ApiResponse> addTripPlace(@PathVariable Integer itineraryId, @Valid @RequestBody TripPlace tripPlace) {
+
+        tripPlaceService.addTripPlace(itineraryId, tripPlace);
+
         return ResponseEntity.status(200).body(new ApiResponse("Trip place added successfully"));
     }
 
@@ -55,5 +57,10 @@ public class TripPlaceController {
     @GetMapping("/today/{tripId}")
     public ResponseEntity<?> getTodayPlan(@PathVariable Integer tripId) {
         return ResponseEntity.status(200).body(tripPlaceService.getTodayPlan(tripId));
+    }
+
+    @GetMapping("/get-by-trip/{tripId}")
+    public ResponseEntity<?> getTripPlacesByTrip(@PathVariable Integer tripId) {
+        return ResponseEntity.status(200).body(tripPlaceService.getTripPlacesByTrip(tripId));
     }
 }

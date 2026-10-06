@@ -71,5 +71,10 @@ public class TripController {
         return ResponseEntity.status(200).body(tripService.generateCityPlan(tripId));
     }
 
+    @GetMapping("/get-by-travel-request/{travelRequestId}")
+    public ResponseEntity<?> getTripByTravelRequest(@PathVariable Integer travelRequestId) {
+        return ResponseEntity.status(200).body(tripService.getTripByTravelRequest(travelRequestId));
+    }
+
 
 }

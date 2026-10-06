@@ -99,4 +99,16 @@ public class TripPlaceService {
 
         return tripPlaces;
     }
+
+    // GET ALL TRIP PLACES BY TRIP
+    public List<TripPlace> getTripPlacesByTrip(Integer tripId) {
+
+        List<TripPlace> tripPlaces = tripPlaceRepository.findAllByItinerary_Trip_Id(tripId);
+
+        if (tripPlaces.isEmpty()) {
+            throw new ApiException("no trip places found for this trip");
+        }
+
+        return tripPlaces;
+    }
 }

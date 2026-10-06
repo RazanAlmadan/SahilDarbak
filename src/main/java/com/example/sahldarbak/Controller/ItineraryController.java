@@ -35,4 +35,18 @@ public class ItineraryController {
     public ResponseEntity<?> getItineraryByTrip(@PathVariable Integer tripId) {
         return ResponseEntity.status(200).body(itineraryService.getItineraryByTrip(tripId));
     }
+
+    @PostMapping("/send-email/{tripId}")
+    public ResponseEntity<?> sendItineraryToEmail(@PathVariable Integer tripId) {
+        itineraryService.sendItineraryToEmail(tripId);
+        return ResponseEntity.status(200).body(new ApiResponse("itinerary sent to email successfully"));
+    }
+
+    @PostMapping("/send-today-whatsapp/{tripId}")
+    public ResponseEntity<?> sendTodayPlanToWhatsApp(@PathVariable Integer tripId) {
+
+        itineraryService.sendTodayPlanToWhatsApp(tripId);
+
+        return ResponseEntity.status(200).body(new ApiResponse("today's plan sent to WhatsApp successfully"));
+    }
 }

@@ -11,4 +11,5 @@ import java.util.List;
 public interface TripPlaceRepository extends JpaRepository<TripPlace, Integer> {
     TripPlace findTripPlaceById(Integer id);
     List<TripPlace> findAllByItinerary_Trip_IdAndScheduledAt(Integer tripId, LocalDate scheduledAt);
+    List<TripPlace> findAllByItinerary_Trip_Id(Integer tripId);
 }

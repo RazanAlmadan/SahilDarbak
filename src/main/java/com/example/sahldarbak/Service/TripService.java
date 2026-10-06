@@ -6,6 +6,7 @@ import com.example.sahldarbak.DTO.CityPlan.CityPlanDTO;
 import com.example.sahldarbak.DTO.CityPlan.CityPlanItemDTO;
 import com.example.sahldarbak.DTO.SelectDestinationDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.HotelInsightDTO;
+import com.example.sahldarbak.ExternalApi.EmailService;
 import com.example.sahldarbak.ExternalApi.GeoapifyService;
 import com.example.sahldarbak.Model.TravelRequest;
 import com.example.sahldarbak.Model.Trip;
@@ -48,6 +49,7 @@ public class TripService {
     private final TripCityRepository tripCityRepository;
     private final ItineraryRepository itineraryRepository;
     private final ObjectMapper objectMapper;
+    private final EmailService emailService;
 
     public List<Trip> getAllTrips(){
         return tripRepository.findAll();
@@ -216,6 +218,8 @@ public class TripService {
             Itinerary itinerary = itineraryRepository.findItineraryByTrip_Id(tripId);
 
 
+            boolean firstGeneration = itinerary == null;
+
             // FIRST GENERATION
             if (itinerary == null) {
 
@@ -231,6 +235,9 @@ public class TripService {
             itinerary.setPlanJson(planJson);
 
             itineraryRepository.save(itinerary);
+            if (firstGeneration) {
+                emailService.sendFullItineraryEmail(trip.getUser().getEmail(), trip.getCountry(), finalItinerary);
+            }
 
 
             return finalItinerary;
@@ -351,6 +358,17 @@ public class TripService {
         return cityPlan;
     }
 
+    // GET TRIP BY TRAVEL REQUEST
+    public Trip getTripByTravelRequest(Integer travelRequestId) {
+
+        Trip trip = tripRepository.findTripByTravelRequest_Id(travelRequestId);
+
+        if (trip == null) {
+            throw new ApiException("trip not found for this travel request");
+        }
+
+        return trip;
+    }
 
 
     //HELPER METHOD
