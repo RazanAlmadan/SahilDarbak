@@ -1,7 +1,7 @@
 package com.example.sahldarbak.Service;
 
 import com.example.sahldarbak.Api.ApiException;
-import com.example.sahldarbak.DTO.SelectDestinationDTO;
+import com.example.sahldarbak.DTO.DestinationRecommendation.SelectDestinationDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.HotelInsightDTO;
 import com.example.sahldarbak.ExternalApi.GeoapifyService;
 import com.example.sahldarbak.Model.TravelRequest;
