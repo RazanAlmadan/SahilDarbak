@@ -2,6 +2,7 @@ package com.example.sahldarbak.Controller;
 
 
 import com.example.sahldarbak.Api.ApiResponse;
+import com.example.sahldarbak.DTO.CityPlan.CityPlanDTO;
 import com.example.sahldarbak.DTO.SelectDestinationDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
 import com.example.sahldarbak.Model.Trip;
@@ -63,4 +64,12 @@ public class TripController {
 
         return ResponseEntity.status(200).body(new ApiResponse("Destination selected successfully"));
     }
+
+    // GENERATE AI CITY PLAN
+    @PostMapping("/generate-city-plan/{tripId}")
+    public ResponseEntity<?> generateCityPlan(@PathVariable Integer tripId) {
+        return ResponseEntity.status(200).body(tripService.generateCityPlan(tripId));
+    }
+
+
 }

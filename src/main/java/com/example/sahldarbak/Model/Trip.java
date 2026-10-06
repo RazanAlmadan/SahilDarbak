@@ -24,37 +24,21 @@ public class Trip {
 
 
     @NotEmpty(message = "country cannot be empty")
-    @Size(min = 3, max = 30, message = "country size cannot be less than 3 or more than 30")
-    @Column(columnDefinition = "varchar(30) not null")
+    @Size(min = 2, max = 50, message = "country cannot be less than 2 or more than 50")
+    @Column(columnDefinition = "varchar(50) not null")
     private String country;
 
     @NotEmpty(message = "city cannot be null")
-    @Size(min = 3, max = 30, message = "city cannot be less than 3 and more than 30")
-    @Column(columnDefinition = "varchar(30) not null")
+    @Size(min = 2, max = 50, message = "city cannot be less than 2 or more than 50")
+    @Column(columnDefinition = "varchar(50) not null")
     private String city;
 
-    @NotNull(message = "start date cannot be empty")
-    @FutureOrPresent(message = "start date cannot be in the past")
-    @Column(columnDefinition = "date not null")
-    private LocalDate startDate;
-
-    @NotNull(message = "end date cannot be empty")
-    @FutureOrPresent(message = "end date cannot be in the past")
-    @Column(columnDefinition = "date not null")
-    private LocalDate endDate;
-
-    @NotNull(message = "budget cannot be empty")
-    @Positive
-    @Column(columnDefinition = "double not null")
-    private Double budget;
 
     @NotEmpty(message = "status cannot be empty")
     @Column(columnDefinition = "varchar(30) not null")
     private String status;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trip")
-    private Set<TripPlace> tripPlace;
 
     @OneToOne
     @JoinColumn(name = "travel_request_id", unique = true)
@@ -74,8 +58,11 @@ public class Trip {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "trip")
     private TravelPresence travelPresence;
 
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TripCity> tripCities;
 
-
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "trip")
+    private Itinerary itinerary;
 
 
 

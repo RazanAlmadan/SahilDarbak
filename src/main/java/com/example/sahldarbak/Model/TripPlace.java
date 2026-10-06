@@ -30,13 +30,20 @@ public class TripPlace {
     @Column(columnDefinition = "varchar(50) not null")
     private String name;
 
+    @NotEmpty(message = "city cannot be empty")
+    @Column(columnDefinition = "varchar(50) not null")
+    private String city;
+
     @NotNull(message = "scheduled at cannot be empty")
+    @Column(columnDefinition = "date not null")
     private LocalDate scheduledAt;
 
+    @Column(columnDefinition = "varchar(50)")
     private String notes;
 
+
     @ManyToOne
-    @JoinColumn(name = "trip_id", nullable = false)
+    @JoinColumn(name = "itinerary_id", nullable = false)
     @JsonIgnore
-    private Trip trip;
+    private Itinerary itinerary;
 }

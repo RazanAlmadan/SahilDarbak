@@ -18,5 +18,7 @@ public class ItineraryDayDTO {
 
     private LocalDate date;
 
+    private String city;
+
     private List<PlaceRecommendationDTO> places;
 }
