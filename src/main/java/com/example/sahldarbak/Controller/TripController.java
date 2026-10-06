@@ -2,6 +2,7 @@ package com.example.sahldarbak.Controller;
 
 
 import com.example.sahldarbak.Api.ApiResponse;
+import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
 import com.example.sahldarbak.Model.Trip;
 import com.example.sahldarbak.Service.TripService;
 import jakarta.validation.Valid;
@@ -43,5 +44,13 @@ public class TripController {
     public ResponseEntity<ApiResponse> deleteTrip(@PathVariable Integer id) {
         tripService.deleteTrip(id);
         return ResponseEntity.status(200).body(new ApiResponse("Trip deleted successfully"));
+    }
+
+    //EXTRA END POINTS:
+
+    @PostMapping("/generate-smart-itinerary/{tripId}")
+    public ResponseEntity<?> generateSmartItinerary(@PathVariable Integer tripId) {
+        SmartItineraryDTO smartItineraryDTO=tripService.generateSmartItinerary(tripId);
+        return ResponseEntity.status(200).body(smartItineraryDTO);
     }
 }

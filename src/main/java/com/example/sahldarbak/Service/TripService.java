@@ -1,6 +1,8 @@
 package com.example.sahldarbak.Service;
 
 import com.example.sahldarbak.Api.ApiException;
+import com.example.sahldarbak.DTO.SmartItinerary.HotelInsightDTO;
+import com.example.sahldarbak.ExternalApi.GeoapifyService;
 import com.example.sahldarbak.Model.TravelRequest;
 import com.example.sahldarbak.Model.Trip;
 import com.example.sahldarbak.Model.User;
@@ -9,6 +11,11 @@ import com.example.sahldarbak.Repository.TripRepository;
 import com.example.sahldarbak.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.example.sahldarbak.AI.SmartItineraryAIService;
+import com.example.sahldarbak.DTO.SmartItinerary.LocationDTO;
+import com.example.sahldarbak.DTO.SmartItinerary.PlaceOptionDTO;
+import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
+import com.example.sahldarbak.ExternalApi.TavilyService;
 
 import java.util.List;
 
@@ -19,6 +26,9 @@ public class TripService {
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
     private final TravelRequestRepository travelRequestRepository;
+    private final GeoapifyService geoapifyService;
+    private final TavilyService tavilyService;
+    private final SmartItineraryAIService smartItineraryAIService;
 
     public List<Trip> getAllTrips(){
         return tripRepository.findAll();
@@ -63,4 +73,59 @@ public class TripService {
         }
         tripRepository.delete(oldTrip);
     }
+
+
+    //EXTRA ENDPOINTS:
+
+
+    // GENERATE SMART ITINERARY FOR TRIP
+    public SmartItineraryDTO generateSmartItinerary(Integer tripId) {
+
+        Trip trip = tripRepository.findTripById(tripId);
+
+        if (trip == null) {
+            throw new ApiException("trip not found");
+        }
+
+        TravelRequest travelRequest = trip.getTravelRequest();
+
+        if (travelRequest == null) {
+            throw new ApiException("travel request not found");
+        }
+
+        LocationDTO location = geoapifyService.getCoordinates(trip.getCity(), trip.getCountry());
+
+        List<PlaceOptionDTO> hotels = geoapifyService.getHotels(location.getLatitude(), location.getLongitude());
+        List<PlaceOptionDTO> activities = geoapifyService.getActivities(location.getLatitude(), location.getLongitude());
+        List<PlaceOptionDTO> restaurants = geoapifyService.getRestaurants(location.getLatitude(), location.getLongitude());
+
+        // ADD HOTEL RATINGS AND ESTIMATED PRICE
+        for (PlaceOptionDTO hotel : hotels) {
+
+            if (hotel.getName() == null) {
+                continue;
+            }
+            HotelInsightDTO hotelInfo = tavilyService.getHotelInfo(hotel.getName(), trip.getCity(), trip.getCountry(), trip.getStartDate(), trip.getEndDate());
+
+            hotel.setRatings(hotelInfo.getRatings());
+            hotel.setEstimatedPrice(hotelInfo.getEstimatedPrice());
+
+
+        }
+
+
+        for (PlaceOptionDTO restaurant : restaurants) {
+
+            if (restaurant.getName() == null) {
+                continue;
+            }
+
+            restaurant.setHalalInfo(tavilyService.getRestaurantHalalInfo(restaurant.getName(), trip.getCity(), trip.getCountry()));
+        }
+
+
+        return smartItineraryAIService.generateSmartItinerary(travelRequest, hotels, activities, restaurants);
+    }
+
+
 }
