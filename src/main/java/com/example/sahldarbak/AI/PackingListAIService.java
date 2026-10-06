@@ -75,8 +75,8 @@ public class PackingListAIService {
 
             holidays = getHolidaysForTrip(
                     trip.getCountry(),
-                    trip.getStartDate(),
-                    trip.getEndDate()
+                    trip.getTravelRequest().getStartDate(),
+                    trip.getTravelRequest().getEndDate()
             );
 
         } catch (Exception e) {
@@ -307,10 +307,10 @@ public class PackingListAIService {
                 """ + trip.getCity() + """
 
                 Start Date:
-                """ + trip.getStartDate() + """
+                """ + trip.getTravelRequest().getStartDate() + """
 
                 End Date:
-                """ + trip.getEndDate() + """
+                """ + trip.getTravelRequest().getEndDate() + """
 
                 User Preferences:
                 """ + userPreferences + """

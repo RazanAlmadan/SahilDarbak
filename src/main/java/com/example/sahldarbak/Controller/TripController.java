@@ -3,7 +3,8 @@ package com.example.sahldarbak.Controller;
 
 import com.example.sahldarbak.Api.ApiResponse;
 import com.example.sahldarbak.DTO.CityPlan.CityPlanDTO;
-import com.example.sahldarbak.DTO.SelectDestinationDTO;
+import com.example.sahldarbak.DTO.DestinationRecommendation.SelectDestinationDTO;
+import com.example.sahldarbak.DTO.PackingList.PackingListDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
 import com.example.sahldarbak.Model.Trip;
 import com.example.sahldarbak.Service.TripService;
@@ -64,4 +65,28 @@ public class TripController {
 
         return ResponseEntity.status(200).body(new ApiResponse("Destination selected successfully"));
     }
+
+    // GENERATE AI CITY PLAN
+    @PostMapping("/generate-city-plan/{tripId}")
+    public ResponseEntity<?> generateCityPlan(@PathVariable Integer tripId) {
+        return ResponseEntity.status(200).body(tripService.generateCityPlan(tripId));
+    }
+
+    @GetMapping("/get-by-travel-request/{travelRequestId}")
+    public ResponseEntity<?> getTripByTravelRequest(@PathVariable Integer travelRequestId) {
+        return ResponseEntity.status(200).body(tripService.getTripByTravelRequest(travelRequestId));
+    }
+
+
+    @PostMapping("/generate-packing-list/{tripId}")
+    public ResponseEntity<?> generatePackingList(
+            @PathVariable Integer tripId
+    ) {
+
+        PackingListDTO packingListDTO = tripService.generatePackingList(tripId);
+
+        return ResponseEntity.status(200).body(packingListDTO);
+    }
+
+
 }
