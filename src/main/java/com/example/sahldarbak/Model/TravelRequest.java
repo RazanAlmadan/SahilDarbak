@@ -50,6 +50,11 @@ public class TravelRequest {
     @Column(columnDefinition = "varchar(10) not null")
     private String status;
 
+    @NotEmpty(message = "city plan mode cannot be empty")
+    @Pattern(regexp = "single_city|multi_city_manual|multi_city_ai", message = "city plan mode must be single_city, multi_city_manual, or multi_city_ai")
+    @Column(columnDefinition = "varchar(30) not null")
+    private String cityPlanMode;
+
 
     @OneToOne(mappedBy = "travelRequest", cascade = CascadeType.ALL)
     private GeneralPreference generalPreference;
