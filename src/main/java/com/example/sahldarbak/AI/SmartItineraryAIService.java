@@ -20,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class SmartItineraryAIService {
 
-    @Value("${gemini.api-key}")
+    @Value("${gemini.api.key}")
     private String apiKey;
 
     private final ObjectMapper objectMapper;

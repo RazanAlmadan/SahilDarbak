@@ -1,4 +1,4 @@
-package com.example.sahldarbak.Service;
+package com.example.sahldarbak.ExternalApi;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;

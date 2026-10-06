@@ -15,7 +15,7 @@ import java.util.Map;
 @Service
 public class GeoapifyService {
 
-    @Value("${geoapify.api-key}")
+    @Value("${geoapify.api.key}")
     private String apiKey;
 
     private final RestClient restClient = RestClient.builder()

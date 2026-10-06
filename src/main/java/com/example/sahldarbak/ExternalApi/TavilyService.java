@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 @Service
 public class TavilyService {
 
-    @Value("${tavily.api-key}")
+    @Value("${tavily.api.key}")
     private String apiKey;
 
     private final RestClient restClient = RestClient.builder()
