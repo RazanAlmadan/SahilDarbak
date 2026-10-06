@@ -1,6 +1,7 @@
 package com.example.sahldarbak.Service;
 
 import com.example.sahldarbak.Api.ApiException;
+import com.example.sahldarbak.DTO.SelectDestinationDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.HotelInsightDTO;
 import com.example.sahldarbak.ExternalApi.GeoapifyService;
 import com.example.sahldarbak.Model.TravelRequest;
@@ -125,6 +126,61 @@ public class TripService {
 
 
         return smartItineraryAIService.generateSmartItinerary(travelRequest, hotels, activities, restaurants);
+    }
+
+    public void selectDestination(
+            Integer user_id,
+            Integer travel_request_id,
+            SelectDestinationDTO dto
+    ) {
+
+        User user = userRepository.findUserById(user_id);
+
+        if (user == null) {
+            throw new ApiException("user not found");
+        }
+
+        TravelRequest travelRequest =
+                travelRequestRepository.findTravelRequestById(travel_request_id);
+
+        if (travelRequest == null) {
+            throw new ApiException("travel request not found");
+        }
+
+        if (!travelRequest.getUser().getId().equals(user_id)) {
+            throw new ApiException(
+                    "this travel request does not belong to this user"
+            );
+        }
+
+        if (travelRequest.getTrip() != null) {
+            throw new ApiException(
+                    "a trip has already been created for this travel request"
+            );
+        }
+
+        Trip trip = new Trip();
+
+        trip.setCountry(dto.getCountry());
+        trip.setCity(dto.getCity());
+
+        /*
+         * Get these values directly from the travel request.
+         */
+        trip.setStartDate(travelRequest.getStartDate());
+        trip.setEndDate(travelRequest.getEndDate());
+        trip.setBudget(travelRequest.getBudget());
+
+        /*
+         * You can change this status depending on
+         * how you want your existing trip workflow to work.
+         */
+        trip.setStatus("planned");
+
+        trip.setUser(user);
+        trip.setTravelRequest(travelRequest);
+
+        tripRepository.save(trip);
     }
 
 
