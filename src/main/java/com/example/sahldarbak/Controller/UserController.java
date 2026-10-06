@@ -1,5 +1,6 @@
 package com.example.sahldarbak.Controller;
 
+import com.example.sahldarbak.Api.ApiResponse;
 import com.example.sahldarbak.Model.User;
 import com.example.sahldarbak.Service.UserService;
 import jakarta.validation.Valid;
@@ -22,19 +23,19 @@ public class UserController {
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody @Valid User user) {
         userService.add(user);
-        return ResponseEntity.status(200).body("user added successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("user added successfully"));
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody @Valid User user) {
         userService.update(id, user);
-        return ResponseEntity.status(200).body("user updated successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("user updated successfully") );
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         userService.delete(id);
-        return ResponseEntity.status(200).body("user deleted successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("user deleted successfully"));
     }
 
 

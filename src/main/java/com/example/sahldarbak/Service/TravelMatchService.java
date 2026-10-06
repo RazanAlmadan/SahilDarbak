@@ -23,6 +23,7 @@ public class TravelMatchService {
     private final TravelPresenceRepository travelPresenceRepository;
     private final BlockedUserRepository blockedUserRepository;
     private final ProfileRepository profileRepository;
+    private final WhatsAppService whatsAppService;
 
 
 
@@ -81,6 +82,17 @@ public class TravelMatchService {
         match.setCreatedAt(LocalDate.now());
 
         travelMatchRepository.save(match);
+
+//        sending message to sender and reciver that an invite is created
+        Profile senderProfile = profileRepository.findProfileById(senderId);
+        Profile receiverProfile = profileRepository.findProfileById(receiverId);
+        String senderName = senderProfile != null ? senderProfile.getFullName() : "Someone";
+        String receiverName = receiverProfile != null ? receiverProfile.getFullName() : "Someone";
+
+        whatsAppService.sendText(sender.getPhoneNumber(),
+                "You sent an invite to " + receiverName + ".");
+        whatsAppService.sendText(receiver.getPhoneNumber(),
+                senderName + " sent you an invite: " + message);
     }
 
     // respond to an invite: only the status changes
@@ -100,30 +112,43 @@ public class TravelMatchService {
 
         match.setStatus(status);
         travelMatchRepository.save(match);
+
+//        Sending whatsapp message
+        Profile receiverProfile = profileRepository.findProfileById(userId);
+        String receiverName = receiverProfile != null ? receiverProfile.getFullName() : "Someone";
+        String senderPhone = match.getSender().getPhoneNumber();
+
+        if (status.equals("accepted"))
+            whatsAppService.sendText(senderPhone,
+                    receiverName + " accepted your invite. You can chat with them on " + match.getReceiver().getPhoneNumber());
+        else
+            whatsAppService.sendText(senderPhone, receiverName + " declined your invite.");
     }
 
     // no delete: a rejected row must stay, and rows are removed by the user-delete cascade
 
 //    Extra endpoints:
 
-//    return the profiles of people in which they are in the same city and country the user is in.
-public List<Profile> getMatches(Integer userId) {
-    TravelPresence mine = travelPresenceRepository.findTravelPresenceById(userId);
-    if (mine == null)
-        throw new ApiException("check in to a city first");
 
-    List<Integer> ids = new ArrayList<>();
-    for (TravelPresence p : travelPresenceRepository.findByCountryAndCity(mine.getCountry(), mine.getCity())) {
-        Integer otherId = p.getId();
-        if (otherId.equals(userId))
-            continue;
-        if (blockedUserRepository.existsByBlockerIdAndBlockedId(userId, otherId)
-                || blockedUserRepository.existsByBlockerIdAndBlockedId(otherId, userId))
-            continue;
-        ids.add(otherId);
-    }
-    return profileRepository.findAllById(ids);
-}
+    //canceled end point
+//    return the profiles of people in which they are in the same city and country the user is in.
+//public List<Profile> getMatches(Integer userId) {
+//    TravelPresence mine = travelPresenceRepository.findTravelPresenceById(userId);
+//    if (mine == null)
+//        throw new ApiException("check in to a city first");
+//
+//    List<Integer> ids = new ArrayList<>();
+//    for (TravelPresence p : travelPresenceRepository.findByCountryAndCity(mine.getCountry(), mine.getCity())) {
+//        Integer otherId = p.getId();
+//        if (otherId.equals(userId))
+//            continue;
+//        if (blockedUserRepository.existsByBlockerIdAndBlockedId(userId, otherId)
+//                || blockedUserRepository.existsByBlockerIdAndBlockedId(otherId, userId))
+//            continue;
+//        ids.add(otherId);
+//    }
+//    return profileRepository.findAllById(ids);
+//}
 
     // invites I sent, with the receiver's profile
     public List<SentInviteDTO> getSent(Integer userId) {

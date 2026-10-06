@@ -1,5 +1,7 @@
 package com.example.sahldarbak.DTO;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,9 +15,13 @@ public class TravelPresenceDTO {
     @NotNull(message = "user id cannot be null")
     private Integer userId;
 
-    @NotEmpty(message = "country is required")
-    private String country;
+    @NotNull(message = "latitude is required")
+    @DecimalMin(value = "-90.0", message = "invalid latitude")
+    @DecimalMax(value = "90.0", message = "invalid latitude")
+    private Double latitude;
 
-    @NotEmpty(message = "city is required")
-    private String city;
+    @NotNull(message = "longitude is required")
+    @DecimalMin(value = "-180.0", message = "invalid longitude")
+    @DecimalMax(value = "180.0", message = "invalid longitude")
+    private Double longitude;
 }
