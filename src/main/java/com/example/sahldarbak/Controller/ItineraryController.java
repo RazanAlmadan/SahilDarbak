@@ -29,4 +29,10 @@ public class ItineraryController {
         itineraryService.cancelItinerary(tripId);
         return ResponseEntity.status(200).body(new ApiResponse("suggested itinerary cancelled successfully"));
     }
+
+    // GET ITINERARY BY TRIP
+    @GetMapping("/get-by-trip/{tripId}")
+    public ResponseEntity<?> getItineraryByTrip(@PathVariable Integer tripId) {
+        return ResponseEntity.status(200).body(itineraryService.getItineraryByTrip(tripId));
+    }
 }

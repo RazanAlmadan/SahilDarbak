@@ -39,8 +39,8 @@ public class SmartCityPlannerAIService {
             TravelRequest travelRequest) {
 
         long totalDays = ChronoUnit.DAYS.between(
-                        trip.getStartDate(),
-                        trip.getEndDate()) + 1;
+                travelRequest.getStartDate(),
+                travelRequest.getEndDate()) + 1;
 
 
 
@@ -294,8 +294,8 @@ public class SmartCityPlannerAIService {
         Return only the final optimized city plan.
         """.formatted(
                 trip.getCountry(),
-                trip.getStartDate(),
-                trip.getEndDate(),
+                travelRequest.getStartDate(),
+                travelRequest.getEndDate(),
                 totalDays,
                 travelRequest.getGeneralPreference(),
                 travelRequest.getActivityPreferences()

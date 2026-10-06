@@ -109,4 +109,25 @@ public class ItineraryService {
 
         itineraryRepository.delete(itinerary);
     }
+
+    // GET ITINERARY BY TRIP
+    public SmartItineraryDTO getItineraryByTrip(Integer tripId) {
+
+        Itinerary itinerary = itineraryRepository.findItineraryByTrip_Id(tripId);
+
+        if (itinerary == null) {
+            throw new ApiException("itinerary not found");
+        }
+
+        try {
+
+            return objectMapper.readValue(itinerary.getPlanJson(), SmartItineraryDTO.class);
+
+        } catch (Exception e) {
+
+            throw new ApiException(
+                    "failed to read itinerary: " + e.getMessage()
+            );
+        }
+    }
 }
