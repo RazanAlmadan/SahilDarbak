@@ -2,6 +2,8 @@ package com.example.sahldarbak.Controller;
 
 
 import com.example.sahldarbak.Api.ApiResponse;
+import com.example.sahldarbak.DTO.SelectDestinationDTO;
+import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
 import com.example.sahldarbak.Model.Trip;
 import com.example.sahldarbak.Service.TripService;
 import jakarta.validation.Valid;
@@ -43,5 +45,22 @@ public class TripController {
     public ResponseEntity<ApiResponse> deleteTrip(@PathVariable Integer id) {
         tripService.deleteTrip(id);
         return ResponseEntity.status(200).body(new ApiResponse("Trip deleted successfully"));
+    }
+
+    //EXTRA END POINTS:
+
+    @PostMapping("/generate-smart-itinerary/{tripId}")
+    public ResponseEntity<?> generateSmartItinerary(@PathVariable Integer tripId) {
+        SmartItineraryDTO smartItineraryDTO=tripService.generateSmartItinerary(tripId);
+        return ResponseEntity.status(200).body(smartItineraryDTO);
+    }
+
+    // user enter the country they want in the body
+    @PostMapping("/select/{user_id}/{travel_request_id}")
+    public ResponseEntity<ApiResponse> selectDestination(@PathVariable Integer user_id, @PathVariable Integer travel_request_id, @Valid @RequestBody SelectDestinationDTO dto) {
+
+        tripService.selectDestination(user_id, travel_request_id, dto);
+
+        return ResponseEntity.status(200).body(new ApiResponse("Destination selected successfully"));
     }
 }
