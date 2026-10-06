@@ -85,6 +85,9 @@ public class TravelRequestService {
         if (oldTravelRequest == null) {
             throw new ApiException("travel request not found");
         }
+        if (oldTravelRequest.getTrip() != null) {
+            throw new ApiException("travel request cannot be updated after trip is created");
+        }
 
         // completed or cancelled request cannot be updated
         if (oldTravelRequest.getStatus().equals("completed") || oldTravelRequest.getStatus().equals("cancelled")) {
@@ -134,6 +137,7 @@ public class TravelRequestService {
         oldTravelRequest.setTravelType(travelRequest.getTravelType());
         oldTravelRequest.setGroupSize(travelRequest.getGroupSize());
         oldTravelRequest.setAdultsCount(travelRequest.getAdultsCount());
+        oldTravelRequest.setCityPlanMode(travelRequest.getCityPlanMode());
         // any update makes the request incomplete again
         oldTravelRequest.setStatus("draft");
         travelRequestRepository.save(oldTravelRequest);
@@ -186,5 +190,23 @@ public class TravelRequestService {
         // request is complete and ready for recommendation
         travelRequest.setStatus("open");
         travelRequestRepository.save(travelRequest);
+    }
+
+    // GET ALL TRAVEL REQUESTS FOR USER
+    public List<TravelRequest> getTravelRequestsByUser(Integer userId) {
+
+        User user = userRepository.findUserById(userId);
+
+        if (user == null) {
+            throw new ApiException("user not found");
+        }
+
+        List<TravelRequest> travelRequests = travelRequestRepository.findAllByUser_IdOrderByIdDesc(userId);
+
+        if (travelRequests.isEmpty()) {
+            throw new ApiException("no travel requests found for this user");
+        }
+
+        return travelRequests;
     }
 }

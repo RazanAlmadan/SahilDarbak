@@ -15,12 +15,13 @@ import org.springframework.web.client.RestClient;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
 public class SmartItineraryAIService {
 
-    @Value("${gemini.api-key}")
+    @Value("${gemini.api.key}")
     private String apiKey;
 
     private final ObjectMapper objectMapper;
@@ -33,6 +34,9 @@ public class SmartItineraryAIService {
     // GENERATE SMART ITINERARY
     public SmartItineraryDTO generateSmartItinerary(
             TravelRequest travelRequest,
+            String city,
+            LocalDate startDate,
+            LocalDate endDate,
             List<PlaceOptionDTO> hotels,
             List<PlaceOptionDTO> activities,
             List<PlaceOptionDTO> restaurants) {
@@ -41,6 +45,9 @@ public class SmartItineraryAIService {
 
             String prompt = buildPrompt(
                     travelRequest,
+                    city,
+                    startDate,
+                    endDate,
                     hotels,
                     activities,
                     restaurants
@@ -122,24 +129,26 @@ public class SmartItineraryAIService {
     // BUILD AI PROMPT
     private String buildPrompt(
             TravelRequest travelRequest,
+            String city,
+            LocalDate startDate,
+            LocalDate endDate,
             List<PlaceOptionDTO> hotels,
             List<PlaceOptionDTO> activities,
             List<PlaceOptionDTO> restaurants) throws Exception {
 
 
-        String travelRequestJson =
-                objectMapper.writeValueAsString(
-                        createTravelRequestContext(travelRequest)
-                );
+        String travelRequestJson = objectMapper.writeValueAsString(
+                        createTravelRequestContext(
+                                travelRequest,
+                                city,
+                                startDate,
+                                endDate));
 
-        String hotelsJson =
-                objectMapper.writeValueAsString(hotels);
+        String hotelsJson = objectMapper.writeValueAsString(hotels);
 
-        String activitiesJson =
-                objectMapper.writeValueAsString(activities);
+        String activitiesJson = objectMapper.writeValueAsString(activities);
 
-        String restaurantsJson =
-                objectMapper.writeValueAsString(restaurants);
+        String restaurantsJson = objectMapper.writeValueAsString(restaurants);
 
 
         return """
@@ -744,12 +753,15 @@ public class SmartItineraryAIService {
 
     // CREATE ONLY THE TRAVEL DATA NEEDED BY AI
     private Map<String, Object> createTravelRequestContext(
-            TravelRequest travelRequest) {
+            TravelRequest travelRequest,
+            String city,
+            LocalDate startDate,
+            LocalDate endDate) {
 
         Map<String, Object> context = new HashMap<>();
 
-        context.put("startDate", travelRequest.getStartDate());
-        context.put("endDate", travelRequest.getEndDate());
+        context.put("startDate", startDate);
+        context.put("endDate", endDate);
         context.put("budget", travelRequest.getBudget());
         context.put("travelType", travelRequest.getTravelType());
         context.put("groupSize", travelRequest.getGroupSize());
@@ -764,8 +776,7 @@ public class SmartItineraryAIService {
             );
 
             context.put(
-                    "city",
-                    travelRequest.getTrip().getCity()
+                    "city",city
             );
         }
 

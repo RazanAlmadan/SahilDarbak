@@ -1,5 +1,6 @@
 package com.example.sahldarbak.Controller;
 
+import com.example.sahldarbak.Api.ApiResponse;
 import com.example.sahldarbak.Service.BlockedUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,13 @@ public class BlockedUserController {
     @PostMapping("/add/{blockerId}/{blockedId}")
     public ResponseEntity<?> add(@PathVariable Integer blockerId, @PathVariable Integer blockedId) {
         blockedUserService.add(blockerId, blockedId);
-        return ResponseEntity.status(200).body("user blocked successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("user blocked successfully"));
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         blockedUserService.delete(id);
-        return ResponseEntity.status(200).body("block record deleted successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("block record deleted successfully") );
     }
 
     @GetMapping("/get-blocked/{blockerId}")

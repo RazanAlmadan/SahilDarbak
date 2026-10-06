@@ -31,6 +31,12 @@ public class TravelPresence {
     @Column(columnDefinition = "date not null")
     private LocalDate checkedInAt;
 
+    @Column(columnDefinition = "double not null")
+    private Double latitude;
+
+    @Column(columnDefinition = "double not null")
+    private Double longitude;
+
     @OneToOne
     @JsonIgnore
     @MapsId

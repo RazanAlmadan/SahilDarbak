@@ -1,6 +1,7 @@
 package com.example.sahldarbak.Controller;
 
 import com.example.sahldarbak.Api.ApiResponse;
+import com.example.sahldarbak.DTO.BudgetEstimateRequestDTO;
 import com.example.sahldarbak.Model.TripBudgetEstimate;
 import com.example.sahldarbak.Service.TripBudgetEstimateService;
 import jakarta.validation.Valid;
@@ -42,5 +43,31 @@ public class TripBudgetEstimateController {
     public ResponseEntity<ApiResponse> deleteTripBudgetEstimate(@PathVariable Integer id) {
         tripBudgetEstimateService.deleteTripBudgetEstimate(id);
         return ResponseEntity.status(200).body(new ApiResponse("Trip budget estimate deleted successfully"));
+    }
+
+
+    //EXTRA ENDPOINT
+
+    // GENERATE AI BUDGET ESTIMATE
+    @PostMapping("/generate/{tripId}")
+    public ResponseEntity<?> generateBudgetEstimate(@PathVariable Integer tripId, @RequestBody @Valid BudgetEstimateRequestDTO requestDTO) {
+
+        return ResponseEntity.status(200).body(tripBudgetEstimateService.generateBudgetEstimate(tripId, requestDTO));
+    }
+
+
+    // GET BUDGET ESTIMATE BY TRIP
+    @GetMapping("/get-by-trip/{tripId}")
+    public ResponseEntity<?> getBudgetEstimateByTrip(@PathVariable Integer tripId) {
+
+        return ResponseEntity.status(200).body(tripBudgetEstimateService.getBudgetEstimateByTrip(tripId));
+    }
+
+
+    // REFRESH AI BUDGET ESTIMATE
+    @PutMapping("/refresh/{tripId}")
+    public ResponseEntity<?> refreshBudgetEstimate(@PathVariable Integer tripId, @RequestBody @Valid BudgetEstimateRequestDTO requestDTO) {
+
+        return ResponseEntity.status(200).body(tripBudgetEstimateService.refreshBudgetEstimate(tripId, requestDTO));
     }
 }

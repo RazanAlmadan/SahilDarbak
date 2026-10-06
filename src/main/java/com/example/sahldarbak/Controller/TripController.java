@@ -2,7 +2,8 @@ package com.example.sahldarbak.Controller;
 
 
 import com.example.sahldarbak.Api.ApiResponse;
-import com.example.sahldarbak.DTO.DestinationRecommendation.SelectDestinationDTO;
+import com.example.sahldarbak.DTO.CityPlan.CityPlanDTO;
+import com.example.sahldarbak.DTO.SelectDestinationDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
 import com.example.sahldarbak.Model.Trip;
 import com.example.sahldarbak.Service.TripService;

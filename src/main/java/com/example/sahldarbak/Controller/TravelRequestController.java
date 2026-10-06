@@ -53,4 +53,10 @@ public class TravelRequestController {
         travelRequestService.submitTravelRequest(travelRequestId);
         return ResponseEntity.status(200).body(new ApiResponse("travel request submitted successfully"));
     }
+
+    @GetMapping("/get-by-user/{userId}")
+    public ResponseEntity<?> getTravelRequestsByUser(@PathVariable Integer userId) {
+
+        return ResponseEntity.status(200).body(travelRequestService.getTravelRequestsByUser(userId));
+    }
 }
