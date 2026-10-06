@@ -1,4 +1,4 @@
-package com.example.sahldarbak.DTO;
+package com.example.sahldarbak.DTO.DestinationRecommendation;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
