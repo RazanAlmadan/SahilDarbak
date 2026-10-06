@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
-public class AIService {
+public class AIDestinationRecommendationService {
 
     private final TravelRequestRepository travelRequestRepository;
 
@@ -41,21 +41,12 @@ public class AIService {
             throw new ApiException("travel request not found");
         }
 
-
-        /*
-         * STEP 1
-         * Collect the user's preferences.
-         */
-
-        String userPreferences =
-                buildUserPreferences(travelRequest);
+        //Collect the user's preferences.
+        String userPreferences = buildUserPreferences(travelRequest);
 
 
-        /*
-         * STEP 2
-         * Ask Gemini to suggest candidate countries.
-         */
 
+        // Ask Gemini to suggest candidate countries.
         String firstPrompt = """
                 You are a travel recommendation assistant.
 
@@ -91,11 +82,9 @@ public class AIService {
         String candidateResponse = callGemini(firstPrompt);
 
 
-        /*
-         * STEP 3
-         * Parse Gemini's countries.
-         */
 
+
+        // Parse Gemini's countries.
         JsonObject candidateObject;
 
         try {
@@ -105,158 +94,90 @@ public class AIService {
                             .getAsJsonObject();
 
         } catch (Exception e) {
-
-            throw new ApiException(
-                    "AI returned invalid JSON: " + candidateResponse
-            );
+            throw new ApiException("AI returned invalid JSON: " + candidateResponse);
         }
 
-
-        JsonArray destinations =
-                candidateObject.getAsJsonArray("destinations");
-
+        JsonArray destinations = candidateObject.getAsJsonArray("destinations");
 
         if (destinations == null || destinations.size() == 0) {
-
-            throw new ApiException(
-                    "AI did not return any destination countries"
-            );
+            throw new ApiException("AI did not return any destination countries");
         }
 
-
-        /*
-         * STEP 4
-         * Get weather + holidays for every country.
-         */
+         // Get weather + holidays for every country using the external API.
 
         JsonArray externalData = new JsonArray();
 
-
         for (JsonElement element : destinations) {
 
-            JsonObject destination =
-                    element.getAsJsonObject();
+            JsonObject destination = element.getAsJsonObject();
+
+            String country = destination.get("country").getAsString();
+
+            String countryCode = destination.get("countryCode").getAsString();
+
+            String capital = destination.get("capital").getAsString();
+
+            JsonObject destinationData = new JsonObject();
+
+            destinationData.addProperty("country", country);
+
+            destinationData.addProperty("countryCode", countryCode);
+
+            destinationData.addProperty("capital", capital);
 
 
-            String country =
-                    destination.get("country").getAsString();
 
-            String countryCode =
-                    destination.get("countryCode").getAsString();
-
-            String capital =
-                    destination.get("capital").getAsString();
-
-
-            JsonObject destinationData =
-                    new JsonObject();
-
-
-            destinationData.addProperty(
-                    "country",
-                    country
-            );
-
-            destinationData.addProperty(
-                    "countryCode",
-                    countryCode
-            );
-
-            destinationData.addProperty(
-                    "capital",
-                    capital
-            );
-
-
-            /*
-             * Get weather
-             */
+            // Get weather using OpenWeather API
 
             try {
 
-                JsonObject weather =
-                        weatherService.getWeather(capital);
+                JsonObject weather = weatherService.getWeather(capital);
 
-                destinationData.add(
-                        "weather",
-                        weather
-                );
+                destinationData.add("weather", weather);
 
             } catch (Exception e) {
-
-                destinationData.addProperty(
-                        "weatherError",
-                        e.getMessage()
-                );
+                destinationData.addProperty("weatherError", e.getMessage());
             }
 
 
-            /*
-             * Get holidays
-             */
 
+            // Get holidays using Nager.date API
             try {
 
-                JsonArray holidays =
-                        getHolidaysForTrip(
-                                countryCode,
-                                travelRequest.getStartDate(),
-                                travelRequest.getEndDate()
-                        );
+                JsonArray holidays = getHolidaysForTrip(countryCode, travelRequest.getStartDate(), travelRequest.getEndDate());
 
-                destinationData.add(
-                        "holidays",
-                        holidays
-                );
+                destinationData.add("holidays", holidays);
 
             } catch (Exception e) {
-
-                destinationData.addProperty(
-                        "holidayError",
-                        e.getMessage()
-                );
+                destinationData.addProperty("holidayError", e.getMessage());
             }
-
-
             externalData.add(destinationData);
         }
 
 
-        /*
-         * STEP 5
-         * Give Gemini the preferences + weather + holidays.
-         */
 
-        String finalPrompt =
-                buildFinalPrompt(
-                        userPreferences,
-                        externalData
-                );
+         // Give Gemini the preferences + weather + holidays.
+
+        String finalPrompt = buildFinalPrompt(userPreferences, externalData);
 
 
-        /*
-         * STEP 6
-         * Gemini analyzes everything and returns final JSON.
-         */
-
+        // Gemini analyzes everything and returns final JSON.
         String aiResponse = callGemini(finalPrompt);
 
         Gson gson = new Gson();
 
-        AIRecommendationResponse response =
-                gson.fromJson(aiResponse, AIRecommendationResponse.class);
+        AIRecommendationResponse response = gson.fromJson(aiResponse, AIRecommendationResponse.class);
 
         return response;
     }
 
 
-    private String buildUserPreferences(
-            TravelRequest travelRequest
-    ) {
+    // collect all the user preferences in one string
+    private String buildUserPreferences(TravelRequest travelRequest) {
 
         StringBuilder text = new StringBuilder();
 
-
+        // Date of travel
         text.append("TRAVEL DATES:\n")
                 .append("Start Date: ")
                 .append(travelRequest.getStartDate())
@@ -266,18 +187,20 @@ public class AIService {
                 .append("\n\n");
 
 
+        // User budget
         text.append("BUDGET:\n")
                 .append(travelRequest.getBudget())
                 .append("\n\n");
 
 
+        // Travel Type
         text.append("TRAVEL TYPE:\n")
                 .append(travelRequest.getTravelType())
                 .append("\n");
 
 
+        // if there was a group
         if (travelRequest.getGroupSize() != null) {
-
             text.append("Group Size: ")
                     .append(travelRequest.getGroupSize())
                     .append("\n");
@@ -294,14 +217,9 @@ public class AIService {
 
         text.append("\n");
 
+        // General preference
 
-        /*
-         * General preference
-         */
-
-        GeneralPreference g =
-                travelRequest.getGeneralPreference();
-
+        GeneralPreference g = travelRequest.getGeneralPreference();
 
         if (g != null) {
 
@@ -324,10 +242,7 @@ public class AIService {
                     .append("\n\n");
         }
 
-
-        /*
-         * Food preferences
-         */
+        // Food preferences
 
         text.append("FOOD PREFERENCES:\n");
 
@@ -350,9 +265,8 @@ public class AIService {
         text.append("\n");
 
 
-        /*
-         * Activity preferences
-         */
+
+        // Activity preferences
 
         text.append("ACTIVITY PREFERENCES:\n");
 
@@ -375,9 +289,7 @@ public class AIService {
         text.append("\n");
 
 
-        /*
-         * Travel restrictions
-         */
+        // Travel restrictions
 
         text.append("TRAVEL RESTRICTIONS:\n");
 
@@ -405,34 +317,17 @@ public class AIService {
     }
 
 
-    private JsonArray getHolidaysForTrip(
-            String countryCode,
-            LocalDate startDate,
-            LocalDate endDate
-    ) {
+    private JsonArray getHolidaysForTrip(String countryCode, LocalDate startDate, LocalDate endDate) {
 
         JsonArray result = new JsonArray();
 
 
-        /*
-         * Get holidays for the year in which
-         * the trip starts.
-         */
 
-        JsonArray startYearHolidays =
-                holidayService.getHolidays(
-                        countryCode,
-                        startDate.getYear()
-                );
+        // Get holidays for the year in which the trip starts.
 
+        JsonArray startYearHolidays = holidayService.getHolidays(countryCode, startDate.getYear());
 
-        addRelevantHolidays(
-                result,
-                startYearHolidays,
-                startDate,
-                endDate
-        );
-
+        addRelevantHolidays(result, startYearHolidays, startDate, endDate);
 
         /*
          * If the trip crosses into another year,
@@ -441,58 +336,34 @@ public class AIService {
 
         if (startDate.getYear() != endDate.getYear()) {
 
-            JsonArray endYearHolidays =
-                    holidayService.getHolidays(
-                            countryCode,
-                            endDate.getYear()
-                    );
+            JsonArray endYearHolidays = holidayService.getHolidays(countryCode, endDate.getYear());
 
-
-            addRelevantHolidays(
-                    result,
-                    endYearHolidays,
-                    startDate,
-                    endDate
-            );
+            addRelevantHolidays(result, endYearHolidays, startDate, endDate);
         }
-
 
         return result;
     }
 
 
-    private void addRelevantHolidays(
-            JsonArray result,
-            JsonArray holidays,
-            LocalDate startDate,
-            LocalDate endDate
-    ) {
+    private void addRelevantHolidays(JsonArray result, JsonArray holidays, LocalDate startDate, LocalDate endDate) {
 
         for (JsonElement element : holidays) {
 
-            JsonObject holiday =
-                    element.getAsJsonObject();
-
+            JsonObject holiday = element.getAsJsonObject();
 
             if (!holiday.has("date")) {
                 continue;
             }
 
 
-            LocalDate holidayDate =
-                    LocalDate.parse(
-                            holiday.get("date").getAsString()
-                    );
-
+            LocalDate holidayDate = LocalDate.parse(holiday.get("date").getAsString());
 
             /*
              * Only add holidays that happen
              * during the user's trip.
              */
 
-            if (!holidayDate.isBefore(startDate)
-                    && !holidayDate.isAfter(endDate)) {
-
+            if (!holidayDate.isBefore(startDate) && !holidayDate.isAfter(endDate)) {
                 result.add(holiday);
             }
         }
@@ -895,10 +766,7 @@ public class AIService {
 
         JsonObject textPart = new JsonObject();
 
-        textPart.addProperty(
-                "text",
-                prompt
-        );
+        textPart.addProperty("text", prompt);
 
 
         JsonArray parts = new JsonArray();
@@ -908,10 +776,7 @@ public class AIService {
 
         JsonObject content = new JsonObject();
 
-        content.add(
-                "parts",
-                parts
-        );
+        content.add("parts", parts);
 
 
         JsonArray contentsArray = new JsonArray();
@@ -921,20 +786,12 @@ public class AIService {
 
         JsonObject requestBody = new JsonObject();
 
-        requestBody.add(
-                "contents",
-                contentsArray
-        );
+        requestBody.add("contents", contentsArray);
 
 
         Request request = new Request.Builder()
                 .url(geminiUrl)
-                .post(
-                        RequestBody.create(
-                                requestBody.toString(),
-                                MediaType.parse("application/json")
-                        )
-                )
+                .post(RequestBody.create(requestBody.toString(), MediaType.parse("application/json")))
                 .build();
 
 
@@ -948,13 +805,9 @@ public class AIService {
             }
 
 
-            String json =
-                    response.body().string();
+            String json = response.body().string();
 
-
-            JsonObject obj =
-                    JsonParser.parseString(json)
-                            .getAsJsonObject();
+            JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
 
 
             if (obj.has("error")) {
@@ -977,35 +830,23 @@ public class AIService {
         }
     }
 
-
     private String extractText(JsonObject obj) {
 
         JsonArray candidates =
                 obj.getAsJsonArray("candidates");
 
-
-        if (candidates == null
-                || candidates.size() == 0) {
-
-            throw new ApiException(
-                    "Gemini returned no candidates"
-            );
+        if (candidates == null || candidates.size() == 0) {
+            throw new ApiException("Gemini returned no candidates");
         }
 
 
-        JsonObject firstCandidate =
-                candidates
-                        .get(0)
-                        .getAsJsonObject();
+        JsonObject firstCandidate = candidates.get(0).getAsJsonObject();
 
 
-        JsonObject content =
-                firstCandidate
-                        .getAsJsonObject("content");
+        JsonObject content = firstCandidate.getAsJsonObject("content");
 
 
-        JsonArray parts =
-                content.getAsJsonArray("parts");
+        JsonArray parts = content.getAsJsonArray("parts");
 
 
         return parts

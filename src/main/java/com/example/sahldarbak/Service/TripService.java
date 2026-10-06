@@ -128,6 +128,7 @@ public class TripService {
         return smartItineraryAIService.generateSmartItinerary(travelRequest, hotels, activities, restaurants);
     }
 
+    // after AI suggest countries the user can select one
     public void selectDestination(
             Integer user_id,
             Integer travel_request_id,
@@ -158,23 +159,21 @@ public class TripService {
                     "a trip has already been created for this travel request"
             );
         }
-
+        // create new Trip with the country the user chose and TravelRequest info
         Trip trip = new Trip();
 
         trip.setCountry(dto.getCountry());
         trip.setCity(dto.getCity());
 
-        /*
-         * Get these values directly from the travel request.
-         */
+
+        // Get these values directly from the travel request.
+
         trip.setStartDate(travelRequest.getStartDate());
         trip.setEndDate(travelRequest.getEndDate());
         trip.setBudget(travelRequest.getBudget());
 
-        /*
-         * You can change this status depending on
-         * how you want your existing trip workflow to work.
-         */
+
+        // we can change it if we want
         trip.setStatus("planned");
 
         trip.setUser(user);

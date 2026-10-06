@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AIController {
 
-    private final AIService aiService;
+    private final AIDestinationRecommendationService aiService;
 
     @GetMapping("/get/Generated/countries/{travel_request_id}")
     public ResponseEntity<?> generateCountry(@PathVariable Integer travel_request_id){

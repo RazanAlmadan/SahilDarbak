@@ -55,20 +55,12 @@ public class TripController {
         return ResponseEntity.status(200).body(smartItineraryDTO);
     }
 
+    // user enter the country they want in the body
     @PostMapping("/select/{user_id}/{travel_request_id}")
-    public ResponseEntity<ApiResponse> selectDestination(
-            @PathVariable Integer user_id,
-            @PathVariable Integer travel_request_id,
-            @Valid @RequestBody SelectDestinationDTO dto
-    ) {
+    public ResponseEntity<ApiResponse> selectDestination(@PathVariable Integer user_id, @PathVariable Integer travel_request_id, @Valid @RequestBody SelectDestinationDTO dto) {
 
-        tripService.selectDestination(
-                user_id,
-                travel_request_id,
-                dto
-        );
+        tripService.selectDestination(user_id, travel_request_id, dto);
 
-        return ResponseEntity.status(200)
-                .body(new ApiResponse("Destination selected successfully"));
+        return ResponseEntity.status(200).body(new ApiResponse("Destination selected successfully"));
     }
 }
