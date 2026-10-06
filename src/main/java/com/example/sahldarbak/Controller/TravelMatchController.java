@@ -1,5 +1,6 @@
 package com.example.sahldarbak.Controller;
 
+import com.example.sahldarbak.Api.ApiResponse;
 import com.example.sahldarbak.Service.TravelMatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class TravelMatchController {
                                  @PathVariable Integer receiverId,
                                  @RequestParam String message) {
         travelMatchService.add(senderId, receiverId, message);
-        return ResponseEntity.status(200).body("invite sent successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("invite sent successfully"));
     }
 
     @PutMapping("/update/{inviteId}/{userId}/{status}")
@@ -26,13 +27,13 @@ public class TravelMatchController {
                                     @PathVariable Integer userId,
                                     @PathVariable String status) {
         travelMatchService.update(inviteId, userId, status);
-        return ResponseEntity.status(200).body("invite updated successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("invite updated successfully"));
     }
 
-    @GetMapping("/matches/{userId}")
-    public ResponseEntity<?> getMatches(@PathVariable Integer userId) {
-        return ResponseEntity.status(200).body(travelMatchService.getMatches(userId));
-    }
+//    @GetMapping("/matches/{userId}")
+//    public ResponseEntity<?> getMatches(@PathVariable Integer userId) {
+//        return ResponseEntity.status(200).body(travelMatchService.getMatches(userId));
+//    }
 
     @GetMapping("/sent/{userId}")
     public ResponseEntity<?> getSent(@PathVariable Integer userId) {

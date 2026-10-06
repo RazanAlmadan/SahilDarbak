@@ -1,5 +1,6 @@
 package com.example.sahldarbak.Controller;
 
+import com.example.sahldarbak.Api.ApiResponse;
 import com.example.sahldarbak.DTO.TravelPresenceDTO;
 import com.example.sahldarbak.Service.TravelPresenceService;
 import jakarta.validation.Valid;
@@ -21,7 +22,7 @@ public class TravelPresenceController {
     @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody @Valid TravelPresenceDTO dto) {
         travelPresenceService.add(dto);
-        return ResponseEntity.status(200).body("travel presence added successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("travel presence added successfully") );
     }
 
     @PutMapping("/update")
@@ -39,5 +40,10 @@ public class TravelPresenceController {
     @GetMapping("/nearby-count/{userId}")
     public ResponseEntity<?> getNearbyCount(@PathVariable Integer userId) {
         return ResponseEntity.status(200).body(travelPresenceService.getNearbyCount(userId));
+    }
+
+    @GetMapping("/nearest/{userId}")
+    public ResponseEntity<?> getNearest(@PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(travelPresenceService.getNearest(userId));
     }
 }
