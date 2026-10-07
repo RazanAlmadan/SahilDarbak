@@ -13,12 +13,19 @@
     <title>خطط رحلتك | SahlDarbak</title>
 
     <link rel="stylesheet"
-          th:href="@{/css/base.css}">
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
 
     <link rel="stylesheet"
-          th:href="@{/css/flow.css}">
+          th:href="@{/css/flow.css}"
+          href="/css/flow.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/travel-request.css}"
+          href="/css/travel-request.css">
 
 </head>
+
 
 <body>
 
@@ -29,32 +36,831 @@
 
     <div class="flow-container">
 
-        <span class="section-tag">
 
-            <span class="material-symbols-rounded">
-                route
+        <!-- HEADER -->
+
+        <div class="request-header">
+
+            <span class="section-tag">
+
+                <span class="material-symbols-rounded">
+                    route
+                </span>
+
+                خطط رحلتك
+
             </span>
 
-            خطط رحلتك
 
-        </span>
-
-
-        <h1>
-            خلنا نعرف رحلتك أكثر ✈️
-        </h1>
-
-        <p>
-            كم خطوة بسيطة وبعدها نبدأ نرتب لك الخيارات المناسبة.
-        </p>
+            <h1>
+                خلنا نعرف رحلتك أكثر ✈️
+            </h1>
 
 
-        <div id="travelRequestApp"
-             class="flow-card">
-
-            <!-- بنبني الـWizard هنا -->
+            <p>
+                كم خطوة بسيطة، وبعدها نقدر نرتب لك تجربة تناسبك فعلًا.
+            </p>
 
         </div>
+
+
+
+        <!-- STEPPER -->
+
+        <div class="request-stepper">
+
+            <div class="step-indicator active"
+                 data-indicator="1">
+                <span>1</span>
+                <small>الرحلة</small>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step-indicator"
+                 data-indicator="2">
+                <span>2</span>
+                <small>جوّك</small>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step-indicator"
+                 data-indicator="3">
+                <span>3</span>
+                <small>الأكل</small>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step-indicator"
+                 data-indicator="4">
+                <span>4</span>
+                <small>الأنشطة</small>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step-indicator"
+                 data-indicator="5">
+                <span>5</span>
+                <small>القيود</small>
+            </div>
+            <div class="step-line"></div>
+
+            <div class="step-indicator"
+                 data-indicator="6">
+                <span>6</span>
+                <small>مراجعة</small>
+            </div>
+
+
+
+
+        </div>
+
+
+
+        <div id="requestMessage"
+             class="request-message">
+        </div>
+
+
+
+        <!-- =============================
+             STEP 1 - BASIC REQUEST
+        ============================== -->
+
+        <section class="wizard-step active"
+                 data-step="1">
+
+            <div class="wizard-card">
+
+                <div class="wizard-title">
+
+                    <div class="wizard-title-icon">
+                        <span class="material-symbols-rounded">
+                            flight
+                        </span>
+                    </div>
+
+                    <div>
+                        <h2>وش تفاصيل رحلتك؟</h2>
+                        <p>
+                            التواريخ، الميزانية ومين مسافر معك.
+                        </p>
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-grid two-columns">
+
+                    <div class="form-group">
+
+                        <label for="startDate">
+                            تاريخ بداية الرحلة
+                        </label>
+
+                        <input id="startDate"
+                               type="date"
+                               required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="endDate">
+                            تاريخ نهاية الرحلة
+                        </label>
+
+                        <input id="endDate"
+                               type="date"
+                               required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="budget">
+                            ميزانيتك التقريبية
+                        </label>
+
+                        <div class="input-with-label">
+
+                            <input id="budget"
+                                   type="number"
+                                   min="1"
+                                   placeholder="مثال: 10000"
+                                   required>
+
+                            <span>ر.س</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="question-block">
+
+                    <h3>
+                        مين مسافر؟
+                    </h3>
+
+
+                    <div class="choice-grid travel-type-grid">
+
+                        <label class="choice-card">
+
+                            <input type="radio"
+                                   name="travelType"
+                                   value="solo">
+
+                            <span class="material-symbols-rounded">
+                                person
+                            </span>
+
+                            <strong>لحالي</strong>
+
+                            <small>رحلة فردية</small>
+
+                        </label>
+
+
+                        <label class="choice-card">
+
+                            <input type="radio"
+                                   name="travelType"
+                                   value="couple">
+
+                            <span class="material-symbols-rounded">
+                                favorite
+                            </span>
+
+                            <strong>شخصين</strong>
+
+                            <small>رحلة لشخصين</small>
+
+                        </label>
+
+
+                        <label class="choice-card">
+
+                            <input type="radio"
+                                   name="travelType"
+                                   value="group">
+
+                            <span class="material-symbols-rounded">
+                                groups
+                            </span>
+
+                            <strong>مجموعة</strong>
+
+                            <small>أصدقاء أو مجموعة</small>
+
+                        </label>
+
+
+                        <label class="choice-card">
+
+                            <input type="radio"
+                                   name="travelType"
+                                   value="family">
+
+                            <span class="material-symbols-rounded">
+                                family_restroom
+                            </span>
+
+                            <strong>عائلة</strong>
+
+                            <small>بالغين وأطفال</small>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+
+                <div id="groupSizeContainer"
+                     class="conditional-field">
+
+                    <div class="form-group">
+
+                        <label for="groupSize">
+                            عدد أفراد المجموعة
+                        </label>
+
+                        <input id="groupSize"
+                               type="number"
+                               min="2">
+
+                    </div>
+
+                </div>
+
+
+
+                <div id="familyDetailsContainer"
+                     class="conditional-field family-details">
+
+                    <div class="form-grid two-columns">
+
+                        <div class="form-group">
+
+                            <label for="adultsCount">
+                                عدد البالغين
+                            </label>
+
+                            <input id="adultsCount"
+                                   type="number"
+                                   min="1"
+                                   value="2">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="childrenCount">
+                                عدد الأطفال
+                            </label>
+
+                            <input id="childrenCount"
+                                   type="number"
+                                   min="1"
+                                   max="10"
+                                   value="1">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="children-ages-section">
+
+                        <h4>
+                            أعمار الأطفال
+                        </h4>
+
+                        <p>
+                            نحتاج الأعمار عشان نراعي الأنشطة والخطة المناسبة لهم.
+                        </p>
+
+                        <div id="familyChildrenAges"
+                             class="children-ages-grid">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="question-block">
+
+                    <h3>
+                        كيف تبي تتنقل بين المدن؟
+                    </h3>
+
+
+                    <div class="choice-grid city-mode-grid">
+
+                        <label class="choice-card">
+
+                            <input type="radio"
+                                   name="cityPlanMode"
+                                   value="single_city">
+
+                            <span class="material-symbols-rounded">
+                                location_on
+                            </span>
+
+                            <strong>مدينة واحدة</strong>
+
+                            <small>
+                                رحلتي كلها في مدينة واحدة
+                            </small>
+
+                        </label>
+
+
+                        <label class="choice-card">
+
+                            <input type="radio"
+                                   name="cityPlanMode"
+                                   value="multi_city_manual">
+
+                            <span class="material-symbols-rounded">
+                                edit_location_alt
+                            </span>
+
+                            <strong>أنا أختار المدن</strong>
+
+                            <small>
+                                أكثر من مدينة وأرتبها بنفسي
+                            </small>
+
+                        </label>
+
+
+                        <label class="choice-card">
+
+                            <input type="radio"
+                                   name="cityPlanMode"
+                                   value="multi_city_ai">
+
+                            <span class="material-symbols-rounded">
+                                auto_awesome
+                            </span>
+
+                            <strong>رتبها لي ✨</strong>
+
+                            <small>
+                                الذكاء الاصطناعي يقترح المدن المناسبة
+                            </small>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =============================
+             STEP 2 - GENERAL
+        ============================== -->
+
+        <section class="wizard-step"
+                 data-step="2">
+
+            <div class="wizard-card">
+
+                <div class="wizard-title">
+
+                    <div class="wizard-title-icon">
+                        <span class="material-symbols-rounded">
+                            mood
+                        </span>
+                    </div>
+
+                    <div>
+                        <h2>وش جوّ الرحلة اللي يعجبك؟</h2>
+                        <p>
+                            هذي الأشياء تساعدنا نفهم اختياراتك.
+                        </p>
+                    </div>
+
+                </div>
+
+
+
+                <div class="preference-question">
+
+                    <h3>الطقس اللي تفضله</h3>
+
+                    <div class="mini-choice-grid">
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="weather"
+                                   value="cold">
+                            <span>❄️</span>
+                            بارد
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="weather"
+                                   value="mild">
+                            <span>🌤️</span>
+                            معتدل
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="weather"
+                                   value="hot">
+                            <span>☀️</span>
+                            حار
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="weather"
+                                   value="any">
+                            <span>✨</span>
+                            ما يفرق
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="preference-question">
+
+                    <h3>الأجواء</h3>
+
+                    <div class="mini-choice-grid">
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="environment"
+                                   value="nature">
+                            طبيعة
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="environment"
+                                   value="city">
+                            مدن
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="environment"
+                                   value="beach">
+                            بحر
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="environment"
+                                   value="mixed">
+                            من كل شيء
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="environment"
+                                   value="any">
+                            ما يفرق
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="preference-question">
+
+                    <h3>الزحمة</h3>
+
+                    <div class="mini-choice-grid">
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="crowdPreference"
+                                   value="low">
+                            أفضل الهدوء
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="crowdPreference"
+                                   value="medium">
+                            وسط
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="crowdPreference"
+                                   value="high">
+                            أحب الأماكن الحيوية
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="crowdPreference"
+                                   value="any">
+                            ما يفرق
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="preference-question">
+
+                    <h3>سرعة رحلتك</h3>
+
+                    <div class="mini-choice-grid">
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="tripPace"
+                                   value="relaxed">
+                            هادية ومريحة
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="tripPace"
+                                   value="moderate">
+                            متوازنة
+                        </label>
+
+                        <label class="mini-choice">
+                            <input type="radio"
+                                   name="tripPace"
+                                   value="active">
+                            مليانة فعاليات
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =============================
+             STEP 3 - FOOD
+        ============================== -->
+
+        <section class="wizard-step"
+                 data-step="3">
+
+            <div class="wizard-card">
+
+                <div class="wizard-title">
+
+                    <div class="wizard-title-icon">
+                        <span class="material-symbols-rounded">
+                            restaurant
+                        </span>
+                    </div>
+
+                    <div>
+                        <h2>وش تفضيلاتك بالأكل؟</h2>
+
+                        <p>
+                            اختر اللي يهمك، وإذا كان شرط أساسي فعل الخيار.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div id="foodPreferences"
+                     class="preference-list">
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =============================
+             STEP 4 - ACTIVITIES
+        ============================== -->
+
+        <section class="wizard-step"
+                 data-step="4">
+
+            <div class="wizard-card">
+
+                <div class="wizard-title">
+
+                    <div class="wizard-title-icon">
+                        <span class="material-symbols-rounded">
+                            attractions
+                        </span>
+                    </div>
+
+                    <div>
+                        <h2>وش الأشياء اللي تستمتع فيها؟</h2>
+
+                        <p>
+                            اختر الأنشطة وحدد أهميتها لك من 1 إلى 5.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div id="activityPreferences"
+                     class="preference-list">
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =============================
+             STEP 5 - RESTRICTIONS
+        ============================== -->
+
+        <section class="wizard-step"
+                 data-step="5">
+
+            <div class="wizard-card">
+
+                <div class="wizard-title">
+
+                    <div class="wizard-title-icon">
+                        <span class="material-symbols-rounded">
+                            health_and_safety
+                        </span>
+                    </div>
+
+                    <div>
+                        <h2>في شيء لازم ننتبه له؟</h2>
+
+                        <p>
+                            حساسية، احتياج خاص، قيد غذائي أو أي ملاحظة مهمة.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div id="restrictionRows">
+                </div>
+
+
+                <button id="addRestrictionButton"
+                        class="btn btn-light"
+                        type="button">
+
+                    <span class="material-symbols-rounded">
+                        add
+                    </span>
+
+                    أضف قيد أو ملاحظة
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+
+
+
+
+        <!-- =============================
+             STEP 6 - REVIEW
+        ============================== -->
+
+        <section class="wizard-step"
+                 data-step="6">
+
+            <div class="wizard-card">
+
+                <div class="wizard-title">
+
+                    <div class="wizard-title-icon">
+                        <span class="material-symbols-rounded">
+                            fact_check
+                        </span>
+                    </div>
+
+                    <div>
+                        <h2>جاهزين؟ 👀</h2>
+
+                        <p>
+                            راجع معلوماتك وبعدين نرسل طلب الرحلة.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div id="reviewContent"
+                     class="review-content">
+                </div>
+
+
+                <div class="review-note">
+
+                    <span class="material-symbols-rounded">
+                        auto_awesome
+                    </span>
+
+                    <p>
+                        بعد الإرسال، يصير طلبك جاهز لمرحلة اختيار الوجهة.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- NAVIGATION -->
+
+        <div class="wizard-navigation">
+
+            <button id="previousButton"
+                    class="btn btn-light"
+                    type="button">
+
+                <span class="material-symbols-rounded">
+                    arrow_forward
+                </span>
+
+                السابق
+
+            </button>
+
+
+            <button id="nextButton"
+                    class="btn btn-primary"
+                    type="button">
+
+                التالي
+
+                <span class="material-symbols-rounded">
+                    arrow_back
+                </span>
+
+            </button>
+
+
+            <button id="submitRequestButton"
+                    class="btn btn-primary submit-request-button"
+                    type="button">
+
+                <span class="material-symbols-rounded">
+                    check_circle
+                </span>
+
+                اعتماد طلب الرحلة
+
+            </button>
+
+        </div>
+
 
     </div>
 
@@ -64,11 +870,14 @@
 <div th:replace="~{fragments/footer.html :: footer}"></div>
 
 
-<script th:src="@{/js/language.js}"></script>
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
 
-<script th:src="@{/js/base.js}"></script>
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
 
-<script th:src="@{/js/travel-request.js}"></script>
+<script th:src="@{/js/travel-request.js}"
+        src="/js/travel-request.js"></script>
 
 </body>
 </html>
