@@ -13,4 +13,5 @@ public interface BlockedUserRepository extends JpaRepository<BlockedUser,Integer
     BlockedUser findBlockedUserById(Integer id);
     boolean existsByBlockerIdAndBlockedId(Integer blockerId, Integer blockedId);
     List<BlockedUser> findBlockedUsersByBlockerId(Integer blockerId);
+    BlockedUser findBlockedUserByBlockerIdAndBlockedId(Integer blockerId, Integer blockedId);
 }

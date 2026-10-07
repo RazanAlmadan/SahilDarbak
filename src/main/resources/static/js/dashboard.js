@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupNewTripButtons();
 
     loadTravelRequests(userId);
+    loadProfileCard(userId);
 
 });
 
@@ -576,5 +577,38 @@ function escapeHtml(value) {
         value ?? "";
 
     return div.innerHTML;
+
+}
+
+
+async function loadProfileCard(userId) {
+
+    const nameEl = document.getElementById("profileName");
+    const noteEl = document.getElementById("profileNote");
+
+    try {
+
+        const response = await fetch(`/api/v1/profile/get/${userId}`);
+
+        // ما عنده بروفايل: نخلي النص الافتراضي "أكمل ملفك الشخصي"
+        if (!response.ok) {
+            return;
+        }
+
+        const profile = await response.json();
+
+        nameEl.removeAttribute("data-i18n");
+        noteEl.removeAttribute("data-i18n");
+
+        nameEl.textContent = profile.fullName;
+
+        noteEl.textContent =
+            [profile.city, profile.country]
+                .filter(Boolean)
+                .join("، ");
+
+    } catch (_) {
+        // نخلي النص الافتراضي
+    }
 
 }

@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.sahldarbak.Model.Profile;
 import com.example.sahldarbak.Repository.ProfileRepository;
+import com.example.sahldarbak.DTO.BlockedUserDTO;
 import java.util.ArrayList;
 
 import java.time.LocalDate;
@@ -28,6 +29,7 @@ public class BlockedUserService {
 //    CRUD without update is no need for it
 
     public List<BlockedUser> get(){ return blockedUserRepository.findAll();}
+
 
     public void add(Integer blockerId, Integer blockedId) {
         if (blockerId.equals(blockedId))
@@ -49,16 +51,18 @@ public class BlockedUserService {
         blockedUser.setBlocked(blocked);
         blockedUser.setBlockedAt(LocalDate.now());
 
-        // cancel pending invites between the two users, in both directions
-        TravelMatch sent = travelMatchRepository
-                .findTravelMatchBySenderIdAndReceiverIdAndStatus(blockerId, blockedId, "pending");
-        if (sent != null)
-            travelMatchRepository.delete(sent);
+        // end every connection between the two users (pending and accepted, both directions)
+        for (String status : List.of("pending", "accepted")) {
+            TravelMatch sent = travelMatchRepository
+                    .findTravelMatchBySenderIdAndReceiverIdAndStatus(blockerId, blockedId, status);
+            if (sent != null)
+                travelMatchRepository.delete(sent);
 
-        TravelMatch received = travelMatchRepository
-                .findTravelMatchBySenderIdAndReceiverIdAndStatus(blockedId, blockerId, "pending");
-        if (received != null)
-            travelMatchRepository.delete(received);
+            TravelMatch received = travelMatchRepository
+                    .findTravelMatchBySenderIdAndReceiverIdAndStatus(blockedId, blockerId, status);
+            if (received != null)
+                travelMatchRepository.delete(received);
+        }
 
         blockedUserRepository.save(blockedUser);
     }
@@ -72,16 +76,18 @@ public class BlockedUserService {
     }
 // Extra endpoints
 
-    // profiles of the users I blocked
-    public List<Profile> getBlocked(Integer blockerId) {
+    // profiles of the users I blocked, with the block record id
+    public List<BlockedUserDTO> getBlocked(Integer blockerId) {
         if (!userRepository.existsById(blockerId))
             throw new ApiException("user not found");
 
-        List<Integer> ids = new ArrayList<>();
-        for (BlockedUser b : blockedUserRepository.findBlockedUsersByBlockerId(blockerId))
-            ids.add(b.getBlocked().getId());
-
-        return profileRepository.findAllById(ids);
+        List<BlockedUserDTO> result = new ArrayList<>();
+        for (BlockedUser b : blockedUserRepository.findBlockedUsersByBlockerId(blockerId)) {
+            Profile profile = profileRepository.findById(b.getBlocked().getId()).orElse(null);
+            if (profile != null)
+                result.add(new BlockedUserDTO(b.getId(), profile));
+        }
+        return result;
     }
 
     // true if either user blocked the other
@@ -91,6 +97,15 @@ public class BlockedUserService {
 
         return blockedUserRepository.existsByBlockerIdAndBlockedId(userA, userB)
                 || blockedUserRepository.existsByBlockerIdAndBlockedId(userB, userA);
+    }
+
+    public void unblock(Integer blockerId, Integer blockedId) {
+        BlockedUser blockedUser = blockedUserRepository
+                .findBlockedUserByBlockerIdAndBlockedId(blockerId, blockedId);
+        if (blockedUser == null)
+            throw new ApiException("this user is not blocked");
+
+        blockedUserRepository.delete(blockedUser);
     }
 
 }

@@ -90,7 +90,7 @@
 
             <!-- PROFILE -->
 
-            <article class="overview-card profile-card">
+            <a href="/profile" class="overview-card profile-card profile-link">
 
                 <div class="overview-icon profile-icon">
 
@@ -107,18 +107,21 @@
                         الملف الشخصي
                     </small>
 
-                    <strong data-i18n="noProfileInfo">
-                        لا توجد معلومات حاليًا
+                    <strong id="profileName"
+                            data-i18n="imCompleteProfile">
+                        أكمل ملفك الشخصي
                     </strong>
 
-                    <span class="profile-note"
-                          data-i18n="profilePlaceholderText">
-                        سيتم عرض بيانات الملف الشخصي هنا
+                    <span id="profileNote"
+                          class="profile-note"
+                          data-i18n="imCompleteProfileHint">
+                        اضغط هنا وعبّ بياناتك
                     </span>
 
                 </div>
 
-            </article>
+            </a>
+
 
 
 

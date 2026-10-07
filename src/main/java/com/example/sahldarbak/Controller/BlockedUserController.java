@@ -40,4 +40,10 @@ public class BlockedUserController {
     public ResponseEntity<?> isBlocked(@PathVariable Integer userA, @PathVariable Integer userB) {
         return ResponseEntity.status(200).body(blockedUserService.isBlocked(userA, userB));
     }
+
+    @DeleteMapping("/unblock/{blockerId}/{blockedId}")
+    public ResponseEntity<?> unblock(@PathVariable Integer blockerId, @PathVariable Integer blockedId) {
+        blockedUserService.unblock(blockerId, blockedId);
+        return ResponseEntity.status(200).body(new ApiResponse("user unblocked successfully"));
+    }
 }

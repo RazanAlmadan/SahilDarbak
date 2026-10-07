@@ -1,4 +1,4 @@
-package com.example.sahldarbak.Service;
+package com.example.sahldarbak.ExternalApi;
 
 import com.example.sahldarbak.Api.ApiException;
 import org.springframework.http.HttpEntity;

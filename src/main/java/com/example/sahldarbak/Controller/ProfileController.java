@@ -32,4 +32,9 @@ public class ProfileController {
         return ResponseEntity.status(200).body(new ApiResponse("profile updated successfully"));
     }
 
+    @GetMapping("/get/{userId}")
+    public ResponseEntity<?> getByUserId(@PathVariable Integer userId) {
+        return ResponseEntity.status(200).body(profileService.getByUserId(userId));
+    }
+
 }
