@@ -63,4 +63,9 @@ public class PageController {
         return "checkin";
     }
 
+    @GetMapping("/travel-match")
+    public String travelMatch() {
+        return "travel-match";
+    }
+
 }

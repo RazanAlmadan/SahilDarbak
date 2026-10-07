@@ -1,0 +1,135 @@
+/* =====================================================
+   SAHLDARBAK - صفحة /travel-match
+   كل الـ classes تبدأ بـ tm-
+===================================================== */
+
+.tm-top {
+    margin-bottom: 26px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.tm-top-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.tm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+}
+
+.tm-card {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tm-card-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.tm-avatar {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--teal-soft);
+    color: var(--primary);
+    border-radius: 50%;
+}
+
+.tm-avatar .material-symbols-rounded {
+    font-size: 30px;
+}
+
+.tm-name {
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.tm-meta {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.tm-origin {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.tm-origin .material-symbols-rounded {
+    font-size: 20px;
+    color: var(--secondary);
+}
+
+.tm-bio {
+    flex: 1;
+    line-height: 1.8;
+    color: var(--text-primary);
+}
+
+.tm-distance {
+    width: fit-content;
+    padding: 5px 12px;
+    background: var(--orange-soft);
+    color: var(--primary);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.tm-card .btn {
+    width: 100%;
+}
+
+/* نافذة الدعوة */
+
+.tm-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 76, 92, 0.45);
+}
+
+.tm-modal-box {
+    width: 100%;
+    max-width: 520px;
+}
+
+.tm-modal-box h2 {
+    margin-bottom: 16px;
+    font-size: 22px;
+}
+
+.tm-modal-actions {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+@media (max-width: 700px) {
+
+    .tm-top {
+        flex-direction: column;
+    }
+
+}
