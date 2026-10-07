@@ -2,13 +2,14 @@ package com.example.sahldarbak.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -46,7 +47,16 @@ public class TripBudgetEstimate {
     private Double totalEstimate;
 
 
-    private LocalDate generatedAt;
+    @NotEmpty(message = "currency cannot be empty")
+    @Column(columnDefinition = "varchar(10) not null")
+    private String currency;
+
+    @Column(columnDefinition = "varchar(500)")
+    private String summary;
+
+    @Column(columnDefinition = "datetime not null")
+    private LocalDateTime generatedAt;
+
 
     @OneToOne
     @JoinColumn(name = "trip_id", nullable = false, unique = true)

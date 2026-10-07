@@ -129,8 +129,8 @@ public class EmailService {
 
         email.append("""
                 <p>
-                    Your itinerary has been accepted successfully.
-                    Here is your complete travel plan.
+                    Your travel plan is ready!
+                    Here is your complete SahlDarbak itinerary.
                 </p>
                 """);
 

@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TripRepository extends JpaRepository<Trip, Integer> {
     Trip findTripById(Integer id);
+    Trip findTripByTravelRequest_Id(Integer travelRequestId);
 }

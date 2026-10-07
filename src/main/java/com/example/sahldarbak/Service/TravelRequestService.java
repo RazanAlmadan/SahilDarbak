@@ -191,4 +191,22 @@ public class TravelRequestService {
         travelRequest.setStatus("open");
         travelRequestRepository.save(travelRequest);
     }
+
+    // GET ALL TRAVEL REQUESTS FOR USER
+    public List<TravelRequest> getTravelRequestsByUser(Integer userId) {
+
+        User user = userRepository.findUserById(userId);
+
+        if (user == null) {
+            throw new ApiException("user not found");
+        }
+
+        List<TravelRequest> travelRequests = travelRequestRepository.findAllByUser_IdOrderByIdDesc(userId);
+
+        if (travelRequests.isEmpty()) {
+            throw new ApiException("no travel requests found for this user");
+        }
+
+        return travelRequests;
+    }
 }

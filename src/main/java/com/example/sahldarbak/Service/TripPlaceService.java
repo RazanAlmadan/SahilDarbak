@@ -8,6 +8,7 @@ import com.example.sahldarbak.Repository.TripPlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -71,5 +72,43 @@ public class TripPlaceService {
         }
 
         tripPlaceRepository.delete(oldTripPlace);
+    }
+
+    //EXTRA ENDPOINTS
+
+    // GET TRIP PLACES BY DATE
+    public List<TripPlace> getTripPlacesByDate(Integer tripId, LocalDate date) {
+
+        List<TripPlace> tripPlaces = tripPlaceRepository.findAllByItinerary_Trip_IdAndScheduledAt(tripId, date);
+
+        if (tripPlaces.isEmpty()) {
+            throw new ApiException("no trip places found for this date");
+        }
+
+        return tripPlaces;
+    }
+
+    // GET TODAY'S PLAN
+    public List<TripPlace> getTodayPlan(Integer tripId) {
+        LocalDate today = LocalDate.now();
+        List<TripPlace> tripPlaces = tripPlaceRepository.findAllByItinerary_Trip_IdAndScheduledAt(tripId, today);
+
+        if (tripPlaces.isEmpty()) {
+            throw new ApiException("no places scheduled for today");
+        }
+
+        return tripPlaces;
+    }
+
+    // GET ALL TRIP PLACES BY TRIP
+    public List<TripPlace> getTripPlacesByTrip(Integer tripId) {
+
+        List<TripPlace> tripPlaces = tripPlaceRepository.findAllByItinerary_Trip_Id(tripId);
+
+        if (tripPlaces.isEmpty()) {
+            throw new ApiException("no trip places found for this trip");
+        }
+
+        return tripPlaces;
     }
 }
