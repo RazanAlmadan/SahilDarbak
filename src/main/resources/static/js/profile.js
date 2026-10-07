@@ -157,7 +157,7 @@ function setupForm(userId) {
 
                 // أول مرة: نكمل لتسجيل الوصول
                 setTimeout(() => {
-                    window.location.href = "/checkin";
+                    window.location.href = "/dashboard";
                 }, 900);
 
             }

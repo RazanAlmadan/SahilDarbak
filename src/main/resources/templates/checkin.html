@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>سهل دربك | تسجيل الوصول</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/immerse.css}"
+          href="/css/immerse.css">
+
+</head>
+
+
+<body>
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+
+<main class="im-page">
+
+    <section class="im-container im-narrow">
+
+        <div class="im-card im-center">
+
+            <div class="im-icon-circle">
+                <span class="material-symbols-rounded">
+                    location_on
+                </span>
+            </div>
+
+            <h1 class="im-title"
+                data-i18n="imCheckinTitle">
+                وصلت؟ خبّرنا وين أنت 📍
+            </h1>
+
+            <p class="im-text"
+               data-i18n="imCheckinText">
+                نحدد مدينتك من موقعك، وبعدها نعطيك دليل المدينة ونوريك المسافرين حولك.
+            </p>
+
+            <button id="gpsBtn"
+                    type="button"
+                    class="btn btn-primary im-btn-full">
+
+                <span class="material-symbols-rounded">
+                    my_location
+                </span>
+
+                <span data-i18n="imUseMyLocation">
+                    استخدم موقعي الحالي
+                </span>
+
+            </button>
+
+
+            <details class="im-manual">
+
+                <summary data-i18n="imManualLocation">
+                    أو أدخل الإحداثيات يدويًا
+                </summary>
+
+                <div class="im-manual-grid">
+
+                    <label class="im-field">
+                        <span data-i18n="imLat">خط العرض</span>
+                        <input id="latInput"
+                               type="number"
+                               step="any"
+                               placeholder="24.7136">
+                    </label>
+
+                    <label class="im-field">
+                        <span data-i18n="imLon">خط الطول</span>
+                        <input id="lonInput"
+                               type="number"
+                               step="any"
+                               placeholder="46.6753">
+                    </label>
+
+                </div>
+
+                <button id="manualBtn"
+                        type="button"
+                        class="btn btn-secondary im-btn-full">
+
+                    <span data-i18n="imConfirmManual">
+                        سجّل وصولي
+                    </span>
+
+                </button>
+
+            </details>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+<script th:src="@{/js/immerse-api.js}"
+        src="/js/immerse-api.js"></script>
+
+<script th:src="@{/js/checkin.js}"
+        src="/js/checkin.js"></script>
+
+</body>
+</html>
