@@ -1,6 +1,7 @@
 package com.example.sahldarbak.Service;
 
 import com.example.sahldarbak.AI.SmartCityPlannerAIService;
+import com.example.sahldarbak.AI.TransportationAIService;
 import com.example.sahldarbak.Api.ApiException;
 import com.example.sahldarbak.DTO.CityPlan.CityPlanDTO;
 import com.example.sahldarbak.DTO.CityPlan.CityPlanItemDTO;
@@ -8,12 +9,10 @@ import com.example.sahldarbak.AI.PackingListAIService;
 import com.example.sahldarbak.DTO.DestinationRecommendation.SelectDestinationDTO;
 import com.example.sahldarbak.DTO.PackingList.PackingListDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.HotelInsightDTO;
+import com.example.sahldarbak.DTO.TransportationRouteDTO;
 import com.example.sahldarbak.ExternalApi.EmailService;
 import com.example.sahldarbak.ExternalApi.GeoapifyService;
-import com.example.sahldarbak.Model.TravelRequest;
-import com.example.sahldarbak.Model.Trip;
-import com.example.sahldarbak.Model.TripCity;
-import com.example.sahldarbak.Model.User;
+import com.example.sahldarbak.Model.*;
 import com.example.sahldarbak.Repository.TravelRequestRepository;
 import com.example.sahldarbak.Repository.TripCityRepository;
 import com.example.sahldarbak.Repository.TripRepository;
@@ -27,7 +26,6 @@ import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
 import com.example.sahldarbak.ExternalApi.TavilyService;
 import com.example.sahldarbak.DTO.SmartItinerary.ItineraryDayDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.PlaceRecommendationDTO;
-import com.example.sahldarbak.Model.Itinerary;
 import com.example.sahldarbak.Repository.ItineraryRepository;
 import tools.jackson.databind.ObjectMapper;
 
@@ -53,6 +51,8 @@ public class TripService {
     private final ObjectMapper objectMapper;
     private final EmailService emailService;
     private final PackingListAIService packingListAIService;
+    private final TripPlaceService tripPlaceService;
+    private final TransportationAIService transportationAIService;
 
     public List<Trip> getAllTrips(){
         return tripRepository.findAll();
@@ -428,6 +428,81 @@ public class TripService {
         }
 
         return packingListAIService.generatePackingList(trip);
+    }
+
+    public List<TransportationRouteDTO> generateTransportation(
+            Integer tripId
+    ) {
+
+        Trip trip =
+                tripRepository.findTripById(tripId);
+
+        if (trip == null) {
+            throw new ApiException("trip not found");
+        }
+
+        List<TripPlace> tripPlaces =
+                tripPlaceService.getTripPlacesByTrip(
+                        tripId
+                );
+
+
+        List<TransportationRouteDTO> routes =
+                new ArrayList<>();
+
+
+        /*
+         * For now we use the order returned by
+         * your friend's existing TripPlace service.
+         *
+         * We do NOT modify TripPlace.
+         */
+
+        for (int i = 0;
+             i < tripPlaces.size() - 1;
+             i++) {
+
+            TripPlace from =
+                    tripPlaces.get(i);
+
+            TripPlace to =
+                    tripPlaces.get(i + 1);
+
+
+            /*
+             * Only connect places on the same day.
+             */
+
+            if (!from.getScheduledAt()
+                    .equals(to.getScheduledAt())) {
+
+                continue;
+            }
+
+
+            TransportationRouteDTO route =
+                    transportationAIService
+                            .generateTransportation(
+                                    from,
+                                    to,
+                                    trip.getCountry(),
+                                    trip.getTravelRequest()
+                            );
+
+
+            routes.add(route);
+        }
+
+
+        if (routes.isEmpty()) {
+
+            throw new ApiException(
+                    "not enough trip places on the same day to generate transportation"
+            );
+        }
+
+
+        return routes;
     }
 
 

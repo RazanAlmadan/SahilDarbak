@@ -88,5 +88,18 @@ public class TripController {
         return ResponseEntity.status(200).body(packingListDTO);
     }
 
+    @PostMapping("/generate-transportation/{tripId}")
+    public ResponseEntity<?> generateTransportation(
+            @PathVariable Integer tripId
+    ) {
+
+        return ResponseEntity.status(200)
+                .body(
+                        tripService.generateTransportation(
+                                tripId
+                        )
+                );
+    }
+
 
 }
