@@ -88,10 +88,20 @@ async function loadTravelRequests(userId) {
          * لو ما عنده Travel Requests
          * سواء الباك رجع [] أو 404
          */
-        if (
+
+        const noTravelRequests =
             response.status === 404 ||
-            (Array.isArray(data) && data.length === 0)
-        ) {
+            (Array.isArray(data) && data.length === 0) ||
+            data?.message
+                ?.toLowerCase()
+                .includes("no travel requests found");
+
+
+        if (noTravelRequests) {
+
+            loading.style.display = "none";
+
+            errorBox.style.display = "none";
 
             emptyTrips.style.display = "flex";
 
@@ -99,6 +109,7 @@ async function loadTravelRequests(userId) {
 
             return;
         }
+
 
 
         if (!response.ok) {
@@ -191,25 +202,55 @@ function createTripCard(request) {
 
     if (trip) {
 
-        title =
-            trip.country && trip.city
-                ? `${trip.country} - ${trip.city}`
-                : "رحلتي";
+        if (
+            request.cityPlanMode === "multi_city_ai" ||
+            request.cityPlanMode === "multi_city_manual"
+        ) {
 
-        statusClass =
-            "status-trip";
+            title =
+                trip.country || "رحلتي";
 
-        statusText =
-            "قيد التخطيط";
+            statusClass =
+                "status-trip";
 
-        buttonText =
-            "كمل رحلتك";
+            statusText =
+                "جاهزة لترتيب المدن";
 
-        buttonIcon =
-            "route";
+            buttonText =
+                request.cityPlanMode === "multi_city_ai"
+                    ? "رتب لي المدن ✨"
+                    : "أضف مدن رحلتك";
 
-        action =
-            "trip";
+            buttonIcon =
+                request.cityPlanMode === "multi_city_ai"
+                    ? "auto_awesome"
+                    : "location_city";
+
+            action =
+                "city-plan";
+
+        } else {
+
+            title =
+                trip.country && trip.city
+                    ? `${trip.country} - ${trip.city}`
+                    : trip.country || "رحلتي";
+
+            statusClass =
+                "status-trip";
+
+            statusText =
+                "قيد التخطيط";
+
+            buttonText =
+                "كمل رحلتك";
+
+            buttonIcon =
+                "route";
+
+            action =
+                "trip";
+        }
 
     } else if (
         request.status &&
@@ -223,16 +264,16 @@ function createTripCard(request) {
             "status-open";
 
         statusText =
-            "جاهزة للاقتراح";
+            "جاهزة لاختيار الوجهة";
 
         buttonText =
-            "شف الوجهات المقترحة";
+            "بانتظار اختيار الوجهة";
 
         buttonIcon =
-            "auto_awesome";
+            "public";
 
         action =
-            "destination";
+            "waiting-destination";
 
     } else {
 
@@ -253,7 +294,6 @@ function createTripCard(request) {
 
         action =
             "request";
-
     }
 
 
@@ -393,15 +433,30 @@ function setupTripButtons() {
 
             }
 
-
-            if (action === "destination") {
+            if (action === "waiting-destination") {
 
                 window.location.href =
-                    `/destination-recommendation?requestId=${requestId}`;
+                    `/trip-start?requestId=${requestId}`;
 
                 return;
-
             }
+
+
+            if (action === "city-plan") {
+
+                localStorage.setItem(
+                    "tripId",
+                    tripId
+                );
+
+                window.location.href =
+                    `/city-plan?tripId=${tripId}`;
+
+                return;
+            }
+
+
+
 
 
             if (action === "trip") {
