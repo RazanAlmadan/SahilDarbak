@@ -1,0 +1,810 @@
+/* =====================================================
+   SAHLDARBAK - BASE CSS
+   Shared across all pages
+===================================================== */
+
+
+/* =============================
+   GOOGLE FONTS
+============================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Tajawal:wght@400;500;600;700;800&display=swap');
+
+
+/* =============================
+   GOOGLE MATERIAL ICONS
+============================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,-25..0');
+
+
+
+/* =============================
+   COLORS
+============================= */
+
+:root {
+
+    /* Brand */
+    --primary: #0F4C5C;
+    --secondary: #2A9D8F;
+
+    --orange: #F4A261;
+    --yellow: #E9C46A;
+
+    /* Background */
+    --background: #F8F5EF;
+    --white: #FFFFFF;
+
+    /* Text */
+    --text-primary: #16343D;
+    --text-secondary: #66777C;
+
+    /* Border */
+    --border: #E8E3DA;
+
+
+    /* Soft Brand Colors */
+
+    --teal-soft: #E8F4F2;
+
+    --orange-soft: #FDF0E6;
+
+    --yellow-soft: #FBF5DF;
+
+    --green-soft: #EDF5EA;
+
+    --blue-soft: #EAF2F5;
+
+
+    /* Shadows */
+
+    --shadow-sm:
+            0 4px 16px rgba(15, 76, 92, 0.07);
+
+    --shadow-md:
+            0 12px 35px rgba(15, 76, 92, 0.12);
+
+    --shadow-lg:
+            0 20px 50px rgba(15, 76, 92, 0.15);
+
+
+    /* Radius */
+
+    --radius-sm: 10px;
+
+    --radius-md: 16px;
+
+    --radius-lg: 24px;
+
+    --radius-xl: 32px;
+
+}
+
+
+
+/* =============================
+   RESET
+============================= */
+
+* {
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    font-family:
+            "Tajawal",
+            sans-serif;
+
+    background:
+            var(--background);
+
+    color:
+            var(--text-primary);
+
+    direction: rtl;
+}
+
+
+html[lang="en"] body {
+
+    font-family:
+            "Poppins",
+            sans-serif;
+
+    direction: ltr;
+}
+
+
+a {
+
+    color: inherit;
+
+    text-decoration: none;
+}
+
+
+button,
+input,
+select,
+textarea {
+
+    font: inherit;
+}
+
+
+button {
+
+    cursor: pointer;
+}
+
+
+img {
+
+    display: block;
+
+    max-width: 100%;
+}
+
+
+
+/* =============================
+   MATERIAL SYMBOLS
+============================= */
+
+.material-symbols-rounded {
+
+    font-size: 27px;
+
+    line-height: 1;
+
+    font-variation-settings:
+            'FILL' 0,
+            'wght' 500,
+            'GRAD' 0,
+            'opsz' 24;
+}
+
+
+
+/* =============================
+   COMMON CONTAINER
+============================= */
+
+.container,
+.section-container {
+
+    width: calc(100% - 100px);
+
+    max-width: 1300px;
+
+    margin-left: auto;
+
+    margin-right: auto;
+}
+
+
+
+/* =============================
+   SHARED BUTTONS
+============================= */
+
+.btn {
+
+    min-height: 48px;
+
+    padding:
+            0 24px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border: none;
+
+    border-radius:
+            var(--radius-md);
+
+    font-weight: 700;
+
+    transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            background-color 0.2s ease;
+}
+
+
+.btn:hover {
+
+    transform:
+            translateY(-2px);
+}
+
+
+.btn-primary {
+
+    background:
+            var(--primary);
+
+    color:
+            var(--white);
+
+    box-shadow:
+            var(--shadow-sm);
+}
+
+
+.btn-primary:hover {
+
+    background:
+            #0B3D49;
+
+    box-shadow:
+            var(--shadow-md);
+}
+
+
+.btn-secondary {
+
+    background:
+            var(--white);
+
+    color:
+            var(--primary);
+
+    border:
+            1px solid var(--border);
+}
+
+
+.btn-secondary:hover {
+
+    background:
+            #FCFAF6;
+}
+
+
+
+/* =============================
+   NAVBAR
+============================= */
+
+.navbar {
+
+    z-index: 100;
+
+    width: calc(100% - 80px);
+
+    max-width: 1400px;
+
+    min-height: 76px;
+
+    margin-left: auto;
+
+    margin-right: auto;
+
+    padding:
+            8px 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+            space-between;
+
+    gap: 25px;
+
+    background:
+            rgba(255, 255, 255, 0.94);
+
+    backdrop-filter:
+            blur(15px);
+
+    border:
+            1px solid rgba(255, 255, 255, 0.70);
+
+    border-radius:
+            22px;
+
+    box-shadow:
+            0 8px 30px rgba(15, 76, 92, 0.10);
+
+    transition:
+            box-shadow 0.25s ease,
+            background-color 0.25s ease;
+}
+
+
+/* Home navbar overlays Hero */
+
+.home-page .navbar {
+
+    position: absolute;
+
+    top: 22px;
+
+    left: 50%;
+
+    transform:
+            translateX(-50%);
+}
+
+
+/* Other pages */
+
+body:not(.home-page) .navbar {
+
+    position: sticky;
+
+    top: 12px;
+
+    margin-top: 12px;
+}
+
+
+.navbar.navbar-scrolled {
+
+    background:
+            rgba(255, 255, 255, 0.98);
+
+    box-shadow:
+            0 12px 35px rgba(15, 76, 92, 0.14);
+}
+
+
+
+/* Logo */
+
+.navbar-logo {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-shrink: 0;
+}
+
+
+.navbar-logo img {
+
+    width: 145px;
+
+    height: 56px;
+
+    object-fit: contain;
+}
+
+
+
+/* Navbar Links */
+
+.navbar-links {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 30px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+}
+
+
+.navbar-links a {
+
+    position: relative;
+
+    color:
+            var(--text-primary);
+
+    transition:
+            color 0.2s ease;
+}
+
+
+.navbar-links a:hover {
+
+    color:
+            var(--orange);
+}
+
+
+.navbar-links a.active {
+
+    color:
+            var(--primary);
+}
+
+
+.navbar-links a.active::after {
+
+    content: "";
+
+    position: absolute;
+
+    right: 0;
+
+    left: 0;
+
+    bottom: -10px;
+
+    height: 3px;
+
+    background:
+            var(--orange);
+
+    border-radius:
+            10px;
+}
+
+
+
+/* Navbar Actions */
+
+.navbar-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+
+.language-btn,
+.login-btn {
+
+    min-height: 43px;
+
+    padding:
+            0 17px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius:
+            13px;
+
+    font-weight: 700;
+}
+
+
+.language-btn {
+
+    border:
+            1px solid var(--border);
+
+    background:
+            var(--white);
+
+    color:
+            var(--primary);
+}
+
+
+.language-btn:hover {
+
+    background:
+            var(--teal-soft);
+}
+
+
+.login-btn {
+
+    background:
+            var(--primary);
+
+    color:
+            var(--white);
+
+    transition:
+            background-color 0.2s ease,
+            transform 0.2s ease;
+}
+
+
+.login-btn:hover {
+
+    background:
+            #0B3D49;
+
+    transform:
+            translateY(-1px);
+}
+
+
+
+/* =============================
+   FOOTER
+============================= */
+
+.footer {
+
+    padding:
+            50px 0 25px;
+
+    background:
+            #073E4A;
+
+    color:
+            var(--white);
+}
+
+
+.footer-container {
+
+    width:
+            calc(100% - 100px);
+
+    max-width:
+            1300px;
+
+    margin-left:
+            auto;
+
+    margin-right:
+            auto;
+
+    display:
+            grid;
+
+    grid-template-columns:
+            1fr auto;
+
+    gap:
+            30px;
+}
+
+
+.footer-brand img {
+
+    width:
+            160px;
+
+    filter:
+            brightness(0) invert(1);
+}
+
+
+.footer-brand p {
+
+    max-width:
+            420px;
+
+    margin-top:
+            10px;
+
+    color:
+            rgba(255, 255, 255, 0.72);
+
+    line-height:
+            1.8;
+}
+
+
+.footer-links {
+
+    padding-top:
+            15px;
+
+    display:
+            flex;
+
+    align-items:
+            flex-start;
+
+    gap:
+            25px;
+
+    font-weight:
+            500;
+}
+
+
+.footer-links a {
+
+    transition:
+            color 0.2s ease;
+}
+
+
+.footer-links a:hover {
+
+    color:
+            var(--yellow);
+}
+
+
+.copyright {
+
+    grid-column:
+            1 / -1;
+
+    margin-top:
+            15px;
+
+    padding-top:
+            25px;
+
+    border-top:
+            1px solid rgba(255, 255, 255, 0.12);
+
+    color:
+            rgba(255, 255, 255, 0.55);
+
+    font-size:
+            14px;
+}
+
+
+
+/* =============================
+   LOADING
+============================= */
+
+.loading-icon {
+
+    animation:
+            spin 0.8s linear infinite;
+}
+
+
+@keyframes spin {
+
+    from {
+
+        transform:
+                rotate(0deg);
+    }
+
+    to {
+
+        transform:
+                rotate(360deg);
+    }
+
+}
+
+
+
+/* =============================
+   RESPONSIVE
+============================= */
+
+@media (max-width: 1100px) {
+
+    .navbar {
+
+        width:
+                calc(100% - 40px);
+    }
+
+
+    .navbar-links {
+
+        gap:
+                18px;
+
+        font-size:
+                14px;
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .navbar-links {
+
+        display:
+                none;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .container,
+    .section-container,
+    .footer-container {
+
+        width:
+                calc(100% - 40px);
+    }
+
+
+    .navbar {
+
+        width:
+                calc(100% - 24px);
+
+        min-height:
+                66px;
+
+        padding:
+                5px 12px;
+
+        border-radius:
+                18px;
+    }
+
+
+    .home-page .navbar {
+
+        top:
+                12px;
+    }
+
+
+    .navbar-logo img {
+
+        width:
+                110px;
+
+        height:
+                50px;
+    }
+
+
+    .login-btn {
+
+        display:
+                none;
+    }
+
+
+    .language-btn {
+
+        min-height:
+                40px;
+
+        padding:
+                0 14px;
+    }
+
+
+    .footer-container {
+
+        grid-template-columns:
+                1fr;
+    }
+
+
+    .footer-links {
+
+        flex-wrap:
+                wrap;
+
+        gap:
+                18px;
+    }
+
+}
