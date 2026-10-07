@@ -43,6 +43,11 @@ public class PageController {
         return "trip";
     }
 
+    @GetMapping("/trip-start")
+    public String tripStart() {
+        return "trip-start";
+    }
+
     @GetMapping("/profile")
     public String profile() {
         return "profile";

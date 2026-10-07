@@ -28,9 +28,8 @@ public class Trip {
     @Column(columnDefinition = "varchar(50) not null")
     private String country;
 
-    @NotEmpty(message = "city cannot be null")
     @Size(min = 2, max = 50, message = "city cannot be less than 2 or more than 50")
-    @Column(columnDefinition = "varchar(50) not null")
+    @Column(columnDefinition = "varchar(50)")
     private String city;
 
 

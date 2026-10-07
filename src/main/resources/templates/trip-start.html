@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>اختر وجهتك | SahlDarbak</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/flow.css}"
+          href="/css/flow.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/trip-start.css}"
+          href="/css/trip-start.css">
+
+</head>
+
+
+<body>
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+
+<main class="trip-start-page">
+
+    <div class="trip-start-container">
+
+
+        <section class="trip-start-header">
+
+            <span class="section-tag">
+
+                <span class="material-symbols-rounded">
+                    travel_explore
+                </span>
+
+                وجهتك
+
+            </span>
+
+
+            <h1>
+                وين ودك تكون رحلتك؟ 🌍
+            </h1>
+
+
+            <p>
+                اختر وجهتك بنفسك، أو خل الاقتراح الذكي يساعدك لاحقًا.
+            </p>
+
+        </section>
+
+
+
+        <div id="tripStartMessage"
+             class="trip-start-message">
+        </div>
+
+
+
+        <section class="destination-methods">
+
+
+            <!-- MANUAL -->
+
+            <article class="destination-method active-method">
+
+                <div class="method-icon manual-icon">
+
+                    <span class="material-symbols-rounded">
+                        location_on
+                    </span>
+
+                </div>
+
+
+                <div class="method-content">
+
+                    <span class="method-label">
+                        أعرف وين أبي أروح
+                    </span>
+
+                    <h2>
+                        اختر وجهتك بنفسك
+                    </h2>
+
+                    <p>
+                        عندك دولة في بالك؟ حددها ونبدأ نرتب الرحلة.
+                    </p>
+
+
+                    <button id="showManualButton"
+                            type="button"
+                            class="btn btn-primary">
+
+                        اختر بنفسي
+
+                        <span class="material-symbols-rounded">
+                            arrow_back
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- AI -->
+
+            <article class="destination-method ai-method">
+
+                <div class="ai-badge">
+                    AI
+                </div>
+
+
+                <div class="method-icon ai-icon">
+
+                    <span class="material-symbols-rounded">
+                        auto_awesome
+                    </span>
+
+                </div>
+
+
+                <div class="method-content">
+
+                    <span class="method-label">
+                        محتار وين تسافر؟
+                    </span>
+
+                    <h2>
+                        اقترح لي وجهة ✨
+                    </h2>
+
+                    <p>
+                        نخلي الذكاء الاصطناعي يقترح وجهات تناسب جوّ رحلتك.
+                    </p>
+
+
+                    <button id="aiDestinationButton"
+                            type="button"
+                            class="btn ai-button">
+
+                        <span class="material-symbols-rounded">
+                            auto_awesome
+                        </span>
+
+                        اقترح لي وجهة
+
+                    </button>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+
+        <!-- MANUAL FORM -->
+
+        <section id="manualDestinationSection"
+                 class="manual-destination-section">
+
+            <div class="manual-card">
+
+                <div class="manual-card-header">
+
+                    <div class="manual-title-icon">
+
+                        <span class="material-symbols-rounded">
+                            public
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <h2>
+                            حدد وجهتك
+                        </h2>
+
+                        <p id="manualDescription">
+                            اكتب الدولة والمدينة اللي ودك تبدأ منها.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div id="requestSummary"
+                     class="request-summary">
+                </div>
+
+
+
+                <div class="destination-form">
+
+                    <div class="form-group">
+
+                        <label for="country">
+                            الدولة
+                        </label>
+
+                        <input id="country"
+                               type="text"
+                               maxlength="50"
+                               placeholder="مثال: اليابان">
+
+                    </div>
+
+
+                    <div class="form-group" id="cityGroup">
+
+                        <label id="cityLabel"
+                               for="city">
+                            المدينة
+                        </label>
+
+                        <input id="city"
+                               type="text"
+                               maxlength="50"
+                               placeholder="مثال: طوكيو">
+
+                        <small id="cityHint">
+                        </small>
+
+                    </div>
+
+
+                    <button id="createTripButton"
+                            type="button"
+                            class="btn btn-primary create-trip-button">
+
+                        <span class="material-symbols-rounded">
+                            flight_takeoff
+                        </span>
+
+                        ابدأ تخطيط رحلتي
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</main>
+
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+<script th:src="@{/js/trip-start.js}"
+        src="/js/trip-start.js"></script>
+
+</body>
+</html>
