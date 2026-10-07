@@ -83,4 +83,7 @@ public class PageController {
         return "blocked";
     }
 
+    @GetMapping("/community")
+    public String community() {return "community";}
+
 }
