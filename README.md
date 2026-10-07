@@ -363,6 +363,6 @@ The API is available at `http://localhost:8080/api/v1`.
 
 | Name | Flow |
 |------|------|
-| Mohammed Turki | Flow 3: On the Trip |
-| _TBD_ | Flow 1: Discover |
-| _TBD_ | Flow 2: Plan |
+| Razan Almadan | Flow 1: Discover |
+| Lama Alharbi | Flow 2: Plan |
+| Mohammed Aljubaili | Flow 3: Plan | 
