@@ -68,4 +68,19 @@ public class PageController {
         return "travel-match";
     }
 
+    @GetMapping("/invites")
+    public String invites() {
+        return "invites";
+    }
+
+    @GetMapping("/connections")
+    public String connections() {
+        return "connections";
+    }
+
+    @GetMapping("/blocked")
+    public String blocked() {
+        return "blocked";
+    }
+
 }

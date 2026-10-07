@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>سهل دربك | اتصالاتي</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/immerse.css}"
+          href="/css/immerse.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/connections.css}"
+          href="/css/connections.css">
+
+</head>
+
+
+<body>
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+
+<main class="im-page">
+
+    <section class="im-container">
+
+        <div class="cn-top">
+
+            <div>
+
+                <h1 class="im-title"
+                    data-i18n="imCnTitle">
+                    اتصالاتي 💬
+                </h1>
+
+                <p class="im-text"
+                   data-i18n="imCnText">
+                    المسافرين اللي قبلوا دعوتك، تقدر تسولف معهم أو تاخذ رقمهم.
+                </p>
+
+            </div>
+
+            <div class="cn-top-links">
+
+                <a href="/invites"
+                   class="btn btn-secondary">
+
+                    <span class="material-symbols-rounded">
+                        mail
+                    </span>
+
+                    <span data-i18n="imCnInvites">
+                        دعواتي
+                    </span>
+
+                </a>
+
+                <a href="/blocked"
+                   class="btn btn-secondary">
+
+                    <span class="material-symbols-rounded">
+                        block
+                    </span>
+
+                    <span data-i18n="imCnBlockedList">
+                        المحظورين
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div id="cnLoader"
+             class="im-loader">
+
+            <span class="material-symbols-rounded loading-icon">
+                progress_activity
+            </span>
+
+        </div>
+
+
+        <div id="cnEmpty"
+             class="im-card im-center"
+             style="display:none;">
+
+            <div class="im-icon-circle">
+                <span class="material-symbols-rounded">
+                    forum
+                </span>
+            </div>
+
+            <h2 data-i18n="imCnEmpty">
+                ما عندك اتصالات للحين
+            </h2>
+
+            <a href="/travel-match"
+               class="btn btn-primary">
+
+                <span class="material-symbols-rounded">
+                    travel_explore
+                </span>
+
+                <span data-i18n="imCnFindTravelers">
+                    دور على مسافرين
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <div id="cnGrid"
+             class="cn-grid"></div>
+
+    </section>
+
+</main>
+
+
+<!-- نافذة الشات -->
+
+<div id="cnChat"
+     class="cn-chat"
+     style="display:none;">
+
+    <div class="cn-chat-box im-card">
+
+        <div class="cn-chat-head">
+
+            <h2 id="cnChatName"></h2>
+
+            <button id="cnChatClose"
+                    type="button"
+                    class="cn-chat-close">
+
+                <span class="material-symbols-rounded">
+                    close
+                </span>
+
+            </button>
+
+        </div>
+
+        <div id="cnMessages"
+             class="cn-messages"></div>
+
+        <form id="cnChatForm"
+              class="cn-chat-form">
+
+            <input id="cnChatInput"
+                   type="text"
+                   autocomplete="off">
+
+            <button type="submit"
+                    class="btn btn-primary">
+
+                <span class="material-symbols-rounded">
+                    send
+                </span>
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+<script th:src="@{/js/immerse-api.js}"
+        src="/js/immerse-api.js"></script>
+
+<script th:src="@{/js/connections.js}"
+        src="/js/connections.js"></script>
+
+</body>
+</html>

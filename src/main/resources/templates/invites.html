@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>سهل دربك | دعواتي</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/immerse.css}"
+          href="/css/immerse.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/invites.css}"
+          href="/css/invites.css">
+
+</head>
+
+
+<body>
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+
+<main class="im-page">
+
+    <section class="im-container im-narrow-wide">
+
+        <div class="iv-top">
+
+            <div>
+
+                <h1 class="im-title"
+                    data-i18n="imIvTitle">
+                    دعواتي ✉️
+                </h1>
+
+                <p class="im-text"
+                   data-i18n="imIvText">
+                    الدعوات اللي وصلتك واللي أرسلتها، كلها هنا.
+                </p>
+
+            </div>
+
+            <div class="iv-top-links">
+
+                <a href="/travel-match"
+                   class="btn btn-secondary">
+
+                    <span class="material-symbols-rounded">
+                        travel_explore
+                    </span>
+
+                    <span data-i18n="imIvTravelers">
+                        المسافرين حولي
+                    </span>
+
+                </a>
+
+                <a href="/connections"
+                   class="btn btn-primary">
+
+                    <span class="material-symbols-rounded">
+                        forum
+                    </span>
+
+                    <span data-i18n="imIvConnections">
+                        اتصالاتي
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="iv-tabs">
+
+            <button id="tabReceived"
+                    type="button"
+                    class="iv-tab iv-tab-active">
+
+                <span data-i18n="imIvReceived">
+                    المستلمة
+                </span>
+
+                <span id="pendingBadge"
+                      class="iv-badge"
+                      style="display:none;">0</span>
+
+            </button>
+
+            <button id="tabSent"
+                    type="button"
+                    class="iv-tab">
+
+                <span data-i18n="imIvSent">
+                    المرسلة
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <div id="ivLoader"
+             class="im-loader">
+
+            <span class="material-symbols-rounded loading-icon">
+                progress_activity
+            </span>
+
+        </div>
+
+
+        <div id="ivEmpty"
+             class="im-card im-center"
+             style="display:none;">
+
+            <div class="im-icon-circle">
+                <span class="material-symbols-rounded">
+                    mail
+                </span>
+            </div>
+
+            <h2 id="ivEmptyText"></h2>
+
+        </div>
+
+
+        <div id="ivList"
+             class="iv-list"></div>
+
+    </section>
+
+</main>
+
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+<script th:src="@{/js/immerse-api.js}"
+        src="/js/immerse-api.js"></script>
+
+<script th:src="@{/js/invites.js}"
+        src="/js/invites.js"></script>
+
+</body>
+</html>

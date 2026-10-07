@@ -1,0 +1,154 @@
+/* =====================================================
+   SAHLDARBAK - صفحة /invites
+   كل الـ classes تبدأ بـ iv-
+===================================================== */
+
+.im-narrow-wide {
+    max-width: 820px;
+}
+
+.iv-top {
+    margin-bottom: 22px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.iv-top-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.iv-tabs {
+    margin-bottom: 20px;
+    padding: 5px;
+    width: fit-content;
+    display: flex;
+    gap: 6px;
+    background: var(--teal-soft);
+    border-radius: 30px;
+}
+
+.iv-tab {
+    padding: 10px 22px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    border-radius: 25px;
+    background: transparent;
+    color: var(--primary);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.iv-tab-active {
+    background: var(--primary);
+    color: #FFFFFF;
+}
+
+.iv-badge {
+    min-width: 22px;
+    padding: 1px 7px;
+    background: var(--orange);
+    color: #FFFFFF;
+    border-radius: 12px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.iv-list {
+    display: grid;
+    gap: 16px;
+}
+
+.iv-card {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.iv-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.iv-person {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.iv-avatar {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--teal-soft);
+    color: var(--primary);
+    border-radius: 50%;
+}
+
+.iv-name {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.iv-meta {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.iv-message {
+    padding: 14px 16px;
+    background: var(--background);
+    border-radius: var(--radius-sm);
+    line-height: 1.8;
+}
+
+.iv-status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.iv-status-pending {
+    background: #FFF7DA;
+    color: #9B771B;
+}
+
+.iv-status-accepted {
+    background: #E8F5F2;
+    color: var(--secondary);
+}
+
+.iv-status-rejected {
+    background: #FBE9E9;
+    color: #C94A4A;
+}
+
+.iv-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+@media (max-width: 700px) {
+
+    .iv-top {
+        flex-direction: column;
+    }
+
+}

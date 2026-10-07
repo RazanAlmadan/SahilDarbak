@@ -1,0 +1,198 @@
+/* =====================================================
+   SAHLDARBAK - صفحة /connections
+   كل الـ classes تبدأ بـ cn-
+===================================================== */
+
+.cn-top {
+    margin-bottom: 26px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.cn-top-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.cn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+}
+
+.cn-card {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cn-person {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.cn-avatar {
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--teal-soft);
+    color: var(--primary);
+    border-radius: 50%;
+}
+
+.cn-name {
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.cn-meta {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.cn-bio {
+    flex: 1;
+    line-height: 1.8;
+}
+
+.cn-phone {
+    padding: 10px 14px;
+    background: var(--orange-soft);
+    border-radius: var(--radius-sm);
+    font-weight: 700;
+}
+
+.cn-phone bdi {
+    direction: ltr;
+}
+
+.cn-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.cn-actions .btn {
+    flex: 1;
+    min-width: 110px;
+    padding-inline: 10px;
+}
+
+.cn-unread {
+    padding: 0 7px;
+    background: var(--orange);
+    color: #FFFFFF;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+/* الشات */
+
+.cn-chat {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 76, 92, 0.45);
+}
+
+.cn-chat-box {
+    width: 100%;
+    max-width: 520px;
+    height: min(600px, 85vh);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cn-chat-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cn-chat-head h2 {
+    font-size: 20px;
+}
+
+.cn-chat-close {
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.cn-messages {
+    flex: 1;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    background: var(--background);
+    border-radius: var(--radius-sm);
+}
+
+.cn-msg {
+    max-width: 78%;
+    padding: 9px 14px;
+    border-radius: 16px;
+    line-height: 1.7;
+    word-break: break-word;
+}
+
+.cn-msg-me {
+    align-self: flex-start;
+    background: var(--primary);
+    color: #FFFFFF;
+}
+
+.cn-msg-them {
+    align-self: flex-end;
+    background: #FFFFFF;
+    border: 1px solid rgba(15, 76, 92, 0.1);
+}
+
+.cn-msg-error {
+    align-self: center;
+    background: #FBE9E9;
+    color: #C94A4A;
+    font-size: 13px;
+}
+
+.cn-chat-form {
+    display: flex;
+    gap: 8px;
+}
+
+.cn-chat-form input {
+    flex: 1;
+    min-height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--background);
+    color: var(--text-primary);
+    font-family: inherit;
+}
+
+@media (max-width: 700px) {
+
+    .cn-top {
+        flex-direction: column;
+    }
+
+}
