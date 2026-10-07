@@ -1,7 +1,7 @@
 package com.example.sahldarbak.AI;
 
-import com.example.sahldarbak.DTO.DestinationRecommendationDTO;
-import com.example.sahldarbak.DTO.TravelSummaryDTO;
+import com.example.sahldarbak.DTO.DestinationRecommendation.DestinationRecommendationDTO;
+import com.example.sahldarbak.DTO.DestinationRecommendation.TravelSummaryDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

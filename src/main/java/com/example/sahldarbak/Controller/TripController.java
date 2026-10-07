@@ -3,7 +3,8 @@ package com.example.sahldarbak.Controller;
 
 import com.example.sahldarbak.Api.ApiResponse;
 import com.example.sahldarbak.DTO.CityPlan.CityPlanDTO;
-import com.example.sahldarbak.DTO.SelectDestinationDTO;
+import com.example.sahldarbak.DTO.DestinationRecommendation.SelectDestinationDTO;
+import com.example.sahldarbak.DTO.PackingList.PackingListDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
 import com.example.sahldarbak.Model.Trip;
 import com.example.sahldarbak.Service.TripService;
@@ -74,6 +75,32 @@ public class TripController {
     @GetMapping("/get-by-travel-request/{travelRequestId}")
     public ResponseEntity<?> getTripByTravelRequest(@PathVariable Integer travelRequestId) {
         return ResponseEntity.status(200).body(tripService.getTripByTravelRequest(travelRequestId));
+    }
+
+
+    @PostMapping("/generate-packing-list/{tripId}")
+    public ResponseEntity<?> generatePackingList(
+            @PathVariable Integer tripId
+    ) {
+
+        PackingListDTO packingListDTO = tripService.generatePackingList(tripId);
+
+        return ResponseEntity.status(200).body(packingListDTO);
+    }
+
+    @PostMapping("/generate-transportation/{tripId}")
+    public ResponseEntity<?> generateTransportation(@PathVariable Integer tripId) {
+        return ResponseEntity.status(200).body(tripService.generateTransportation(tripId));
+    }
+
+    @GetMapping("/weather/{tripId}")
+    public ResponseEntity<?> getTripWeather(@PathVariable Integer tripId) {
+        return ResponseEntity.status(200).body(tripService.getTripWeather(tripId));
+    }
+
+    @GetMapping("/holidays/{tripId}")
+    public ResponseEntity<?> getTripHolidays(@PathVariable Integer tripId) {
+        return ResponseEntity.status(200).body(tripService.getTripHolidays(tripId));
     }
 
 
