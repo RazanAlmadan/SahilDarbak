@@ -9,6 +9,7 @@ import com.example.sahldarbak.AI.PackingListAIService;
 import com.example.sahldarbak.DTO.DestinationRecommendation.HolidayDTO;
 import com.example.sahldarbak.DTO.DestinationRecommendation.HolidayInfoDTO;
 import com.example.sahldarbak.DTO.DestinationRecommendation.SelectDestinationDTO;
+import com.example.sahldarbak.DTO.DestinationRecommendation.WeatherDTO;
 import com.example.sahldarbak.DTO.PackingList.PackingListDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.HotelInsightDTO;
 import com.example.sahldarbak.DTO.TransportationRouteDTO;
@@ -36,7 +37,9 @@ import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +62,10 @@ public class TripService {
     private final WeatherService weatherService;
     private final HolidayService holidayService;
     private final CountryService countryService;
+    private final TransportationEmailService transportationEmailService;
+
+    /// Save transportation temporarly in memory
+    private final Map<Integer, List<TransportationRouteDTO>> transportationCache = new HashMap<>();
 
     public List<Trip> getAllTrips(){
         return tripRepository.findAll();
@@ -455,10 +462,12 @@ public class TripService {
             throw new ApiException("not enough trip places on the same day to generate transportation");
         }
 
+        transportationCache.put(tripId, routes);
+
         return routes;
     }
     /// check the weather in your trip
-    public Object getTripWeather(Integer tripId) {
+    public WeatherDTO getTripWeather(Integer tripId) {
 
         Trip trip = tripRepository.findTripById(tripId);
 
@@ -466,7 +475,24 @@ public class TripService {
             throw new ApiException("trip not found");
         }
 
-        return weatherService.getWeather(trip.getCity());
+        JsonObject weather = weatherService.getWeather(trip.getCity());
+
+        String condition = weather.getAsJsonArray("weather")
+                        .get(0)
+                        .getAsJsonObject()
+                        .get("description")
+                        .getAsString();
+
+        Double temperature = weather.getAsJsonObject("main")
+                        .get("temp")
+                        .getAsDouble();
+
+        WeatherDTO weatherDTO = new WeatherDTO();
+
+        weatherDTO.setCondition(condition);
+        weatherDTO.setTemperatureCelsius(temperature);
+
+        return weatherDTO;
     }
     /// check if there is holidays in your trip
     public HolidayInfoDTO getTripHolidays(Integer tripId) {
@@ -515,6 +541,15 @@ public class TripService {
             }
         }
         return new HolidayInfoDTO(!holidaysDuringTrip.isEmpty(), holidaysDuringTrip.size(), holidaysDuringTrip);
+    }
+
+    /// Send email to user with transportation info
+    public void sendTransportationEmail(Integer tripId) {List<TransportationRouteDTO> routes = transportationCache.get(tripId);
+
+        if (routes == null || routes.isEmpty()) {
+            throw new ApiException("transportation suggestions not found. Generate transportation first");
+        }
+        transportationEmailService.sendTransportationEmail(tripId, routes);
     }
 
 
