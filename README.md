@@ -74,50 +74,32 @@ The system allows travelers to:
 SahlDarbak is a layered **Spring Boot** application. Controllers receive requests, services hold the business logic, repositories talk to MySQL, and AI and external-API services reach out to third-party providers. Errors from any layer are returned in one format by a global exception handler.
 
 ```mermaid
-flowchart TB
-    Client["Client (Frontend / Postman)"]
-
-    subgraph Backend["SahlDarbak Backend (Spring Boot)"]
-        direction TB
-        Controllers["Controllers (REST /api/v1)"]
-        Advice["AdviceController (global errors, ApiResponse)"]
-        Services["Services (business logic)"]
-        AIL["AI Services (Gemini prompts)"]
-        EXT["ExternalApi Services"]
-        Repos["Repositories (Spring Data JPA)"]
-        Chat["ChatWebSocketHandler (/chat)"]
+flowchart LR
+    Client["Client<br/>Frontend / Postman"]
+ 
+    subgraph App["SahlDarbak Backend (Spring Boot)"]
+        direction LR
+        Controllers["Controllers<br/>REST /api/v1"]
+        Services["Services<br/>business logic"]
+        AI["AI Services<br/>Gemini prompts"]
+        Ext["ExternalApi<br/>API clients"]
+        Repos["Repositories<br/>Spring Data JPA"]
+        Chat["Chat<br/>WebSocket /chat"]
     end
-
+ 
     DB[("MySQL")]
-
-    Gemini["Gemini AI"]
-    Weather["OpenWeather"]
-    Holidays["Nager.Date (holidays)"]
-    Geo["Geoapify (places and routes)"]
-    Tavily["Tavily (hotel and halal search)"]
-    Nominatim["Nominatim (reverse geocoding)"]
-    WA["WhatsApp Cloud API"]
-    Brevo["Brevo (Email)"]
-
+    Providers["Third-party providers<br/>Gemini, OpenWeather, Nager.Date, Geoapify<br/>Tavily, Nominatim, WhatsApp, Brevo"]
+ 
     Client -->|HTTP| Controllers
     Client <-->|WebSocket| Chat
     Controllers --> Services
-    Controllers -.->|errors| Advice
+    Services --> AI
+    Services --> Ext
     Services --> Repos
-    Services --> AIL
-    Services --> EXT
-    AIL --> EXT
-    Repos --> DB
     Chat --> Repos
-
-    AIL --> Gemini
-    EXT --> Weather
-    EXT --> Holidays
-    EXT --> Geo
-    EXT --> Tavily
-    EXT --> Nominatim
-    EXT --> WA
-    EXT --> Brevo
+    AI --> Providers
+    Ext --> Providers
+    Repos --> DB
 ```
 
 **Layers**
