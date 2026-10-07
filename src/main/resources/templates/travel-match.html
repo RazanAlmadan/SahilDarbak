@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>سهل دربك | مسافرين حولك</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/immerse.css}"
+          href="/css/immerse.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/travel-match.css}"
+          href="/css/travel-match.css">
+
+</head>
+
+
+<body>
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+
+<main class="im-page">
+
+    <section class="im-container">
+
+        <div class="tm-top">
+
+            <div>
+
+                <h1 class="im-title"
+                    data-i18n="imTmTitle">
+                    مسافرين حولك 🧳
+                </h1>
+
+                <p class="im-text"
+                   data-i18n="imTmText">
+                    ناس مثلك في نفس مدينتك، أرسل لهم دعوة وتعرفوا على بعض.
+                </p>
+
+            </div>
+
+            <div class="tm-top-links">
+
+                <a href="/city"
+                   class="btn btn-secondary">
+
+                    <span class="material-symbols-rounded">
+                        arrow_forward
+                    </span>
+
+                    <span data-i18n="imTmBack">
+                        دليل المدينة
+                    </span>
+
+                </a>
+
+                <a href="/invites"
+                   class="btn btn-primary">
+
+                    <span class="material-symbols-rounded">
+                        mail
+                    </span>
+
+                    <span data-i18n="imTmMyInvites">
+                        دعواتي
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div id="tmLoader"
+             class="im-loader">
+
+            <span class="material-symbols-rounded loading-icon">
+                progress_activity
+            </span>
+
+        </div>
+
+
+        <div id="tmEmpty"
+             class="im-card im-center"
+             style="display:none;">
+
+            <div class="im-icon-circle">
+                <span class="material-symbols-rounded">
+                    travel_explore
+                </span>
+            </div>
+
+            <h2 data-i18n="imTmEmpty">
+                ما فيه مسافرين حولك الحين
+            </h2>
+
+            <p class="im-text"
+               data-i18n="imTmEmptyText">
+                ارجع بعد شوي، أو شوف دعواتك السابقة.
+            </p>
+
+        </div>
+
+
+        <div id="tmGrid"
+             class="tm-grid"></div>
+
+    </section>
+
+</main>
+
+
+<!-- نافذة إرسال الدعوة -->
+
+<div id="tmModal"
+     class="tm-modal"
+     style="display:none;">
+
+    <div class="tm-modal-box im-card">
+
+        <h2>
+            <span data-i18n="imTmModalTitle">دعوة</span>
+            <span id="tmModalName"></span>
+        </h2>
+
+        <label class="im-field">
+
+            <span data-i18n="imTmMsgLabel">
+                رسالتك
+            </span>
+
+            <textarea id="tmMessage"
+                      maxlength="300"
+                      rows="4"></textarea>
+
+            <span class="im-counter">
+                <span id="tmMsgCount">0</span> / 300
+            </span>
+
+        </label>
+
+        <div class="tm-modal-actions">
+
+            <button id="tmSendBtn"
+                    type="button"
+                    class="btn btn-primary">
+
+                <span class="material-symbols-rounded">
+                    send
+                </span>
+
+                <span data-i18n="imTmSend">
+                    أرسل الدعوة
+                </span>
+
+            </button>
+
+            <button id="tmCancelBtn"
+                    type="button"
+                    class="btn btn-secondary">
+
+                <span data-i18n="imTmCancel">
+                    إلغاء
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+<script th:src="@{/js/immerse-api.js}"
+        src="/js/immerse-api.js"></script>
+
+<script th:src="@{/js/travel-match.js}"
+        src="/js/travel-match.js"></script>
+
+</body>
+</html>

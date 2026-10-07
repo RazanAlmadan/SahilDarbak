@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>سهل دربك | مدينتي</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/immerse.css}"
+          href="/css/immerse.css">
+
+</head>
+
+
+<body>
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+
+<main class="im-page">
+
+    <section class="im-container">
+
+        <div class="im-city-top">
+
+            <div>
+
+                <h1 class="im-title"
+                    data-i18n="imCityTitle">
+                    انغمس في مدينتك 🌆
+                </h1>
+
+                <p class="im-text"
+                   data-i18n="imCityText">
+                    نصايح تعرّفك على المدينة، ومسافرين حولك لو ودك بصحبة.
+                </p>
+
+            </div>
+
+
+            <div class="im-stat">
+
+                <span class="material-symbols-rounded">
+                    group
+                </span>
+
+                <div>
+
+                    <strong id="nearbyCount">-</strong>
+
+                    <div data-i18n="imNearbyLabel">
+                        مسافر حولك
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <h2 class="im-section-title"
+            data-i18n="imGuideTitle">
+            دليل المدينة
+        </h2>
+
+        <div id="guideLoader"
+             class="im-loader">
+
+            <span class="material-symbols-rounded loading-icon">
+                progress_activity
+            </span>
+
+            <p data-i18n="imGuideLoading">
+                نجهز لك الدليل...
+            </p>
+
+        </div>
+
+        <div id="guideGrid"
+             class="im-guide-grid"></div>
+
+
+        <div class="im-links">
+
+            <a href="/travel-match"
+               class="btn btn-primary">
+
+                <span class="material-symbols-rounded">
+                    travel_explore
+                </span>
+
+                <span data-i18n="imGoNearby">
+                    المسافرين حولي
+                </span>
+
+            </a>
+
+            <a href="/invites"
+               class="btn btn-secondary">
+
+                <span data-i18n="imGoInvites">
+                    الدعوات
+                </span>
+
+            </a>
+
+            <a href="/connections"
+               class="btn btn-secondary">
+
+                <span data-i18n="imGoConnections">
+                    اتصالاتي
+                </span>
+
+            </a>
+
+            <button id="checkoutBtn"
+                    type="button"
+                    class="btn btn-secondary">
+
+                <span class="material-symbols-rounded">
+                    logout
+                </span>
+
+                <span data-i18n="imCheckout">
+                    تسجيل المغادرة
+                </span>
+
+            </button>
+            <button id="resetDemoBtn"
+                    type="button"
+                    class="btn btn-secondary">
+
+                <span class="material-symbols-rounded">
+                    restart_alt
+                </span>
+
+                <span data-i18n="imResetDemo">
+                    إعادة ضبط الديمو
+                </span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+<script th:src="@{/js/immerse-api.js}"
+        src="/js/immerse-api.js"></script>
+
+<script th:src="@{/js/city.js}"
+        src="/js/city.js"></script>
+
+</body>
+</html>

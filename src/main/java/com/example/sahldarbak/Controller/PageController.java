@@ -53,4 +53,19 @@ public class PageController {
         return "profile";
     }
 
+    @GetMapping("/city")
+    public String city() {
+        return "city";
+    }
+
+    @GetMapping("/checkin")
+    public String checkin() {
+        return "checkin";
+    }
+
+    @GetMapping("/travel-match")
+    public String travelMatch() {
+        return "travel-match";
+    }
+
 }
