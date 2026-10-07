@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SahilDarbak | أدوات الرحلة</title>
+
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/travel-tools.css}">
+
+    <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+    >
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<main class="travel-tools-page">
+
+    <section class="travel-tools-hero">
+        <div class="travel-tools-container">
+
+            <span class="tools-tag">
+                <span class="material-symbols-rounded">luggage</span>
+                أدوات الرحلة
+            </span>
+
+            <h1>جهز رحلتك بذكاء ✈️</h1>
+
+            <p>
+                كل الأدوات التي تحتاجها لتجهيز رحلتك في مكان واحد.
+                استخدم أدوات الطقس والعطلات، وجهز حقيبتك واحصل على اقتراحات التنقل.
+            </p>
+
+        </div>
+    </section>
+
+
+    <section class="trip-selector-section">
+        <div class="travel-tools-container">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="mini-label">رحلتك</span>
+                    <h2>أدوات رحلتك جاهزة لك</h2>
+                </div>
+
+                <div class="heading-icon">
+                    <span class="material-symbols-rounded">flight_takeoff</span>
+                </div>
+
+            </div>
+
+
+            <div id="tripChoices" class="trip-choices">
+                <!-- User trips are loaded here -->
+            </div>
+
+
+            <div id="tripState" class="tools-state empty-state hidden">
+                <span class="material-symbols-rounded">luggage</span>
+                <h3>ما قدرنا نحدد رحلتك</h3>
+                <p>افتح أدوات الرحلة بعد إنشاء رحلة من حسابك.</p>
+            </div>
+
+
+            <div id="selectedTripHeader" class="selected-trip-header hidden">
+
+                <div>
+                    <h2 id="tripTitle">رحلتك</h2>
+                    <p id="tripDetails"></p>
+                </div>
+
+                <span class="material-symbols-rounded">
+                    travel_explore
+                </span>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="tools-content">
+        <div class="travel-tools-container">
+
+            <div id="toolsState" class="tools-state empty-state hidden">
+                <span class="material-symbols-rounded">info</span>
+                <h3>اختر رحلتك أولًا</h3>
+                <p>لا توجد رحلة محددة حاليًا.</p>
+            </div>
+
+
+            <section id="toolsGrid" class="tools-grid hidden">
+
+
+                <!-- WEATHER -->
+                <article class="tool-card weather-tool">
+
+                    <div class="tool-card-top">
+
+                        <div class="tool-icon">
+                            <span class="material-symbols-rounded">
+                                partly_cloudy_day
+                            </span>
+                        </div>
+
+                        <span class="tool-number">01</span>
+
+                    </div>
+
+                    <h2>🌤️ الطقس</h2>
+
+                    <p>
+                        تعرف على حالة الطقس في وجهتك قبل السفر.
+                    </p>
+
+                    <button
+                            id="getWeatherButton"
+                            type="button"
+                            class="tool-action-button"
+                    >
+                        <span class="material-symbols-rounded">
+                            partly_cloudy_day
+                        </span>
+                        اعرض الطقس
+                    </button>
+
+                    <div id="weatherResult" class="tool-result hidden"></div>
+
+                </article>
+
+
+                <!-- HOLIDAYS -->
+                <article class="tool-card holiday-tool">
+
+                    <div class="tool-card-top">
+
+                        <div class="tool-icon">
+                            <span class="material-symbols-rounded">
+                                celebration
+                            </span>
+                        </div>
+
+                        <span class="tool-number">02</span>
+
+                    </div>
+
+                    <h2>🎉 العطلات</h2>
+
+                    <p>
+                        تحقق من العطلات الرسمية في وجهتك أثناء فترة سفرك.
+                    </p>
+
+                    <button
+                            id="getHolidaysButton"
+                            type="button"
+                            class="tool-action-button"
+                    >
+                        <span class="material-symbols-rounded">
+                            event
+                        </span>
+                        اعرض العطلات
+                    </button>
+
+                    <div id="holidaysResult" class="tool-result hidden"></div>
+
+                </article>
+
+
+                <!-- PACKING -->
+                <article class="tool-card packing-tool">
+
+                    <div class="tool-card-top">
+
+                        <div class="tool-icon">
+                            <span class="material-symbols-rounded">
+                                luggage
+                            </span>
+                        </div>
+
+                        <span class="tool-number">03</span>
+
+                    </div>
+
+                    <h2>🎒 قائمة التجهيز</h2>
+
+                    <p>
+                        أنشئ قائمة تجهيز مخصصة لرحلتك باستخدام الذكاء الاصطناعي.
+                    </p>
+
+                    <button
+                            id="generatePackingButton"
+                            type="button"
+                            class="tool-action-button"
+                    >
+                        <span class="material-symbols-rounded">
+                            auto_awesome
+                        </span>
+                        أنشئ قائمة التجهيز
+                    </button>
+
+                    <div id="packingResult" class="tool-result hidden"></div>
+
+                </article>
+
+
+                <!-- TRANSPORTATION -->
+                <article class="tool-card transport-tool">
+
+                    <div class="tool-card-top">
+
+                        <div class="tool-icon">
+                            <span class="material-symbols-rounded">
+                                directions_transit
+                            </span>
+                        </div>
+
+                        <span class="tool-number">04</span>
+
+                    </div>
+
+                    <h2>🚆 التنقل</h2>
+
+                    <p>
+                        احصل على أفضل طريقة للتنقل بين أماكن رحلتك.
+                    </p>
+
+                    <button
+                            id="generateTransportationButton"
+                            type="button"
+                            class="tool-action-button"
+                    >
+                        <span class="material-symbols-rounded">
+                            route
+                        </span>
+                        اقترح طريقة التنقل
+                    </button>
+
+                    <div id="transportationResult" class="tool-result hidden"></div>
+
+                </article>
+
+            </section>
+
+
+            <div id="pageError" class="tools-state error-state hidden"></div>
+
+        </div>
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script th:src="@{/js/language.js}"></script>
+<script th:src="@{/js/base.js}"></script>
+<script th:src="@{/js/travel-tools.js}"></script>
+
+</body>
+</html>
