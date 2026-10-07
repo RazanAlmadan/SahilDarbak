@@ -18,7 +18,6 @@ public class ProfileService {
     private final UserRepository userRepository;
 
 //    CRUD without delete
-
     public List<Profile> get(){ return profileRepository.findAll();}
     public void add(ProfileDTO profileDTO){
         User user = userRepository.findUserById(profileDTO.getUserId());
@@ -53,7 +52,6 @@ public class ProfileService {
         profile.setCountry(profileDTO.getCountry());
         profile.setCity(profileDTO.getCity());
         profile.setBio(profileDTO.getBio());
-
         profileRepository.save(profile);
     }
 

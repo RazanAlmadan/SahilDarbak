@@ -7,6 +7,7 @@ import com.example.sahldarbak.DTO.SmartItinerary.ItineraryDayDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.PlaceRecommendationDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
 import com.example.sahldarbak.ExternalApi.EmailService;
+import com.example.sahldarbak.ExternalApi.WhatsAppService;
 import com.example.sahldarbak.Model.Itinerary;
 import com.example.sahldarbak.Model.TripPlace;
 import com.example.sahldarbak.Repository.ItineraryRepository;
