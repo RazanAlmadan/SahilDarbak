@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.sahldarbak.Model.Profile;
 import com.example.sahldarbak.Repository.ProfileRepository;
+import com.example.sahldarbak.DTO.BlockedUserDTO;
 import java.util.ArrayList;
 
 import java.time.LocalDate;
@@ -75,16 +76,18 @@ public class BlockedUserService {
     }
 // Extra endpoints
 
-    // profiles of the users I blocked
-    public List<Profile> getBlocked(Integer blockerId) {
+    // profiles of the users I blocked, with the block record id
+    public List<BlockedUserDTO> getBlocked(Integer blockerId) {
         if (!userRepository.existsById(blockerId))
             throw new ApiException("user not found");
 
-        List<Integer> ids = new ArrayList<>();
-        for (BlockedUser b : blockedUserRepository.findBlockedUsersByBlockerId(blockerId))
-            ids.add(b.getBlocked().getId());
-
-        return profileRepository.findAllById(ids);
+        List<BlockedUserDTO> result = new ArrayList<>();
+        for (BlockedUser b : blockedUserRepository.findBlockedUsersByBlockerId(blockerId)) {
+            Profile profile = profileRepository.findById(b.getBlocked().getId()).orElse(null);
+            if (profile != null)
+                result.add(new BlockedUserDTO(b.getId(), profile));
+        }
+        return result;
     }
 
     // true if either user blocked the other
@@ -94,6 +97,15 @@ public class BlockedUserService {
 
         return blockedUserRepository.existsByBlockerIdAndBlockedId(userA, userB)
                 || blockedUserRepository.existsByBlockerIdAndBlockedId(userB, userA);
+    }
+
+    public void unblock(Integer blockerId, Integer blockedId) {
+        BlockedUser blockedUser = blockedUserRepository
+                .findBlockedUserByBlockerIdAndBlockedId(blockerId, blockedId);
+        if (blockedUser == null)
+            throw new ApiException("this user is not blocked");
+
+        blockedUserRepository.delete(blockedUser);
     }
 
 }

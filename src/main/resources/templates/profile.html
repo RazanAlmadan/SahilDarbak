@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>سهل دربك | الملف الشخصي</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/immerse.css}"
+          href="/css/immerse.css">
+
+</head>
+
+
+<body>
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+
+<main class="im-page">
+
+    <section class="im-container im-narrow">
+
+        <div class="im-card">
+
+            <div class="im-center">
+
+                <div class="im-icon-circle">
+                    <span class="material-symbols-rounded">
+                        person
+                    </span>
+                </div>
+
+                <h1 id="profileTitle"
+                    class="im-title"
+                    data-i18n="imProfileCreateTitle">
+                    خلنا نتعرف عليك 👋
+                </h1>
+
+                <p class="im-text"
+                   data-i18n="imProfileText">
+                    هذي المعلومات هي اللي يشوفها المسافرين حولك لما تدعوهم.
+                </p>
+
+            </div>
+
+
+            <div id="profileLoader"
+                 class="im-loader">
+
+                <span class="material-symbols-rounded loading-icon">
+                    progress_activity
+                </span>
+
+            </div>
+
+
+            <form id="profileForm"
+                  class="im-text-start"
+                  style="display: none;"
+                  novalidate>
+
+                <div class="im-form-grid">
+
+                    <label class="im-field im-field-full">
+                        <span data-i18n="imFullName">الاسم الكامل</span>
+                        <input id="fullName"
+                               type="text"
+                               maxlength="100"
+                               autocomplete="name">
+                    </label>
+
+                    <label class="im-field">
+                        <span data-i18n="imBirthDate">تاريخ الميلاد</span>
+                        <input id="dateOfBirth"
+                               type="date">
+                    </label>
+
+                    <label class="im-field">
+                        <span data-i18n="imGender">الجنس</span>
+                        <select id="gender">
+                            <option value="" data-i18n="imSelect">اختر</option>
+                            <option value="male" data-i18n="imMale">ذكر</option>
+                            <option value="female" data-i18n="imFemale">أنثى</option>
+                        </select>
+                    </label>
+
+                    <label class="im-field">
+                        <span data-i18n="imCountry">الدولة</span>
+                        <input id="country"
+                               type="text"
+                               maxlength="50">
+                    </label>
+
+                    <label class="im-field">
+                        <span data-i18n="imCity">المدينة</span>
+                        <input id="city"
+                               type="text"
+                               maxlength="50">
+                    </label>
+
+                    <label class="im-field im-field-full">
+                        <span data-i18n="imBio">نبذة عنك</span>
+                        <textarea id="bio"
+                                  maxlength="500"></textarea>
+                        <span class="im-counter">
+                            <span id="bioCount">0</span> / 500
+                        </span>
+                    </label>
+
+                </div>
+
+
+                <div class="im-form-actions">
+
+                    <button id="saveBtn"
+                            type="submit"
+                            class="btn btn-primary im-btn-full">
+
+                        <span id="saveBtnText"
+                              data-i18n="imSaveCreate">
+                            احفظ وكمل
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+<script th:src="@{/js/immerse-api.js}"
+        src="/js/immerse-api.js"></script>
+
+<script th:src="@{/js/profile.js}"
+        src="/js/profile.js"></script>
+
+</body>
+</html>

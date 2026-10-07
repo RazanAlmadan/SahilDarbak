@@ -43,4 +43,9 @@ public class PageController {
         return "trip";
     }
 
+    @GetMapping("/profile")
+    public String profile() {
+        return "profile";
+    }
+
 }

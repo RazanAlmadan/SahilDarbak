@@ -1,0 +1,274 @@
+/* =====================================================
+   SAHLDARBAK - IMMERSE (Flow 3) CSS
+   كل الـ classes تبدأ بـ im- عشان ما تتعارض مع غيرها
+===================================================== */
+
+.im-page {
+    padding: 40px 0 80px;
+}
+
+.im-container {
+    width: calc(100% - 40px);
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.im-narrow {
+    max-width: 640px;
+}
+
+.im-card {
+    padding: 32px;
+    background: var(--white);
+    border: 1px solid rgba(15, 76, 92, 0.08);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.im-center {
+    text-align: center;
+}
+
+.im-icon-circle {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--teal-soft);
+    color: var(--primary);
+    border-radius: 50%;
+}
+
+.im-icon-circle .material-symbols-rounded {
+    font-size: 36px;
+}
+
+.im-title {
+    font-size: clamp(26px, 4vw, 36px);
+    line-height: 1.3;
+    margin-bottom: 10px;
+}
+
+.im-text {
+    color: var(--text-secondary);
+    line-height: 1.9;
+    margin-bottom: 22px;
+}
+
+.im-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+
+.im-btn-full {
+    width: 100%;
+}
+
+/* manual location */
+
+.im-manual {
+    margin-top: 22px;
+    text-align: start;
+}
+
+.im-manual summary {
+    cursor: pointer;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.im-manual-grid {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.im-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.im-field input,
+.im-field select,
+.im-field textarea {
+    min-height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--background);
+    color: var(--text-primary);
+}
+
+.im-field input[type="number"],
+.im-field input[type="date"] {
+    direction: ltr;
+    text-align: start;
+}
+
+.im-field textarea {
+    min-height: 110px;
+    padding: 12px 14px;
+    resize: vertical;
+    line-height: 1.8;
+}
+
+.im-field input:focus,
+.im-field select:focus,
+.im-field textarea:focus {
+    outline: 2px solid var(--secondary);
+    outline-offset: 1px;
+}
+
+/* profile form */
+
+.im-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.im-field-full {
+    grid-column: 1 / -1;
+}
+
+.im-counter {
+    align-self: flex-end;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.im-form-actions {
+    margin-top: 8px;
+}
+
+.im-text-start {
+    text-align: start;
+}
+
+.im-manual .btn {
+    margin-top: 14px;
+}
+
+/* city page */
+
+.im-city-top {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.im-stat {
+    padding: 18px 26px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--orange-soft);
+    border-radius: var(--radius-md);
+}
+
+.im-stat strong {
+    font-size: 32px;
+    color: var(--primary);
+}
+
+.im-guide-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.im-guide-card h3 {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+}
+
+.im-guide-card h3 .material-symbols-rounded {
+    padding: 8px;
+    background: var(--teal-soft);
+    color: var(--primary);
+    border-radius: 12px;
+    font-size: 24px;
+}
+
+.im-guide-card ul {
+    padding-inline-start: 20px;
+    line-height: 2;
+    color: var(--text-primary);
+}
+
+.im-section-title {
+    margin: 36px 0 16px;
+    font-size: 24px;
+}
+
+.im-loader {
+    padding: 40px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.im-links {
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* toasts */
+
+.im-toasts {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: calc(100% - 40px);
+    max-width: 420px;
+}
+
+.im-toast {
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    color: var(--white);
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+}
+
+.im-toast-error {
+    background: #B3433A;
+}
+
+.im-toast-success {
+    background: var(--secondary);
+}
+
+@media (max-width: 700px) {
+    .im-card {
+        padding: 22px;
+    }
+
+    .im-city-top,
+    .im-guide-grid,
+    .im-form-grid,
+    .im-manual-grid {
+        grid-template-columns: 1fr;
+    }
+}

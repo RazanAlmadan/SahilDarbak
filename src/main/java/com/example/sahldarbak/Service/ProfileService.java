@@ -59,4 +59,11 @@ public class ProfileService {
 
 // Extra endpoints
 
+public Profile getByUserId(Integer userId) {
+    Profile profile = profileRepository.findById(userId).orElse(null);
+    if (profile == null)
+        throw new ApiException("profile not found");
+    return profile;
+}
+
 }
