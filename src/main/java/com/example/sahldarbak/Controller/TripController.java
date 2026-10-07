@@ -80,9 +80,7 @@ public class TripController {
 
 
     @PostMapping("/generate-packing-list/{tripId}")
-    public ResponseEntity<?> generatePackingList(
-            @PathVariable Integer tripId
-    ) {
+    public ResponseEntity<?> generatePackingList(@PathVariable Integer tripId) {
 
         PackingListDTO packingListDTO = tripService.generatePackingList(tripId);
 
@@ -110,6 +108,12 @@ public class TripController {
         tripService.sendTransportationEmail(tripId);
 
         return ResponseEntity.status(200).body(new ApiResponse("Transportation suggestions sent to your email successfully"));
+    }
+
+    @GetMapping("/get-by-id/{tripId}")
+    public ResponseEntity<?> getTripById(@PathVariable Integer tripId) {
+
+        return ResponseEntity.status(200).body(tripService.getTripById(tripId));
     }
 
 

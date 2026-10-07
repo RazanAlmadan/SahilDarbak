@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>رحلاتي | SahlDarbak</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/dashboard.css}"
+          href="/css/dashboard.css">
+</head>
+
+<body class="dashboard-page">
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+
+<main class="dashboard-main">
+
+    <div class="dashboard-container">
+
+
+        <!-- =========================
+             HEADER
+        ========================= -->
+
+        <section class="dashboard-header">
+
+            <div class="dashboard-title">
+
+                <span class="dashboard-label">
+
+                    <span class="material-symbols-rounded">
+                        flight_takeoff
+                    </span>
+
+                    <span data-i18n="myTrips">
+                        رحلاتي
+                    </span>
+
+                </span>
+
+
+                <h1 data-i18n="dashboardWelcome">
+                    أهلًا! وين بنسافر الجاية؟ 👋
+                </h1>
+
+
+                <p data-i18n="dashboardDescription">
+                    من هنا تقدر تبدأ رحلة جديدة أو تكمل رحلة سبق وبدأتها.
+                </p>
+
+            </div>
+
+
+            <button id="newTripButton"
+                    class="btn btn-primary dashboard-new-trip"
+                    type="button">
+
+                <span class="material-symbols-rounded">
+                    add
+                </span>
+
+                <span data-i18n="newTrip">
+                    ابدأ رحلة جديدة
+                </span>
+
+            </button>
+
+        </section>
+
+
+
+        <!-- =========================
+             OVERVIEW
+        ========================= -->
+
+        <section class="dashboard-overview">
+
+
+            <!-- PROFILE -->
+
+            <article class="overview-card profile-card">
+
+                <div class="overview-icon profile-icon">
+
+                    <span class="material-symbols-rounded">
+                        person
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <small data-i18n="profile">
+                        الملف الشخصي
+                    </small>
+
+                    <strong data-i18n="noProfileInfo">
+                        لا توجد معلومات حاليًا
+                    </strong>
+
+                    <span class="profile-note"
+                          data-i18n="profilePlaceholderText">
+                        سيتم عرض بيانات الملف الشخصي هنا
+                    </span>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- TOTAL -->
+
+            <article class="overview-card">
+
+                <div class="overview-icon total-icon">
+
+                    <span class="material-symbols-rounded">
+                        luggage
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <strong id="totalRequests">
+                        0
+                    </strong>
+
+                    <span data-i18n="totalTrips">
+                        خطط السفر
+                    </span>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- DRAFT -->
+
+            <article class="overview-card">
+
+                <div class="overview-icon draft-icon">
+
+                    <span class="material-symbols-rounded">
+                        edit_note
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <strong id="draftRequests">
+                        0
+                    </strong>
+
+                    <span data-i18n="draftTrips">
+                        تحتاج تكملة
+                    </span>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- PLANNED -->
+
+            <article class="overview-card">
+
+                <div class="overview-icon planned-icon">
+
+                    <span class="material-symbols-rounded">
+                        auto_awesome
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <strong id="plannedTrips">
+                        0
+                    </strong>
+
+                    <span data-i18n="plannedTrips">
+                        رحلات مخططة
+                    </span>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+
+        <!-- =========================
+             TRIPS
+        ========================= -->
+
+        <section class="travel-plans-section">
+
+
+            <div class="travel-plans-heading">
+
+                <h2 data-i18n="yourTrips">
+                    خطط سفرك
+                </h2>
+
+                <p data-i18n="yourTripsDescription">
+                    كل رحلة بدأت تخطط لها بتلقاها هنا.
+                </p>
+
+            </div>
+
+
+
+            <div id="dashboardLoading"
+                 class="dashboard-loading">
+
+                <span class="material-symbols-rounded loading-icon">
+                    progress_activity
+                </span>
+
+                جاري تحميل رحلاتك...
+
+            </div>
+
+
+
+            <div id="dashboardError"
+                 class="dashboard-error"
+                 style="display:none;">
+
+                <span class="material-symbols-rounded">
+                    error
+                </span>
+
+                <p id="dashboardErrorText"></p>
+
+            </div>
+
+
+
+            <div id="emptyTrips"
+                 class="empty-trips"
+                 style="display:none;">
+
+                <div class="empty-trip-icon">
+
+                    <span class="material-symbols-rounded">
+                        travel_explore
+                    </span>
+
+                </div>
+
+                <h3>
+                    للحين ما خططت أي رحلة 👀
+                </h3>
+
+                <p>
+                    خلنا نبدأ أول رحلة ونشوف وين يناسبك تسافر.
+                </p>
+
+                <button type="button"
+                        class="btn btn-primary"
+                        data-action="new-trip">
+
+                    <span class="material-symbols-rounded">
+                        add
+                    </span>
+
+                    ابدأ أول رحلة
+
+                </button>
+
+            </div>
+
+
+
+            <div id="tripsGrid"
+                 class="trips-grid">
+            </div>
+
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+<script th:src="@{/js/dashboard.js}"
+        src="/js/dashboard.js"></script>
+
+</body>
+</html>

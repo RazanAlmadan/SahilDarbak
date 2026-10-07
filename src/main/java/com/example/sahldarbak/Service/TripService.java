@@ -371,6 +371,16 @@ public class TripService {
         return trip;
     }
 
+    public Trip getTripById(Integer tripId) {
+
+        Trip trip = tripRepository.findTripById(tripId);
+
+        if (trip == null) {
+            throw new ApiException("trip not found");
+        }
+
+        return trip;
+    }
     //HELPER METHOD
     // GENERATE ITINERARY FOR ONE CITY
     private SmartItineraryDTO generateItineraryForCity(TravelRequest travelRequest, String country, String city, java.time.LocalDate startDate, java.time.LocalDate endDate) {

@@ -1,6 +1,7 @@
 package com.example.sahldarbak.Service;
 
 import com.example.sahldarbak.Api.ApiException;
+import com.example.sahldarbak.DTO.LoginDTO;
 import com.example.sahldarbak.Model.User;
 import com.example.sahldarbak.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +62,17 @@ public class UserService {
     }
 
 //    Extra endpoints
+
+    public User login(LoginDTO loginDTO) {
+
+        User user = userRepository.findUserByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword());
+
+        if (user == null) {
+            throw new ApiException("email or password is incorrect");
+        }
+
+        return user;
+    }
 
 
 }

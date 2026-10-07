@@ -195,6 +195,40 @@ const translations = {
         travelerNature: "طبيعة",
         travelerAdventure: "مغامرات",
         travelerFood: "تجارب",
+        dashboard: "رحلاتي",
+        logout: "تسجيل الخروج",
+        myTrips: "رحلاتي",
+        dashboardWelcome: "أهلًا! وين بنسافر الجاية؟ 👋",
+        dashboardDescription: "من هنا تقدر تبدأ رحلة جديدة أو تكمل رحلة سبق وبدأتها.",
+        newTrip: "ابدأ رحلة جديدة",
+
+        yourAccount: "حسابك",
+        profileComingSoon: "الملف الشخصي سيتم استكماله قريبًا",
+
+        totalTrips: "خطط السفر",
+        draftTrips: "تحتاج تكملة",
+        plannedTrips: "رحلات مخططة",
+
+        yourTrips: "خطط سفرك",
+        yourTripsDescription: "كل رحلة بدأت تخطط لها بتلقاها هنا.",
+
+        loadingTrips: "جاري تحميل رحلاتك...",
+
+        noTripsTitle: "للحين ما خططت أي رحلة 👀",
+        noTripsText: "خلنا نبدأ بأول رحلة ونشوف وين يناسبك تسافر.",
+        startFirstTrip: "ابدأ أول رحلة",
+
+        statusDraft: "تحتاج تكملة",
+        statusOpen: "جاهزة للاقتراح",
+        statusCompleted: "مكتملة",
+        statusCancelled: "ملغاة",
+
+        viewTrip: "عرض الرحلة",
+        findDestination: "شوف الوجهات",
+        continuePlanning: "كمل التخطيط",
+        profile: "الملف الشخصي",
+        noProfileInfo: "لا توجد معلومات حاليًا",
+        profileComingSoon: "سيتم عرض بيانات الملف الشخصي هنا",
     },
 
 
@@ -437,6 +471,40 @@ const translations = {
         travelerNature: "Nature",
         travelerAdventure: "Adventure",
         travelerFood: "Experiences",
+        dashboard: "My Trips",
+        logout: "Logout",
+        myTrips: "My Trips",
+        dashboardWelcome: "Welcome! Where are we going next? 👋",
+        dashboardDescription: "Start a new trip or continue planning one you already started.",
+        newTrip: "Start a New Trip",
+
+        yourAccount: "Your Account",
+        profileComingSoon: "Profile details will be available soon",
+
+        totalTrips: "Travel Plans",
+        draftTrips: "Need Attention",
+        plannedTrips: "Planned Trips",
+
+        yourTrips: "Your Travel Plans",
+        yourTripsDescription: "Everything you've started planning is right here.",
+
+        loadingTrips: "Loading your trips...",
+
+        noTripsTitle: "No trips planned yet 👀",
+        noTripsText: "Let's start your first trip and find somewhere that suits you.",
+        startFirstTrip: "Plan Your First Trip",
+
+        statusDraft: "Needs Completion",
+        statusOpen: "Ready for Suggestions",
+        statusCompleted: "Completed",
+        statusCancelled: "Cancelled",
+
+        viewTrip: "View Trip",
+        findDestination: "See Destinations",
+        continuePlanning: "Continue Planning",
+        profile: "Profile",
+        noProfileInfo: "No information available",
+        profileComingSoon: "Profile information will appear here",
     }
 
 };

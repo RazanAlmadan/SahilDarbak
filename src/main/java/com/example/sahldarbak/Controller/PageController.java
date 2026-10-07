@@ -10,4 +10,37 @@ public class PageController {
         return "index";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String register() {
+        return "register";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "dashboard";
+    }
+
+    @GetMapping("/travel-request")
+    public String travelRequest() {
+        return "travel-request";
+    }
+
+
+
+    @GetMapping("/city-plan")
+    public String cityPlan() {
+        return "city-plan";
+    }
+
+
+    @GetMapping("/trip")
+    public String trip() {
+        return "trip";
+    }
+
 }
