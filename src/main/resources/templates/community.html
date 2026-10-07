@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>سهل دربك | مجتمع المسافرين</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/community.css}"
+          href="/css/community.css">
+
+</head>
+
+
+<body>
+
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+
+<main class="community-page">
+
+
+    <!-- =========================
+         COMMUNITY HERO
+    ========================= -->
+
+    <section class="community-hero">
+
+        <div class="community-container">
+
+            <div class="community-hero-content">
+
+                <div class="community-hero-text">
+
+                    <span class="community-tag">
+
+                        <span class="material-symbols-rounded">
+                            public
+                        </span>
+
+                        <span data-i18n="communityPageTag">
+                            مجتمع المسافرين
+                        </span>
+
+                    </span>
+
+
+                    <h1 data-i18n="communityPageTitle">
+                        خذها من ناس راحوا قبلك 🌍
+                    </h1>
+
+
+                    <p data-i18n="communityPageDescription">
+                        تجارب حقيقية من مسافرين تساعدك تعرف وش ينتظرك قبل رحلتك.
+                    </p>
+
+                </div>
+
+
+                <div class="community-hero-icon">
+
+                    <span class="material-symbols-rounded">
+                        travel_explore
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         COMMUNITY CONTENT
+    ========================= -->
+
+    <section class="community-content">
+
+        <div class="community-container">
+
+
+            <!-- =========================
+                 TOP ACTIONS
+            ========================= -->
+
+            <div class="community-toolbar">
+
+
+                <div class="community-search">
+
+                    <span class="material-symbols-rounded">
+                        search
+                    </span>
+
+                    <input id="countrySearch"
+                           type="text"
+                           data-i18n-placeholder="communitySearchPlaceholder"
+                           placeholder="ابحث باسم الدولة...">
+
+                    <button id="searchButton"
+                            type="button"
+                            class="search-button">
+
+                        <span data-i18n="search">
+                            بحث
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <div class="community-actions">
+
+                    <button id="allPostsButton"
+                            type="button"
+                            class="community-filter active">
+
+                        <span class="material-symbols-rounded">
+                            grid_view
+                        </span>
+
+                        <span data-i18n="communityAllPosts">
+                            كل التجارب
+                        </span>
+
+                    </button>
+
+
+                    <button id="ratingButton"
+                            type="button"
+                            class="community-filter">
+
+                        <span class="material-symbols-rounded">
+                            star
+                        </span>
+
+                        <span data-i18n="communityTopRated">
+                            الأعلى تقييماً
+                        </span>
+
+                    </button>
+
+
+                    <button id="createPostButton"
+                            type="button"
+                            class="btn btn-primary create-post-button">
+
+                        <span class="material-symbols-rounded">
+                            add
+                        </span>
+
+                        <span data-i18n="communityCreatePost">
+                            أضف تجربتك
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 SEARCH STATE
+            ========================= -->
+
+            <div id="searchState"
+                 class="search-state"
+                 style="display: none;">
+
+                <span class="material-symbols-rounded">
+                    search
+                </span>
+
+                <span id="searchStateText"></span>
+
+                <button id="clearSearchButton"
+                        type="button">
+
+                    <span data-i18n="communityClearSearch">
+                        إلغاء البحث
+                    </span>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =========================
+                 POSTS LOADING
+            ========================= -->
+
+            <div id="postsLoading"
+                 class="community-loading">
+
+                <span class="material-symbols-rounded loading-icon">
+                    progress_activity
+                </span>
+
+                <p data-i18n="communityLoading">
+                    نحضر لك تجارب المسافرين...
+                </p>
+
+            </div>
+
+
+
+            <!-- =========================
+                 POSTS
+            ========================= -->
+
+            <div id="postsGrid"
+                 class="community-posts-grid">
+            </div>
+
+
+
+            <!-- =========================
+                 EMPTY STATE
+            ========================= -->
+
+            <div id="emptyState"
+                 class="community-empty"
+                 style="display: none;">
+
+                <div class="empty-icon">
+
+                    <span class="material-symbols-rounded">
+                        travel_explore
+                    </span>
+
+                </div>
+
+                <h2 data-i18n="communityEmptyTitle">
+                    ما لقينا تجارب هنا
+                </h2>
+
+                <p data-i18n="communityEmptyText">
+                    جرّب دولة ثانية أو كن أول شخص يشارك تجربته.
+                </p>
+
+            </div>
+
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         CREATE POST MODAL
+    ========================= -->
+
+    <div id="createPostModal"
+         class="community-modal"
+         aria-hidden="true">
+
+        <div class="modal-overlay"
+             id="modalOverlay">
+        </div>
+
+
+        <div class="modal-card">
+
+
+            <div class="modal-header">
+
+                <div>
+
+                    <span class="modal-tag">
+
+                        <span class="material-symbols-rounded">
+                            edit_note
+                        </span>
+
+                        <span data-i18n="communityShareExperience">
+                            شارك تجربتك
+                        </span>
+
+                    </span>
+
+
+                    <h2 data-i18n="communityCreateTitle">
+                        خل المسافرين يستفيدون من تجربتك ✨
+                    </h2>
+
+                </div>
+
+
+                <button id="closeModalButton"
+                        type="button"
+                        class="modal-close">
+
+                    <span class="material-symbols-rounded">
+                        close
+                    </span>
+
+                </button>
+
+            </div>
+
+
+
+            <form id="communityPostForm"
+                  novalidate>
+
+
+                <div class="community-form-grid">
+
+
+                    <label class="community-field">
+
+                        <span data-i18n="communityPostTitle">
+                            عنوان التجربة
+                        </span>
+
+                        <input id="postTitle"
+                               type="text"
+                               maxlength="100"
+                               required
+                               data-i18n-placeholder="communityTitlePlaceholder"
+                               placeholder="مثلاً: أفضل وقت لزيارة كابادوكيا">
+
+                    </label>
+
+
+                    <label class="community-field">
+
+                        <span data-i18n="communityCountry">
+                            الدولة
+                        </span>
+
+                        <input id="postCountry"
+                               type="text"
+                               maxlength="50"
+                               required
+                               data-i18n-placeholder="communityCountryPlaceholder"
+                               placeholder="مثلاً: تركيا">
+
+                    </label>
+
+
+                    <label class="community-field">
+
+                        <span data-i18n="communityCity">
+                            المدينة
+                        </span>
+
+                        <input id="postCity"
+                               type="text"
+                               maxlength="50"
+                               required
+                               data-i18n-placeholder="communityCityPlaceholder"
+                               placeholder="مثلاً: كابادوكيا">
+
+                    </label>
+
+
+                    <label class="community-field">
+
+                        <span data-i18n="communityRating">
+                            تقييم التجربة
+                        </span>
+
+                        <select id="postRating"
+                                required>
+
+                            <option value=""
+                                    data-i18n="communityChooseRating">
+                                اختر التقييم
+                            </option>
+
+                            <option value="5">
+                                ★★★★★
+                            </option>
+
+                            <option value="4">
+                                ★★★★☆
+                            </option>
+
+                            <option value="3">
+                                ★★★☆☆
+                            </option>
+
+                            <option value="2">
+                                ★★☆☆☆
+                            </option>
+
+                            <option value="1">
+                                ★☆☆☆☆
+                            </option>
+
+                        </select>
+
+                    </label>
+
+
+                    <label class="community-field community-field-full">
+
+                        <span data-i18n="communityContent">
+                            تجربتك
+                        </span>
+
+                        <textarea id="postContent"
+                                  maxlength="2000"
+                                  required
+                                  data-i18n-placeholder="communityContentPlaceholder"
+                                  placeholder="وش الشيء اللي تتمنى أحد قاله لك قبل ما تسافر؟"></textarea>
+
+                        <small>
+                            <span id="contentCount">0</span>
+                            / 2000
+                        </small>
+
+                    </label>
+
+
+                </div>
+
+
+
+                <div id="postError"
+                     class="form-message error-message"
+                     style="display: none;">
+                </div>
+
+
+                <div id="postSuccess"
+                     class="form-message success-message"
+                     style="display: none;">
+
+                    <span class="material-symbols-rounded">
+                        check_circle
+                    </span>
+
+                    <span data-i18n="communityPostSuccess">
+                        تمت إضافة تجربتك بنجاح 🎉
+                    </span>
+
+                </div>
+
+
+
+                <div class="modal-actions">
+
+                    <button id="cancelPostButton"
+                            type="button"
+                            class="btn btn-secondary">
+
+                        <span data-i18n="cancel">
+                            إلغاء
+                        </span>
+
+                    </button>
+
+
+                    <button id="submitPostButton"
+                            type="submit"
+                            class="btn btn-primary">
+
+                        <span class="material-symbols-rounded">
+                            send
+                        </span>
+
+                        <span data-i18n="communityPublish">
+                            نشر التجربة
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+</main>
+
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+<script th:src="@{/js/community.js}"
+        src="/js/community.js"></script>
+
+
+</body>
+</html>
