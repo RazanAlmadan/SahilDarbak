@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<footer class="footer"
+        th:fragment="footer">
+
+    <div class="footer-container">
+
+        <div class="footer-brand">
+
+            <img th:src="@{/images/logo.png}"
+                 src="/images/logo.png"
+                 alt="SahlDarbak Logo">
+
+            <p data-i18n="footerText">
+                رحلتك تبدأ بفكرة... وسهل دربك يكملها معك.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a th:href="@{/#home}"
+               href="/#home"
+               data-i18n="home">
+                الرئيسية
+            </a>
+
+            <a th:href="@{/#discover}"
+               href="/#discover"
+               data-i18n="discover">
+                اكتشف
+            </a>
+
+            <a th:href="@{/#features}"
+               href="/#features"
+               data-i18n="planTrip">
+                خطط رحلتك
+            </a>
+
+            <a th:href="@{/#community}"
+               href="/#community"
+               data-i18n="community">
+                مجتمع المسافرين
+            </a>
+
+        </div>
+
+
+        <p class="copyright">
+            ©
+            <span id="currentYear">2026</span>
+            SahlDarbak
+        </p>
+
+    </div>
+
+</footer>
+
+</body>
+</html>

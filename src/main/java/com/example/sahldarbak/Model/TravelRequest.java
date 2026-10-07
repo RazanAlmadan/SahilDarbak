@@ -36,7 +36,7 @@ public class TravelRequest {
     private Double budget;
 
     @NotEmpty(message = "travel type is required")
-    @Pattern(regexp = "^(solo|couple|group|family)$", message = "travel type must be solo,couple,ل group, or family")
+    @Pattern(regexp = "^(solo|couple|group|family)$", message = "travel type must be solo,couple, group, or family")
     @Column(columnDefinition = "varchar(10) not null")
     private String travelType;
 

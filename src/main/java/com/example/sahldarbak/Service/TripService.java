@@ -9,6 +9,7 @@ import com.example.sahldarbak.AI.PackingListAIService;
 import com.example.sahldarbak.DTO.DestinationRecommendation.HolidayDTO;
 import com.example.sahldarbak.DTO.DestinationRecommendation.HolidayInfoDTO;
 import com.example.sahldarbak.DTO.DestinationRecommendation.SelectDestinationDTO;
+import com.example.sahldarbak.DTO.DestinationRecommendation.WeatherDTO;
 import com.example.sahldarbak.DTO.PackingList.PackingListDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.HotelInsightDTO;
 import com.example.sahldarbak.DTO.TransportationRouteDTO;
@@ -36,7 +37,9 @@ import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -59,6 +62,10 @@ public class TripService {
     private final WeatherService weatherService;
     private final HolidayService holidayService;
     private final CountryService countryService;
+    private final TransportationEmailService transportationEmailService;
+
+    /// Save transportation temporarly in memory
+    private final Map<Integer, List<TransportationRouteDTO>> transportationCache = new HashMap<>();
 
     public List<Trip> getAllTrips(){
         return tripRepository.findAll();
@@ -260,11 +267,7 @@ public class TripService {
 
 
     // after AI suggest countries the user can select one
-    public void selectDestination(
-            Integer user_id,
-            Integer travel_request_id,
-            SelectDestinationDTO dto
-    ) {
+    public void selectDestination(Integer user_id, Integer travel_request_id, SelectDestinationDTO dto) {
 
         User user = userRepository.findUserById(user_id);
 
@@ -272,23 +275,18 @@ public class TripService {
             throw new ApiException("user not found");
         }
 
-        TravelRequest travelRequest =
-                travelRequestRepository.findTravelRequestById(travel_request_id);
+        TravelRequest travelRequest = travelRequestRepository.findTravelRequestById(travel_request_id);
 
         if (travelRequest == null) {
             throw new ApiException("travel request not found");
         }
 
         if (!travelRequest.getUser().getId().equals(user_id)) {
-            throw new ApiException(
-                    "this travel request does not belong to this user"
-            );
+            throw new ApiException("this travel request does not belong to this user");
         }
 
         if (travelRequest.getTrip() != null) {
-            throw new ApiException(
-                    "a trip has already been created for this travel request"
-            );
+            throw new ApiException("a trip has already been created for this travel request");
         }
         // create new Trip with the country the user chose and TravelRequest info
         Trip trip = new Trip();
@@ -296,12 +294,6 @@ public class TripService {
         trip.setCountry(dto.getCountry());
         trip.setCity(dto.getCity());
 
-
-        // Get these values directly from the travel request.
-
-//        trip.setStartDate(travelRequest.getStartDate());
-//        trip.setEndDate(travelRequest.getEndDate());
-//        trip.setBudget(travelRequest.getBudget());
 
 
         // we can change it if we want
@@ -379,7 +371,6 @@ public class TripService {
         return trip;
     }
 
-
     //HELPER METHOD
     // GENERATE ITINERARY FOR ONE CITY
     private SmartItineraryDTO generateItineraryForCity(TravelRequest travelRequest, String country, String city, java.time.LocalDate startDate, java.time.LocalDate endDate) {
@@ -423,11 +414,10 @@ public class TripService {
         return smartItineraryAIService.generateSmartItinerary(travelRequest, city, startDate, endDate, hotels, activities, restaurants);
     }
 
-
+    /// help user create a packing list
     public PackingListDTO generatePackingList(Integer tripId) {
 
-        Trip trip =
-                tripRepository.findTripById(tripId);
+        Trip trip = tripRepository.findTripById(tripId);
 
         if (trip == null) {
             throw new ApiException("trip not found");
@@ -436,82 +426,8 @@ public class TripService {
         return packingListAIService.generatePackingList(trip);
     }
 
-    public List<TransportationRouteDTO> generateTransportation(
-            Integer tripId
-    ) {
-
-        Trip trip =
-                tripRepository.findTripById(tripId);
-
-        if (trip == null) {
-            throw new ApiException("trip not found");
-        }
-
-        List<TripPlace> tripPlaces =
-                tripPlaceService.getTripPlacesByTrip(
-                        tripId
-                );
-
-
-        List<TransportationRouteDTO> routes =
-                new ArrayList<>();
-
-
-        /*
-         * For now we use the order returned by
-         * your friend's existing TripPlace service.
-         *
-         * We do NOT modify TripPlace.
-         */
-
-        for (int i = 0;
-             i < tripPlaces.size() - 1;
-             i++) {
-
-            TripPlace from =
-                    tripPlaces.get(i);
-
-            TripPlace to =
-                    tripPlaces.get(i + 1);
-
-
-            /*
-             * Only connect places on the same day.
-             */
-
-            if (!from.getScheduledAt()
-                    .equals(to.getScheduledAt())) {
-
-                continue;
-            }
-
-
-            TransportationRouteDTO route =
-                    transportationAIService
-                            .generateTransportation(
-                                    from,
-                                    to,
-                                    trip.getCountry(),
-                                    trip.getTravelRequest()
-                            );
-
-
-            routes.add(route);
-        }
-
-
-        if (routes.isEmpty()) {
-
-            throw new ApiException(
-                    "not enough trip places on the same day to generate transportation"
-            );
-        }
-
-
-        return routes;
-    }
-
-    public Object getTripWeather(Integer tripId) {
+    /// use trip id to get all trip places info
+    public List<TransportationRouteDTO> generateTransportation(Integer tripId) {
 
         Trip trip = tripRepository.findTripById(tripId);
 
@@ -519,9 +435,66 @@ public class TripService {
             throw new ApiException("trip not found");
         }
 
-        return weatherService.getWeather(trip.getCity());
-    }
+        List<TripPlace> tripPlaces = tripPlaceService.getTripPlacesByTrip(tripId);
 
+        List<TransportationRouteDTO> routes = new ArrayList<>();
+
+        // get info from trip place
+
+        for (int i = 0; i < tripPlaces.size() - 1; i++) {
+
+            TripPlace from = tripPlaces.get(i);
+
+            TripPlace to = tripPlaces.get(i + 1);
+
+            // Only connect places on the same day.
+            if (!from.getScheduledAt().equals(to.getScheduledAt())) {
+                continue;
+            }
+
+            TransportationRouteDTO route = transportationAIService.generateTransportation(from, to, trip.getCountry(), trip.getTravelRequest());
+
+            routes.add(route);
+        }
+
+
+        if (routes.isEmpty()) {
+            throw new ApiException("not enough trip places on the same day to generate transportation");
+        }
+
+        transportationCache.put(tripId, routes);
+
+        return routes;
+    }
+    /// check the weather in your trip
+    public WeatherDTO getTripWeather(Integer tripId) {
+
+        Trip trip = tripRepository.findTripById(tripId);
+
+        if (trip == null) {
+            throw new ApiException("trip not found");
+        }
+
+        JsonObject weather = weatherService.getWeather(trip.getCity());
+
+        String condition = weather.getAsJsonArray("weather")
+                        .get(0)
+                        .getAsJsonObject()
+                        .get("description")
+                        .getAsString();
+
+        Double temperature = weather.getAsJsonObject("main")
+                        .get("temp")
+                        .getAsDouble();
+
+        WeatherDTO weatherDTO = new WeatherDTO();
+
+        weatherDTO.setCondition(condition);
+        weatherDTO.setTemperatureCelsius(temperature);
+
+        return weatherDTO;
+    }
+    /// check if there is holidays in your trip
     public HolidayInfoDTO getTripHolidays(Integer tripId) {
 
         Trip trip = tripRepository.findTripById(tripId);
@@ -533,12 +506,10 @@ public class TripService {
         if (trip.getTravelRequest() == null) {
             throw new ApiException("travel request not found");
         }
-
-        LocalDate startDate =
-                trip.getTravelRequest().getStartDate();
-
-        LocalDate endDate =
-                trip.getTravelRequest().getEndDate();
+        //get start date from travel request
+        LocalDate startDate = trip.getTravelRequest().getStartDate();
+        //get end date from travel request
+        LocalDate endDate = trip.getTravelRequest().getEndDate();
 
         if (startDate == null || endDate == null) {
             throw new ApiException("trip dates are required");
@@ -570,6 +541,15 @@ public class TripService {
             }
         }
         return new HolidayInfoDTO(!holidaysDuringTrip.isEmpty(), holidaysDuringTrip.size(), holidaysDuringTrip);
+    }
+
+    /// Send email to user with transportation info
+    public void sendTransportationEmail(Integer tripId) {List<TransportationRouteDTO> routes = transportationCache.get(tripId);
+
+        if (routes == null || routes.isEmpty()) {
+            throw new ApiException("transportation suggestions not found. Generate transportation first");
+        }
+        transportationEmailService.sendTransportationEmail(tripId, routes);
     }
 
 

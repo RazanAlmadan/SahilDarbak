@@ -3,7 +3,7 @@ package com.example.sahldarbak.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,9 +34,14 @@ public class CommunityPost {
     @Column(columnDefinition = "varchar(50) not null")
     private String city;
 
+
+    @Min(value = 1, message = "rating must be between 1 and 5")
+    @Max(value = 5, message = "rating must be between 1 and 5")
+    @Column(columnDefinition = "int not null")
+    private Integer rating;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
-
 }

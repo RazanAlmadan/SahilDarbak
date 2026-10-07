@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<header class="navbar"
+        th:fragment="navbar">
+
+    <a class="navbar-logo"
+       th:href="@{/}">
+
+        <img th:src="@{/images/logo.png}"
+             src="/images/logo.png"
+             alt="SahlDarbak Logo">
+
+    </a>
+
+
+    <nav class="navbar-links">
+
+        <a th:href="@{/#home}"
+           href="/#home"
+           data-nav="home"
+           data-i18n="home">
+            الرئيسية
+        </a>
+
+        <a th:href="@{/#discover}"
+           href="/#discover"
+           data-nav="discover"
+           data-i18n="discover">
+            اكتشف
+        </a>
+
+        <a th:href="@{/#features}"
+           href="/#features"
+           data-nav="features"
+           data-i18n="planTrip">
+            خطط رحلتك
+        </a>
+
+        <a th:href="@{/#community}"
+           href="/#community"
+           data-nav="community"
+           data-i18n="community">
+            مجتمع المسافرين
+        </a>
+
+    </nav>
+
+
+    <div class="navbar-actions">
+
+        <button id="languageBtn"
+                class="language-btn"
+                type="button">
+            EN
+        </button>
+
+        <a th:href="@{/login}"
+           href="/login"
+           class="login-btn"
+           data-i18n="login">
+            تسجيل الدخول
+        </a>
+
+    </div>
+
+</header>
+
+</body>
+</html>

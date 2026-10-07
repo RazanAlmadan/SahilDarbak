@@ -34,6 +34,9 @@ public class TripPlace {
     @Column(columnDefinition = "varchar(50) not null")
     private String city;
 
+    @Column(columnDefinition = "varchar(500)")
+    private String officialWebsite;
+
     @NotNull(message = "scheduled at cannot be empty")
     @Column(columnDefinition = "date not null")
     private LocalDate scheduledAt;

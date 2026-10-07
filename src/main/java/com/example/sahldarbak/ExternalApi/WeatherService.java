@@ -1,14 +1,21 @@
 package com.example.sahldarbak.ExternalApi;
 
+
+import com.example.sahldarbak.Api.ApiException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 @Service
+@RequiredArgsConstructor
 public class WeatherService {
 
     @Value("${openweather.api.key}")
@@ -18,7 +25,6 @@ public class WeatherService {
     private String apiUrl;
 
     private final OkHttpClient client = new OkHttpClient();
-
 
     public JsonObject getWeather(String city) {
 
@@ -34,23 +40,28 @@ public class WeatherService {
 
         try (Response response = client.newCall(request).execute()) {
 
-            if (response.body() == null) {
-                throw new RuntimeException("Weather API returned an empty response");
+            if (!response.isSuccessful() || response.body() == null) {
+                throw new ApiException(
+                        "failed to get weather information"
+                );
             }
 
             String responseBody = response.body().string();
 
-            if (!response.isSuccessful()) {
-                throw new RuntimeException(
-                        "Weather API error: " + responseBody
+            if (responseBody.isEmpty()) {
+                throw new ApiException(
+                        "weather response is empty"
                 );
             }
 
-            return JsonParser.parseString(responseBody).getAsJsonObject();
+            return JsonParser
+                    .parseString(responseBody)
+                    .getAsJsonObject();
 
-        } catch (Exception e) {
-            throw new RuntimeException(
-                    "Failed to get weather for " + city + ": " + e.getMessage()
+        } catch (IOException e) {
+
+            throw new ApiException(
+                    "failed to connect to weather service"
             );
         }
     }

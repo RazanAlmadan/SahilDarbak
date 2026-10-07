@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>سهل دربك | SahlDarbak</title>
+
+    <!-- Shared CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <!-- Home CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/home.css}"
+          href="/css/home.css">
+
+</head>
+
+
+<body class="home-page">
+
+
+<!-- =========================
+     SHARED NAVBAR
+========================= -->
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+<main>
+
+
+    <!-- =========================
+         HERO
+    ========================= -->
+
+    <section class="hero"
+             id="home">
+
+        <div class="hero-overlay"></div>
+
+
+        <div class="hero-content">
+
+            <span class="hero-badge"
+                  data-i18n="heroBadge">
+                ✈️ رحلتك تبدأ من هنا
+            </span>
+
+
+            <h1 data-i18n="heroTitle">
+                وين ودك تكون رحلتك الجاية؟ ✈️
+            </h1>
+
+
+            <p data-i18n="heroDescription">
+                قل لنا وش تحب، وسهل دربك يساعدك تلقى الوجهة
+                اللي تناسبك ويرتب لك الرحلة على جوّك.
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a href="#discover"
+                   class="btn btn-primary"
+                   data-action="start-trip"
+                   data-i18n="startTrip">
+                    ابدأ رحلتك
+                </a>
+
+
+                <a href="#how-it-works"
+                   class="btn btn-light"
+                   data-i18n="howItWorks">
+                    كيف يشتغل؟
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="hero-mini-card">
+
+            <div class="mini-card-icon">
+
+                <span class="material-symbols-rounded">
+                    auto_awesome
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong data-i18n="heroCardTitle">
+                    محتار وين تسافر؟
+                </strong>
+
+                <small data-i18n="heroCardText">
+                    خلها علينا
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         AI DESTINATION
+    ========================= -->
+
+    <section class="ai-section"
+             id="discover">
+
+        <div class="ai-decoration ai-decoration-one"></div>
+        <div class="ai-decoration ai-decoration-two"></div>
+
+
+        <div class="section-container ai-grid">
+
+
+            <div class="ai-content">
+
+                <span class="section-tag">
+
+                    <span class="material-symbols-rounded">
+                        auto_awesome
+                    </span>
+
+                    <span data-i18n="aiLabel">
+                        ذكاء اصطناعي
+                    </span>
+
+                </span>
+
+
+                <h2 data-i18n="aiTitle">
+                    محتار وين تسافر؟ خلها علينا ✨
+                </h2>
+
+
+                <p data-i18n="aiDescription">
+                    كم سؤال بسيط عنك وعن رحلتك، والباقي نرتبه معك.
+                    نقترح لك وجهات تناسب اهتماماتك، ميزانيتك ووقت سفرك.
+                </p>
+
+
+                <a href="#"
+                   class="btn btn-primary ai-main-button"
+                   data-action="destination-recommendation">
+
+                    <span class="material-symbols-rounded">
+                        travel_explore
+                    </span>
+
+                    <span data-i18n="recommendDestination">
+                        اقترح لي وجهة
+                    </span>
+
+                </a>
+
+            </div>
+
+
+
+            <div class="ai-preview-card">
+
+
+                <div class="ai-preview-top">
+
+                    <div class="ai-preview-icon">
+
+                        <span class="material-symbols-rounded">
+                            explore
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong data-i18n="aiPreviewTitle">
+                            خلنا نعرف جوّك
+                        </strong>
+
+                        <small data-i18n="aiPreviewSubtitle">
+                            وبعدها نشوف وين يناسبك
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="preference-list">
+
+
+                    <div class="preference preference-nature">
+
+                        <span class="preference-icon">
+
+                            <span class="material-symbols-rounded">
+                                forest
+                            </span>
+
+                        </span>
+
+                        <p data-i18n="nature">
+                            طبيعة وهدوء
+                        </p>
+
+                    </div>
+
+
+                    <div class="preference preference-budget">
+
+                        <span class="preference-icon">
+
+                            <span class="material-symbols-rounded">
+                                payments
+                            </span>
+
+                        </span>
+
+                        <p data-i18n="mediumBudget">
+                            ميزانية متوسطة
+                        </p>
+
+                    </div>
+
+
+                    <div class="preference preference-weather">
+
+                        <span class="preference-icon">
+
+                            <span class="material-symbols-rounded">
+                                ac_unit
+                            </span>
+
+                        </span>
+
+                        <p data-i18n="coolWeather">
+                            أجواء باردة
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ai-thinking">
+
+                    <span class="material-symbols-rounded">
+                        auto_awesome
+                    </span>
+
+                    <p data-i18n="thinking">
+                        ممم... عندنا لك كم فكرة 👀
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FEATURES
+    ========================= -->
+
+    <section class="features-section"
+             id="features">
+
+        <div class="section-container">
+
+
+            <div class="section-heading">
+
+                <span class="section-tag">
+
+                    <span class="material-symbols-rounded">
+                        travel
+                    </span>
+
+                    <span data-i18n="sahlDarbakLabel">
+                        سهل دربك
+                    </span>
+
+                </span>
+
+
+                <h2 data-i18n="featuresTitle">
+                    وش نقدر نسوي لك؟
+                </h2>
+
+
+                <p data-i18n="featuresDescription">
+                    من أول ما تقول أبي أسافر، لين تكون رحلتك جاهزة.
+                </p>
+
+            </div>
+
+
+
+            <div class="features-grid">
+
+
+                <article class="feature-card feature-teal">
+
+                    <div class="feature-icon">
+
+                        <span class="material-symbols-rounded">
+                            flight_takeoff
+                        </span>
+
+                    </div>
+
+                    <h3 data-i18n="featureDestinationTitle">
+                        نلقى لك الوجهة
+                    </h3>
+
+                    <p data-i18n="featureDestinationText">
+                        اقتراحات تناسب اهتماماتك، وقت سفرك وميزانيتك.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card feature-orange">
+
+                    <div class="feature-icon">
+
+                        <span class="material-symbols-rounded">
+                            location_on
+                        </span>
+
+                    </div>
+
+                    <h3 data-i18n="featurePlacesTitle">
+                        نرتب لك الأماكن
+                    </h3>
+
+                    <p data-i18n="featurePlacesText">
+                        مطاعم، فنادق، أنشطة وتجارب تختار منها اللي يعجبك.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card feature-yellow">
+
+                    <div class="feature-icon">
+
+                        <span class="material-symbols-rounded">
+                            calendar_month
+                        </span>
+
+                    </div>
+
+                    <h3 data-i18n="featurePlanTitle">
+                        نضبط لك أيامك
+                    </h3>
+
+                    <p data-i18n="featurePlanText">
+                        نرتب اختياراتك داخل برنامج يومي مريح وواضح.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card feature-green">
+
+                    <div class="feature-icon">
+
+                        <span class="material-symbols-rounded">
+                            luggage
+                        </span>
+
+                    </div>
+
+                    <h3 data-i18n="featurePrepareTitle">
+                        نجهزك قبل السفر
+                    </h3>
+
+                    <p data-i18n="featurePrepareText">
+                        طقس، إجازات، أغراض مهمة ونصائح تناسب وجهتك.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card feature-blue">
+
+                    <div class="feature-icon">
+
+                        <span class="material-symbols-rounded">
+                            group
+                        </span>
+
+                    </div>
+
+                    <h3 data-i18n="featureMatchTitle">
+                        ناس بنفس جوّك
+                    </h3>
+
+                    <p data-i18n="featureMatchText">
+                        لو حبيت، تعرف على مسافرين موجودين حولك.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         DESTINATIONS
+    ========================= -->
+
+    <section class="destinations-section">
+
+        <div class="section-container">
+
+
+            <div class="section-heading inline-heading">
+
+                <span class="section-tag">
+
+                    <span class="material-symbols-rounded">
+                        public
+                    </span>
+
+                    <span data-i18n="exploreLabel">
+                        استكشف
+                    </span>
+
+                </span>
+
+
+                <h2 data-i18n="destinationsTitle">
+                    يمكن وجهتك الجاية وحدة من هذولا 👀
+                </h2>
+
+
+                <p data-i18n="destinationsDescription">
+                    شوي إلهام قبل ما تبدأ.
+                </p>
+
+            </div>
+
+
+
+            <div class="destination-grid">
+
+
+                <article class="destination-card">
+
+                    <img src="https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=900&q=80"
+                         alt="Turkey">
+
+                    <div class="destination-overlay">
+
+                        <span data-i18n="destinationCulture">
+                            ثقافة • أكل • مدن
+                        </span>
+
+                        <h3 data-i18n="turkey">
+                            تركيا
+                        </h3>
+
+                    </div>
+
+                </article>
+
+
+                <article class="destination-card">
+
+                    <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=900&q=80"
+                         alt="Japan">
+
+                    <div class="destination-overlay">
+
+                        <span data-i18n="destinationJapan">
+                            ثقافة • تجارب • مغامرة
+                        </span>
+
+                        <h3 data-i18n="japan">
+                            اليابان
+                        </h3>
+
+                    </div>
+
+                </article>
+
+
+                <article class="destination-card">
+
+                    <img src="https://images.unsplash.com/photo-1502784444187-359ac186c5bb?auto=format&fit=crop&w=900&q=80"
+                         alt="Switzerland">
+
+                    <div class="destination-overlay">
+
+                        <span data-i18n="destinationNature">
+                            طبيعة • جبال • هدوء
+                        </span>
+
+                        <h3 data-i18n="switzerland">
+                            سويسرا
+                        </h3>
+
+                    </div>
+
+                </article>
+
+
+                <article class="destination-card">
+
+                    <img src="https://images.unsplash.com/photo-1512632578888-169bbbc64f33?auto=format&fit=crop&w=900&q=80"
+                         alt="Oman">
+
+                    <div class="destination-overlay">
+
+                        <span data-i18n="destinationOman">
+                            طبيعة • تجارب • استرخاء
+                        </span>
+
+                        <h3 data-i18n="oman">
+                            عُمان
+                        </h3>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         HOW IT WORKS
+    ========================= -->
+
+    <section class="how-section"
+             id="how-it-works">
+
+        <div class="section-container">
+
+
+            <div class="section-heading">
+
+                <span class="section-tag">
+
+                    <span class="material-symbols-rounded">
+                        route
+                    </span>
+
+                </span>
+
+
+                <h2 data-i18n="howTitle">
+                    من فكرة إلى رحلة
+                </h2>
+
+
+                <p data-i18n="howDescription">
+                    أربع خطوات وباقي عليك تستمتع.
+                </p>
+
+            </div>
+
+
+
+            <div class="steps-wrapper">
+
+
+                <div class="step-card step-one">
+
+                    <div class="step-number">
+                        1
+                    </div>
+
+                    <div class="step-icon">
+
+                        <span class="material-symbols-rounded">
+                            tune
+                        </span>
+
+                    </div>
+
+                    <h3 data-i18n="stepOneTitle">
+                        قل لنا وش جوّك
+                    </h3>
+
+                    <p data-i18n="stepOneText">
+                        اهتماماتك، ميزانيتك ووقت سفرك.
+                    </p>
+
+                </div>
+
+
+                <span class="step-arrow">
+                    ←
+                </span>
+
+
+                <div class="step-card step-two">
+
+                    <div class="step-number">
+                        2
+                    </div>
+
+                    <div class="step-icon">
+
+                        <span class="material-symbols-rounded">
+                            auto_awesome
+                        </span>
+
+                    </div>
+
+                    <h3 data-i18n="stepTwoTitle">
+                        نشوف لك وين يناسبك
+                    </h3>
+
+                    <p data-i18n="stepTwoText">
+                        اقتراحات ذكية مبنية على تفضيلاتك.
+                    </p>
+
+                </div>
+
+
+                <span class="step-arrow">
+                    ←
+                </span>
+
+
+                <div class="step-card step-three">
+
+                    <div class="step-number">
+                        3
+                    </div>
+
+                    <div class="step-icon">
+
+                        <span class="material-symbols-rounded">
+                            travel_explore
+                        </span>
+
+                    </div>
+
+                    <h3 data-i18n="stepThreeTitle">
+                        اختار اللي يعجبك
+                    </h3>
+
+                    <p data-i18n="stepThreeText">
+                        أماكن، أنشطة، مطاعم وتجارب.
+                    </p>
+
+                </div>
+
+
+                <span class="step-arrow">
+                    ←
+                </span>
+
+
+                <div class="step-card step-four">
+
+                    <div class="step-number">
+                        4
+                    </div>
+
+                    <div class="step-icon">
+
+                        <span class="material-symbols-rounded">
+                            flight_takeoff
+                        </span>
+
+                    </div>
+
+                    <h3 data-i18n="stepFourTitle">
+                        جهز شنطتك وامش
+                    </h3>
+
+                    <p data-i18n="stepFourText">
+                        برنامجك مرتب، والباقي استمتع.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         PREPARE
+    ========================= -->
+
+    <section class="prepare-section">
+
+        <div class="section-container prepare-grid">
+
+
+            <div class="prepare-content">
+
+                <span class="section-tag">
+
+                    <span class="material-symbols-rounded">
+                        wb_sunny
+                    </span>
+
+                </span>
+
+
+                <h2 data-i18n="prepareTitle">
+                    السفر أحلى لما تعرف وش ينتظرك
+                </h2>
+
+
+                <p data-i18n="prepareDescription">
+                    قبل لا تسافر، نعطيك الأشياء اللي فعلًا تهمك عن وجهتك.
+                </p>
+
+
+                <a href="#"
+                   class="btn btn-primary"
+                   data-i18n="prepareButton">
+                    جهزني للرحلة
+                </a>
+
+            </div>
+
+
+
+            <div class="prepare-cards">
+
+
+                <div class="prepare-card prepare-weather">
+
+                    <span class="prepare-icon">
+
+                        <span class="material-symbols-rounded">
+                            partly_cloudy_day
+                        </span>
+
+                    </span>
+
+                    <div>
+
+                        <h3 data-i18n="weather">
+                            حالة الطقس
+                        </h3>
+
+                        <p data-i18n="weatherText">
+                            وش الجو المتوقع وقت رحلتك؟
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="prepare-card prepare-holiday">
+
+                    <span class="prepare-icon">
+
+                        <span class="material-symbols-rounded">
+                            celebration
+                        </span>
+
+                    </span>
+
+                    <div>
+
+                        <h3 data-i18n="holidays">
+                            الإجازات والمواسم
+                        </h3>
+
+                        <p data-i18n="holidaysText">
+                            اعرف إذا فيه موسم أو إجازة وقت سفرك.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="prepare-card prepare-luggage">
+
+                    <span class="prepare-icon">
+
+                        <span class="material-symbols-rounded">
+                            luggage
+                        </span>
+
+                    </span>
+
+                    <div>
+
+                        <h3 data-i18n="packing">
+                            وش تحط في شنطتك؟
+                        </h3>
+
+                        <p data-i18n="packingText">
+                            أشياء تناسب الطقس وطبيعة رحلتك.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="prepare-card prepare-transport">
+
+                    <span class="prepare-icon">
+
+                        <span class="material-symbols-rounded">
+                            train
+                        </span>
+
+                    </span>
+
+                    <div>
+
+                        <h3 data-i18n="transport">
+                            كيف تتنقل؟
+                        </h3>
+
+                        <p data-i18n="transportText">
+                            خيارات مناسبة بين أماكن رحلتك.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         TRAVEL MATCH
+    ========================= -->
+
+    <section class="match-section">
+
+        <div class="section-container match-card">
+
+
+            <div class="match-content">
+
+                <span class="section-tag">
+
+                    <span class="material-symbols-rounded">
+                        group
+                    </span>
+
+                    <span data-i18n="travelMatchLabel">
+                        مسافرون حولك
+                    </span>
+
+                </span>
+
+
+                <h2 data-i18n="matchTitle">
+                    مسافر لحالك؟ مو شرط تكملها لحالك
+                </h2>
+
+
+                <p data-i18n="matchDescription">
+                    إذا حبيت، نساعدك تلاقي مسافرين موجودين حولك
+                    وعندهم اهتمامات قريبة منك.
+                </p>
+
+
+                <a href="#"
+                   class="btn btn-primary"
+                   data-action="travel-match"
+                   data-i18n="matchButton">
+                    اكتشف المسافرين حولك
+                </a>
+
+            </div>
+
+
+
+            <div class="travelers-preview">
+
+
+                <div class="traveler-card">
+
+                    <div class="avatar">
+
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"
+                             alt="Noor">
+
+                    </div>
+
+                    <strong>Noor</strong>
+
+                    <small data-i18n="travelerFood">
+                        تجارب
+                    </small>
+
+                </div>
+
+
+                <div class="traveler-card active">
+
+                    <div class="avatar">
+
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80"
+                             alt="Ahmed">
+
+                    </div>
+
+                    <strong>Ahmed</strong>
+
+                    <small data-i18n="travelerAdventure">
+                        مغامرات
+                    </small>
+
+                </div>
+
+
+                <div class="traveler-card">
+
+                    <div class="avatar">
+
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80"
+                             alt="Sara">
+
+                    </div>
+
+                    <strong>Sara</strong>
+
+                    <small data-i18n="travelerNature">
+                        طبيعة
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         COMMUNITY
+    ========================= -->
+
+    <section class="community-section"
+             id="community">
+
+        <div class="section-container">
+
+
+            <div class="section-heading">
+
+                <span class="section-tag">
+
+                    <span class="material-symbols-rounded">
+                        photo_camera
+                    </span>
+
+                </span>
+
+
+                <h2 data-i18n="communityTitle">
+                    خذها من ناس راحوا قبلك
+                </h2>
+
+
+                <p data-i18n="communityDescription">
+                    تجارب بسيطة ممكن تختصر عليك كثير.
+                </p>
+
+            </div>
+
+
+
+            <div class="posts-grid">
+
+
+                <article class="post-card">
+
+                    <div class="post-user">
+
+                        <div class="post-avatar">
+                            س
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                سارة
+                            </strong>
+
+                            <small>
+                                🇹🇷 تركيا
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <p data-i18n="postOne">
+                        إذا بتروح كابادوكيا، حاول تحجز رحلة المنطاد بدري
+                        لأن الأماكن تخلص بسرعة 🎈
+                    </p>
+
+                    <span class="post-like">
+                        ♥ 124
+                    </span>
+
+                </article>
+
+
+                <article class="post-card">
+
+                    <div class="post-user">
+
+                        <div class="post-avatar">
+                            ن
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                نورة
+                            </strong>
+
+                            <small>
+                                🇯🇵 اليابان
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <p data-i18n="postTwo">
+                        أكثر شيء فرق معي باليابان إني قسمت المدن حسب الأيام
+                        بدل ما أحاول أشوف كل شيء بنفس اليوم.
+                    </p>
+
+                    <span class="post-like">
+                        ♥ 97
+                    </span>
+
+                </article>
+
+
+                <article class="post-card">
+
+                    <div class="post-user">
+
+                        <div class="post-avatar">
+                            ف
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                فهد
+                            </strong>
+
+                            <small>
+                                🇨🇭 سويسرا
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    <p data-i18n="postThree">
+                        إذا تحب الطبيعة والهدوء، لا تركز بس على المدن الكبيرة.
+                        القرى كانت أجمل جزء من الرحلة.
+                    </p>
+
+                    <span class="post-like">
+                        ♥ 156
+                    </span>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         FINAL CTA
+    ========================= -->
+
+    <section class="final-cta">
+
+        <div class="final-cta-overlay"></div>
+
+
+        <div class="final-cta-content">
+
+            <span class="material-symbols-rounded final-plane">
+                flight_takeoff
+            </span>
+
+
+            <h2 data-i18n="finalTitle">
+                طيب... وين ودك تكون رحلتك الجاية؟
+            </h2>
+
+
+            <p data-i18n="finalDescription">
+                خلنا نبدأ من هناك.
+            </p>
+
+
+            <a href="#"
+               class="btn final-btn"
+               data-action="start-trip"
+               data-i18n="startTrip">
+                ابدأ رحلتك
+            </a>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================
+     SHARED FOOTER
+========================= -->
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<!-- =========================
+     SHARED JAVASCRIPT
+========================= -->
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+
+<!-- =========================
+     HOME JAVASCRIPT
+========================= -->
+
+<script th:src="@{/js/index.js}"
+        src="/js/index.js"></script>
+
+
+</body>
+</html>

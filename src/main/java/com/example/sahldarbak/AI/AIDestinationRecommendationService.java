@@ -42,12 +42,15 @@ public class AIDestinationRecommendationService {
 
     public AIRecommendationResponse generateCountry(Integer travel_request_id) {
 
-        TravelRequest travelRequest =
-                travelRequestRepository.findTravelRequestById(travel_request_id);
+        TravelRequest travelRequest = travelRequestRepository.findTravelRequestById(travel_request_id);
 
 
         if (travelRequest == null) {
             throw new ApiException("travel request not found");
+        }
+
+        if (!travelRequest.getStatus().equals("open")){
+            throw new ApiException("you did not submit your request");
         }
 
         //Collect the user's preferences.
