@@ -6,6 +6,7 @@ import com.example.sahldarbak.DTO.CityPlan.CityPlanDTO;
 import com.example.sahldarbak.DTO.DestinationRecommendation.SelectDestinationDTO;
 import com.example.sahldarbak.DTO.PackingList.PackingListDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
+import com.example.sahldarbak.DTO.TransportationRouteDTO;
 import com.example.sahldarbak.Model.Trip;
 import com.example.sahldarbak.Service.TripService;
 import jakarta.validation.Valid;
@@ -101,6 +102,14 @@ public class TripController {
     @GetMapping("/holidays/{tripId}")
     public ResponseEntity<?> getTripHolidays(@PathVariable Integer tripId) {
         return ResponseEntity.status(200).body(tripService.getTripHolidays(tripId));
+    }
+
+    @PostMapping("/send-transportation-email/{tripId}")
+    public ResponseEntity<?> sendTransportationEmail(@PathVariable Integer tripId) {
+
+        tripService.sendTransportationEmail(tripId);
+
+        return ResponseEntity.status(200).body(new ApiResponse("Transportation suggestions sent to your email successfully"));
     }
 
 
