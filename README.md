@@ -365,4 +365,4 @@ The API is available at `http://localhost:8080/api/v1`.
 |------|------|
 | Razan Almadan | Flow 1: Discover |
 | Lama Alharbi | Flow 2: Plan |
-| Mohammed Aljubaili | Flow 3: Plan | 
+| Mohammed Aljubaili | Flow 3: Discover | 
