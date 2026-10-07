@@ -379,7 +379,6 @@ public class TripService {
         return trip;
     }
 
-
     //HELPER METHOD
     // GENERATE ITINERARY FOR ONE CITY
     private SmartItineraryDTO generateItineraryForCity(TravelRequest travelRequest, String country, String city, java.time.LocalDate startDate, java.time.LocalDate endDate) {
