@@ -267,7 +267,7 @@ SahlDarbak is organized around **what the traveler already knows**. Each flow be
 |------|----------------------|--------------|
 | **1. Discover** | "I don't know which country." | AI suggests and compares countries using interests, weather, and holidays. Also covers packing list, transportation, and community posts. |
 | **2. Plan** | "I picked a country, but not the cities and places." | AI chooses cities and splits days, builds the itinerary with hotels, restaurants and halal checks, estimates the budget, and emails the plan. |
-| **3. On the Trip** | "I'm already in a city." | Check-in, city guide, nearby travelers, invites, block, WhatsApp notifications, and in-site chat. |
+| **3. Explore** | "I'm already in a city." | Check-in, city guide, nearby travelers, invites, block, WhatsApp notifications, and in-site chat. |
 
 ---
 
