@@ -1,6 +1,6 @@
 <div align="center">
 
-# SahlDarbak | سهل درب
+# SahlDarbak | سهل دربك
 
 **Plan Smarter ... Travel Together**
 
