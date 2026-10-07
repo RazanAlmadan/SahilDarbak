@@ -248,6 +248,8 @@ const translations = {
         imProfileSaved: "تم حفظ ملفك الشخصي 🎉",
         imProfileUpdated: "تم تحديث ملفك الشخصي",
         imFillRequired: "عبّ كل الحقول المطلوبة",
+        imCompleteProfile: "أكمل ملفك الشخصي",
+        imCompleteProfileHint: "اضغط هنا وعبّ بياناتك",
     },
 
 
@@ -543,6 +545,8 @@ const translations = {
         imProfileSaved: "Your profile is saved 🎉",
         imProfileUpdated: "Your profile is updated",
         imFillRequired: "Please fill in all required fields",
+        imCompleteProfile: "Complete your profile",
+        imCompleteProfileHint: "Tap here to fill in your details",
     }
 
 };
