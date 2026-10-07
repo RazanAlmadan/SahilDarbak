@@ -67,4 +67,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<TravelRequest> travelRequests;
 
+    @OneToMany(mappedBy = "user")
+    private Set<CommunityPost> communityPosts;
+
 }

@@ -13,7 +13,7 @@ public class HolidayService {
     private final OkHttpClient client = new OkHttpClient();
 
     private final String API_URL =
-            "https://nagerholidays.com/api/v4/Holidays/AT/2026";
+            "https://date.nager.at/api/v3/PublicHolidays";
 
 
     public JsonArray getHolidays(String countryCode, int year) {
@@ -37,14 +37,17 @@ public class HolidayService {
                 );
             }
 
-            String responseBody = response.body().string();
+            String responseBody =
+                    response.body().string();
 
-            System.out.println("NAGER STATUS: " + response.code());
-            System.out.println("NAGER RESPONSE: " + responseBody);
+            System.out.println(
+                    "NAGER STATUS: " + response.code()
+            );
 
             if (!response.isSuccessful()) {
                 throw new RuntimeException(
-                        "Nager.Date API error: " + responseBody
+                        "Nager.Date API error: "
+                                + responseBody
                 );
             }
 
@@ -62,9 +65,4 @@ public class HolidayService {
             );
         }
     }
-
-
-
-
 }
-

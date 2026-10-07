@@ -1,4 +1,4 @@
-package com.example.sahldarbak.DTO;
+package com.example.sahldarbak.DTO.DestinationRecommendation;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

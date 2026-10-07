@@ -1,6 +1,7 @@
 package com.example.sahldarbak.AI;
 
 import com.example.sahldarbak.Api.ApiException;
+import com.example.sahldarbak.DTO.CountryComparisonDTO;
 import com.example.sahldarbak.ExternalApi.HolidayService;
 import com.example.sahldarbak.ExternalApi.WeatherService;
 import com.example.sahldarbak.Model.*;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
+import tools.jackson.databind.ObjectMapper;
 
 @Service
 @RequiredArgsConstructor
@@ -23,12 +26,18 @@ public class AIDestinationRecommendationService {
 
     private final HolidayService holidayService;
 
+    private final ObjectMapper objectMapper;
+
 
     @Value("${gemini.api.key}")
     private String apiKey;
 
 
-    private final OkHttpClient client = new OkHttpClient();
+    OkHttpClient client = new OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build();
 
 
     public AIRecommendationResponse generateCountry(Integer travel_request_id) {
@@ -855,4 +864,153 @@ public class AIDestinationRecommendationService {
                 .get("text")
                 .getAsString();
     }
+
+
+    public CountryComparisonDTO compareCountries(
+            Integer travelRequestId,
+            String country1,
+            String country2
+    ) {
+
+        TravelRequest travelRequest =
+                travelRequestRepository.findById(travelRequestId)
+                        .orElseThrow(() ->
+                                new ApiException("travel request not found"));
+
+        StringBuilder preferences =
+                new StringBuilder();
+
+        if (travelRequest.getGeneralPreference() != null) {
+
+            preferences.append("Weather: ")
+                    .append(travelRequest
+                            .getGeneralPreference()
+                            .getWeather())
+                    .append("\n");
+
+            preferences.append("Environment: ")
+                    .append(travelRequest
+                            .getGeneralPreference()
+                            .getEnvironment())
+                    .append("\n");
+
+            preferences.append("Crowd preference: ")
+                    .append(travelRequest
+                            .getGeneralPreference()
+                            .getCrowdPreference())
+                    .append("\n");
+
+            preferences.append("Trip pace: ")
+                    .append(travelRequest
+                            .getGeneralPreference()
+                            .getTripPace())
+                    .append("\n");
+        }
+
+        if (travelRequest.getActivityPreferences() != null) {
+
+            preferences.append("\nActivities:\n");
+
+            travelRequest.getActivityPreferences()
+                    .forEach(activity ->
+                            preferences.append("- ")
+                                    .append(activity.getActivityType())
+                                    .append(" | priority: ")
+                                    .append(activity.getPriority())
+                                    .append("\n")
+                    );
+        }
+
+        if (travelRequest.getTravelRestrictions() != null) {
+
+            preferences.append("\nRestrictions:\n");
+
+            travelRequest.getTravelRestrictions()
+                    .forEach(restriction ->
+                            preferences.append("- ")
+                                    .append(restriction.getRestrictionType())
+                                    .append(": ")
+                                    .append(restriction.getDescription())
+                                    .append(" | required: ")
+                                    .append(restriction.getIsRequired())
+                                    .append("\n")
+                    );
+        }
+
+        String prompt = """
+            You are the country comparison assistant
+            for Sahl Darbak.
+
+            Compare the following two countries for this traveler.
+
+            COUNTRY 1:
+            %s
+
+            COUNTRY 2:
+            %s
+
+            TRAVELER PREFERENCES:
+            %s
+
+            Compare the countries based on:
+
+            1. Weather
+            2. Activities
+            3. Environment
+            4. Crowds
+            5. Budget
+
+            IMPORTANT:
+
+            - Consider the traveler's preferences.
+            - Consider their activities.
+            - Consider their restrictions.
+            - Do not invent specific prices.
+            - Do not invent exact weather conditions.
+            - Keep the recommendation practical.
+            - Return ONLY valid JSON.
+            - Do not use Markdown.
+
+            Use EXACTLY this structure:
+
+            {
+              "country1": "%s",
+              "country2": "%s",
+              "betterForWeather": "Country name",
+              "betterForActivities": "Country name",
+              "betterForEnvironment": "Country name",
+              "betterForCrowds": "Country name",
+              "betterForBudget": "Country name",
+              "recommendation": "Country name",
+              "reason": "Short explanation"
+            }
+            """.formatted(
+                country1,
+                country2,
+                preferences,
+                country1,
+                country2
+        );
+
+        try {
+
+            String response = callGemini(prompt);
+
+            return objectMapper.readValue(
+                    response,
+                    CountryComparisonDTO.class
+            );
+
+        } catch (Exception e) {
+
+            throw new ApiException(
+                    "failed to compare countries: "
+                            + e.getMessage()
+            );
+        }
+    }
+
+
+
+
 }
