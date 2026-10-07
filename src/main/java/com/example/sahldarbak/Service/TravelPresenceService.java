@@ -2,6 +2,7 @@ package com.example.sahldarbak.Service;
 
 import com.example.sahldarbak.Api.ApiException;
 import com.example.sahldarbak.DTO.TravelPresenceDTO;
+import com.example.sahldarbak.ExternalApi.GeocodingService;
 import com.example.sahldarbak.Model.TravelPresence;
 import com.example.sahldarbak.Model.User;
 import com.example.sahldarbak.Repository.BlockedUserRepository;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.sahldarbak.DTO.NearestTravelerDTO;
 import com.example.sahldarbak.Model.Profile;
-import com.example.sahldarbak.Repository.ProfileRepository;
 
 import java.time.Period;
 import java.util.ArrayList;
