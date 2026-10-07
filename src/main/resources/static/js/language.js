@@ -273,6 +273,9 @@ const translations = {
         imGeoTimeout: "تأخر تحديد الموقع، حاول مرة ثانية",
         imBadCoords: "الإحداثيات غير صحيحة",
         imNeedProfile: "لازم تعبي ملفك الشخصي أول، نوديك له الحين",
+        imResetDemo: "إعادة ضبط الديمو",
+        imResetConfirm: "تبي تمسح كل الدعوات والحظر وترجع للبداية؟",
+        imResetDone: "تم إرجاع الديمو لحالته الأولى",
     },
 
 
@@ -593,6 +596,9 @@ const translations = {
         imGeoTimeout: "Location request timed out, please try again",
         imBadCoords: "Invalid coordinates",
         imNeedProfile: "Please complete your profile first, taking you there now",
+        imResetDemo: "Reset demo",
+        imResetConfirm: "Delete all invites and blocks and start over?",
+        imResetDone: "Demo is back to its initial state",
     }
 
 };

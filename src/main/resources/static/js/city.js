@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadNearbyCount(userId);
     loadGuide(userId);
     setupCheckout(userId);
+    setupResetDemo();
 
 });
 
@@ -206,6 +207,40 @@ function setupCheckout(userId) {
             setBtnLoading(button, false);
 
         }
+
+    });
+
+}
+
+
+
+function setupResetDemo() {
+
+    const button = document.getElementById("resetDemoBtn");
+
+    button.addEventListener("click", async () => {
+
+        if (!confirm(t("imResetConfirm"))) {
+            return;
+        }
+
+        setBtnLoading(button, true);
+
+        try {
+
+            await immerseApi("/demo/reset", { method: "DELETE" });
+
+            showSuccess(t("imResetDone"));
+
+            loadNearbyCount(getCurrentUserId());
+
+        } catch (error) {
+
+            showError(error.message);
+
+        }
+
+        setBtnLoading(button, false);
 
     });
 
