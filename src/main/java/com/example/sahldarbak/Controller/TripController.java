@@ -89,16 +89,18 @@ public class TripController {
     }
 
     @PostMapping("/generate-transportation/{tripId}")
-    public ResponseEntity<?> generateTransportation(
-            @PathVariable Integer tripId
-    ) {
+    public ResponseEntity<?> generateTransportation(@PathVariable Integer tripId) {
+        return ResponseEntity.status(200).body(tripService.generateTransportation(tripId));
+    }
 
-        return ResponseEntity.status(200)
-                .body(
-                        tripService.generateTransportation(
-                                tripId
-                        )
-                );
+    @GetMapping("/weather/{tripId}")
+    public ResponseEntity<?> getTripWeather(@PathVariable Integer tripId) {
+        return ResponseEntity.status(200).body(tripService.getTripWeather(tripId));
+    }
+
+    @GetMapping("/holidays/{tripId}")
+    public ResponseEntity<?> getTripHolidays(@PathVariable Integer tripId) {
+        return ResponseEntity.status(200).body(tripService.getTripHolidays(tripId));
     }
 
 

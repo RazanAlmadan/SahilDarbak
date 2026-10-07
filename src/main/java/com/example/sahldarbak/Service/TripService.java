@@ -6,29 +6,32 @@ import com.example.sahldarbak.Api.ApiException;
 import com.example.sahldarbak.DTO.CityPlan.CityPlanDTO;
 import com.example.sahldarbak.DTO.CityPlan.CityPlanItemDTO;
 import com.example.sahldarbak.AI.PackingListAIService;
+import com.example.sahldarbak.DTO.DestinationRecommendation.HolidayDTO;
+import com.example.sahldarbak.DTO.DestinationRecommendation.HolidayInfoDTO;
 import com.example.sahldarbak.DTO.DestinationRecommendation.SelectDestinationDTO;
 import com.example.sahldarbak.DTO.PackingList.PackingListDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.HotelInsightDTO;
 import com.example.sahldarbak.DTO.TransportationRouteDTO;
-import com.example.sahldarbak.ExternalApi.EmailService;
-import com.example.sahldarbak.ExternalApi.GeoapifyService;
+import com.example.sahldarbak.ExternalApi.*;
 import com.example.sahldarbak.Model.*;
 import com.example.sahldarbak.Repository.TravelRequestRepository;
 import com.example.sahldarbak.Repository.TripCityRepository;
 import com.example.sahldarbak.Repository.TripRepository;
 import com.example.sahldarbak.Repository.UserRepository;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.sahldarbak.AI.SmartItineraryAIService;
 import com.example.sahldarbak.DTO.SmartItinerary.LocationDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.PlaceOptionDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
-import com.example.sahldarbak.ExternalApi.TavilyService;
 import com.example.sahldarbak.DTO.SmartItinerary.ItineraryDayDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.PlaceRecommendationDTO;
 import com.example.sahldarbak.Repository.ItineraryRepository;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -53,6 +56,9 @@ public class TripService {
     private final PackingListAIService packingListAIService;
     private final TripPlaceService tripPlaceService;
     private final TransportationAIService transportationAIService;
+    private final WeatherService weatherService;
+    private final HolidayService holidayService;
+    private final CountryService countryService;
 
     public List<Trip> getAllTrips(){
         return tripRepository.findAll();
@@ -504,6 +510,68 @@ public class TripService {
 
         return routes;
     }
+
+    public Object getTripWeather(Integer tripId) {
+
+        Trip trip = tripRepository.findTripById(tripId);
+
+        if (trip == null) {
+            throw new ApiException("trip not found");
+        }
+
+        return weatherService.getWeather(trip.getCity());
+    }
+
+    public HolidayInfoDTO getTripHolidays(Integer tripId) {
+
+        Trip trip = tripRepository.findTripById(tripId);
+
+        if (trip == null) {
+            throw new ApiException("trip not found");
+        }
+
+        if (trip.getTravelRequest() == null) {
+            throw new ApiException("travel request not found");
+        }
+
+        LocalDate startDate =
+                trip.getTravelRequest().getStartDate();
+
+        LocalDate endDate =
+                trip.getTravelRequest().getEndDate();
+
+        if (startDate == null || endDate == null) {
+            throw new ApiException("trip dates are required");
+        }
+
+        String countryCode = countryService.getCountryCode(trip.getCountry());
+
+        JsonArray holidays = holidayService.getHolidays(countryCode, startDate.getYear());
+
+        List<HolidayDTO> holidaysDuringTrip = new ArrayList<>();
+
+        for (int i = 0; i < holidays.size(); i++) {
+
+            JsonObject holiday = holidays.get(i).getAsJsonObject();
+
+            LocalDate holidayDate = LocalDate.parse(holiday.get("date").getAsString());
+
+            if (!holidayDate.isBefore(startDate) && !holidayDate.isAfter(endDate)) {
+
+                HolidayDTO holidayDTO = new HolidayDTO();
+
+                holidayDTO.setName(holiday.get("localName").getAsString());
+
+                holidayDTO.setDate(holiday.get("date").getAsString());
+
+                holidayDTO.setType(holiday.get("types").toString());
+
+                holidaysDuringTrip.add(holidayDTO);
+            }
+        }
+        return new HolidayInfoDTO(!holidaysDuringTrip.isEmpty(), holidaysDuringTrip.size(), holidaysDuringTrip);
+    }
+
 
 
 }
