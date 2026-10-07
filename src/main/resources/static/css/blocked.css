@@ -1,0 +1,77 @@
+/* =====================================================
+   SAHLDARBAK - صفحة /blocked
+   كل الـ classes تبدأ بـ bl-
+===================================================== */
+
+.im-narrow-wide {
+    max-width: 820px;
+}
+
+.bl-top {
+    margin-bottom: 26px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.bl-top-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.bl-list {
+    display: grid;
+    gap: 14px;
+}
+
+.bl-card {
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.bl-person {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.bl-avatar {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FBE9E9;
+    color: #C94A4A;
+    border-radius: 50%;
+}
+
+.bl-name {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.bl-meta {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 700px) {
+
+    .bl-top {
+        flex-direction: column;
+    }
+
+    .bl-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+}

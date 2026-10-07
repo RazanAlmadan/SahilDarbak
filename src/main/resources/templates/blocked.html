@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>سهل دربك | المحظورين</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/immerse.css}"
+          href="/css/immerse.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/blocked.css}"
+          href="/css/blocked.css">
+
+</head>
+
+
+<body>
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+
+<main class="im-page">
+
+    <section class="im-container im-narrow-wide">
+
+        <div class="bl-top">
+
+            <div>
+
+                <h1 class="im-title"
+                    data-i18n="imBlTitle">
+                    المحظورين 🚫
+                </h1>
+
+                <p class="im-text"
+                   data-i18n="imBlText">
+                    اللي حظرتهم ما يطلعون لك ولا تقدر تسولف معهم، وتقدر ترجعهم متى ما تبي.
+                </p>
+
+            </div>
+
+            <div class="bl-top-links">
+
+                <a href="/connections"
+                   class="btn btn-secondary">
+
+                    <span class="material-symbols-rounded">
+                        forum
+                    </span>
+
+                    <span data-i18n="imBlConnections">
+                        اتصالاتي
+                    </span>
+
+                </a>
+
+                <a href="/travel-match"
+                   class="btn btn-primary">
+
+                    <span class="material-symbols-rounded">
+                        travel_explore
+                    </span>
+
+                    <span data-i18n="imBlTravelers">
+                        المسافرين حولي
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div id="blLoader"
+             class="im-loader">
+
+            <span class="material-symbols-rounded loading-icon">
+                progress_activity
+            </span>
+
+        </div>
+
+
+        <div id="blEmpty"
+             class="im-card im-center"
+             style="display:none;">
+
+            <div class="im-icon-circle">
+                <span class="material-symbols-rounded">
+                    verified_user
+                </span>
+            </div>
+
+            <h2 data-i18n="imBlEmpty">
+                ما حظرت أحد
+            </h2>
+
+        </div>
+
+
+        <div id="blList"
+             class="bl-list"></div>
+
+
+        <div class="im-links">
+
+            <button id="resetDemoBtn"
+                    type="button"
+                    class="btn btn-secondary">
+
+                <span class="material-symbols-rounded">
+                    restart_alt
+                </span>
+
+                <span data-i18n="imResetDemo">
+                    إعادة ضبط الديمو
+                </span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+<script th:src="@{/js/immerse-api.js}"
+        src="/js/immerse-api.js"></script>
+
+<script th:src="@{/js/blocked.js}"
+        src="/js/blocked.js"></script>
+
+</body>
+</html>
