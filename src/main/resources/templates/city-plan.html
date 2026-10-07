@@ -10,47 +10,260 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>مدن الرحلة | SahlDarbak</title>
+    <title>مدن رحلتك | SahlDarbak</title>
 
     <link rel="stylesheet"
-          th:href="@{/css/base.css}">
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
 
     <link rel="stylesheet"
-          th:href="@{/css/flow.css}">
+          th:href="@{/css/flow.css}"
+          href="/css/flow.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/city-plan.css}"
+          href="/css/city-plan.css">
 
 </head>
+
 
 <body>
 
 <div th:replace="~{fragments/navbar.html :: navbar}"></div>
 
 
-<main class="flow-page">
+<main class="city-plan-page">
 
-    <div class="flow-container">
+    <div class="city-plan-container">
 
-        <span class="section-tag">
 
-            <span class="material-symbols-rounded">
-                location_city
+        <!-- HEADER -->
+
+        <section class="city-plan-header">
+
+            <span class="section-tag">
+
+                <span class="material-symbols-rounded">
+                    location_city
+                </span>
+
+                مدن رحلتك
+
             </span>
 
-            مدن رحلتك
 
-        </span>
-
-
-        <h1>
-            نرتب المدن على مزاج رحلتك 🗺️
-        </h1>
+            <h1>
+                نرتب المدن على مزاج رحلتك 🗺️
+            </h1>
 
 
-        <div id="cityPlanApp"
-             class="flow-card">
+            <p>
+                بنقترح لك المدن المناسبة ونوزع أيام الرحلة بينها.
+            </p>
 
-            <!-- AI / Manual city plan -->
+        </section>
 
+
+
+        <!-- MESSAGE -->
+
+        <div id="cityPlanMessage"
+             class="city-plan-message">
         </div>
+
+
+
+        <!-- MAIN CARD -->
+
+        <section class="city-plan-card">
+
+
+            <!-- TRIP INFO -->
+
+            <div class="trip-summary">
+
+                <div class="summary-item">
+
+                    <span class="material-symbols-rounded">
+                        public
+                    </span>
+
+                    <div>
+                        <small>الدولة</small>
+                        <strong id="tripCountry">
+                            —
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span class="material-symbols-rounded">
+                        calendar_month
+                    </span>
+
+                    <div>
+                        <small>مدة الرحلة</small>
+
+                        <strong id="tripDates">
+                            —
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <span class="material-symbols-rounded">
+                        route
+                    </span>
+
+                    <div>
+                        <small>طريقة اختيار المدن</small>
+
+                        <strong id="cityPlanMode">
+                            —
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- EMPTY STATE -->
+
+            <div id="emptyCityPlan"
+                 class="city-plan-empty">
+
+                <div class="empty-icon">
+
+                    <span class="material-symbols-rounded">
+                        auto_awesome
+                    </span>
+
+                </div>
+
+
+                <h2>
+                    نختار لك المدن؟ ✨
+                </h2>
+
+
+                <p>
+                    الذكاء الاصطناعي بيختار مدن مناسبة داخل الدولة
+                    ويقسم أيام الرحلة بينها.
+                </p>
+
+
+                <button id="generateCityPlanButton"
+                        type="button"
+                        class="btn btn-primary">
+
+                    <span class="material-symbols-rounded">
+                        auto_awesome
+                    </span>
+
+                    اقترح لي المدن
+
+                </button>
+
+            </div>
+
+
+
+            <!-- LOADING -->
+
+            <div id="cityPlanLoading"
+                 class="city-plan-loading">
+
+                <span class="material-symbols-rounded loading-icon">
+                    progress_activity
+                </span>
+
+                <h3>
+                    قاعدين نرتب أفضل مسار لك...
+                </h3>
+
+                <p>
+                    نختار المدن ونوزع الأيام على رحلتك ✨
+                </p>
+
+            </div>
+
+
+
+            <!-- RESULTS -->
+
+            <div id="cityPlanResults"
+                 class="city-plan-results">
+
+                <div class="results-heading">
+
+                    <div>
+
+                        <span class="result-label">
+                            اقتراحنا لك
+                        </span>
+
+                        <h2>
+                            خطة المدن المقترحة
+                        </h2>
+
+                    </div>
+
+
+                    <span class="material-symbols-rounded">
+                        route
+                    </span>
+
+                </div>
+
+
+                <div id="citiesContainer"
+                     class="cities-container">
+                </div>
+
+
+
+                <div class="city-plan-actions">
+
+                    <button id="regenerateCityPlanButton"
+                            type="button"
+                            class="btn btn-light">
+
+                        <span class="material-symbols-rounded">
+                            refresh
+                        </span>
+
+                        اقترح خطة ثانية
+
+                    </button>
+
+
+                    <button id="acceptCityPlanButton"
+                            type="button"
+                            class="btn btn-primary">
+
+                        <span class="material-symbols-rounded">
+                            check_circle
+                        </span>
+
+                        اعتمد هذه الخطة
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
 
     </div>
 
@@ -60,11 +273,15 @@
 <div th:replace="~{fragments/footer.html :: footer}"></div>
 
 
-<script th:src="@{/js/language.js}"></script>
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
 
-<script th:src="@{/js/base.js}"></script>
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
 
-<script th:src="@{/js/city-plan.js}"></script>
+<script th:src="@{/js/city-plan.js}"
+        src="/js/city-plan.js"></script>
 
 </body>
+
 </html>

@@ -70,7 +70,7 @@ public class TripBudgetEstimateService {
     //EXTRA ENDPOINT
 
     // GENERATE AI BUDGET ESTIMATE
-    public TripBudgetEstimate generateBudgetEstimate(Integer tripId, BudgetEstimateRequestDTO requestDTO) {
+    public TripBudgetEstimate generateBudgetEstimate(Integer tripId, BudgetEstimateRequestDTO requestDTO,String lang) {
 
         Trip trip = tripRepository.findTripById(tripId);
 
@@ -94,7 +94,7 @@ public class TripBudgetEstimateService {
         List<TripCity> tripCities = getBudgetTripCities(tripId, travelRequest);
 
 
-        TripBudgetEstimateDTO result = tripBudgetEstimateAIService.generateBudgetEstimate(trip, travelRequest, requestDTO, tripCities);
+        TripBudgetEstimateDTO result = tripBudgetEstimateAIService.generateBudgetEstimate(trip, travelRequest, requestDTO, tripCities,lang);
 
 
         validateBudgetResult(result);
@@ -143,7 +143,7 @@ public class TripBudgetEstimateService {
 
 
     // REFRESH AI BUDGET ESTIMATE
-    public TripBudgetEstimate refreshBudgetEstimate(Integer tripId, BudgetEstimateRequestDTO requestDTO) {
+    public TripBudgetEstimate refreshBudgetEstimate(Integer tripId, BudgetEstimateRequestDTO requestDTO,String lang) {
 
         Trip trip = tripRepository.findTripById(tripId);
 
@@ -169,7 +169,7 @@ public class TripBudgetEstimateService {
         List<TripCity> tripCities = getBudgetTripCities(tripId, travelRequest);
 
 
-        TripBudgetEstimateDTO result = tripBudgetEstimateAIService.generateBudgetEstimate(trip, travelRequest, requestDTO, tripCities);
+        TripBudgetEstimateDTO result = tripBudgetEstimateAIService.generateBudgetEstimate(trip, travelRequest, requestDTO, tripCities,lang);
 
 
         validateBudgetResult(result);

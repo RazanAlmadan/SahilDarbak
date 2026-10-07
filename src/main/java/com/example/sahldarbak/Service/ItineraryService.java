@@ -137,7 +137,7 @@ public class ItineraryService {
         }
     }
 
-    public void sendItineraryToEmail(Integer tripId) {
+    public void sendItineraryToEmail(Integer tripId, String lang) {
 
         Itinerary itinerary = itineraryRepository.findItineraryByTrip_Id(tripId);
 
@@ -149,8 +149,7 @@ public class ItineraryService {
 
             SmartItineraryDTO smartItinerary = objectMapper.readValue(itinerary.getPlanJson(), SmartItineraryDTO.class);
 
-            emailService.sendFullItineraryEmail(itinerary.getTrip().getUser().getEmail(), itinerary.getTrip().getCountry(), smartItinerary);
-
+            emailService.sendFullItineraryEmail(itinerary.getTrip().getUser().getEmail(), itinerary.getTrip().getCountry(), smartItinerary, lang);
         } catch (Exception e) {
 
             throw new ApiException("failed to send itinerary email: " + e.getMessage());

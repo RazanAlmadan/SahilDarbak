@@ -36,7 +36,11 @@ public class SmartCityPlannerAIService {
     // GENERATE INTELLIGENT MULTI-CITY PLAN
     public CityPlanDTO generateCityPlan(
             Trip trip,
-            TravelRequest travelRequest) {
+            TravelRequest travelRequest,  String lang) {
+        String outputLanguage =
+                "en".equalsIgnoreCase(lang)
+                        ? "English"
+                        : "Arabic";
 
         long totalDays = ChronoUnit.DAYS.between(
                 travelRequest.getStartDate(),
@@ -55,6 +59,34 @@ public class SmartCityPlannerAIService {
 
         Your recommendations should feel like they come from a smart,
         helpful travel companion rather than a formal report.
+                ========================
+                OUTPUT LANGUAGE
+                ========================
+                
+                The selected UI language is: %s
+                
+                Write all user-facing descriptive text in %s.
+                
+                For Arabic:
+                - Use clear, natural and friendly Arabic.
+                - Keep the tone warm and concise.
+                - Do not use overly formal language.
+                
+                IMPORTANT:
+                Do NOT translate or modify:
+                - place names
+                - hotel names
+                - restaurant names
+                - attraction names
+                - city names
+                - URLs
+                - source names
+                - external IDs
+                - enum/status values
+                - JSON keys
+                - factual evidence copied from external sources
+                
+                Do NOT change the required JSON structure.
 
         ========================
         TRIP INFORMATION
@@ -293,6 +325,8 @@ public class SmartCityPlannerAIService {
 
         Return only the final optimized city plan.
         """.formatted(
+                outputLanguage,
+                outputLanguage,
                 trip.getCountry(),
                 travelRequest.getStartDate(),
                 travelRequest.getEndDate(),

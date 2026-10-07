@@ -53,8 +53,8 @@ public class TripController {
     //EXTRA END POINTS:
 
     @PostMapping("/generate-smart-itinerary/{tripId}")
-    public ResponseEntity<?> generateSmartItinerary(@PathVariable Integer tripId) {
-        SmartItineraryDTO smartItineraryDTO=tripService.generateSmartItinerary(tripId);
+    public ResponseEntity<?> generateSmartItinerary(@PathVariable Integer tripId,  @RequestParam(defaultValue = "ar") String lang) {
+        SmartItineraryDTO smartItineraryDTO=tripService.generateSmartItinerary(tripId,lang);
         return ResponseEntity.status(200).body(smartItineraryDTO);
     }
 
@@ -69,8 +69,8 @@ public class TripController {
 
     // GENERATE AI CITY PLAN
     @PostMapping("/generate-city-plan/{tripId}")
-    public ResponseEntity<?> generateCityPlan(@PathVariable Integer tripId) {
-        return ResponseEntity.status(200).body(tripService.generateCityPlan(tripId));
+    public ResponseEntity<?> generateCityPlan(@PathVariable Integer tripId,@RequestParam(defaultValue = "ar") String lang) {
+        return ResponseEntity.status(200).body(tripService.generateCityPlan(tripId,lang));
     }
 
     @GetMapping("/get-by-travel-request/{travelRequestId}")

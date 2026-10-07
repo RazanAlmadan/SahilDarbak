@@ -245,81 +245,72 @@ public class TavilyService {
             String source,
             String url) {
 
-        // £250 / GBP 250 / £250 per night
         Pattern gbpPattern = Pattern.compile(
                 "(?:£|GBP\\s*)([\\d,]+(?:\\.\\d{1,2})?)",
                 Pattern.CASE_INSENSITIVE
         );
 
-        Matcher gbpMatcher =
-                gbpPattern.matcher(content);
+        Matcher gbpMatcher = gbpPattern.matcher(content);
 
         if (gbpMatcher.find()) {
 
-            Double price = Double.parseDouble(
-                    gbpMatcher
-                            .group(1)
-                            .replace(",", "")
-            );
+            Double price =
+                    safeParseDouble(gbpMatcher.group(1));
 
-            return new HotelPriceDTO(
-                    price,
-                    "GBP",
-                    source,
-                    url
-            );
+            if (price != null) {
+                return new HotelPriceDTO(
+                        price,
+                        "GBP",
+                        source,
+                        url
+                );
+            }
         }
 
 
-        // $250 / USD 250
         Pattern usdPattern = Pattern.compile(
                 "(?:\\$|USD\\s*)([\\d,]+(?:\\.\\d{1,2})?)",
                 Pattern.CASE_INSENSITIVE
         );
 
-        Matcher usdMatcher =
-                usdPattern.matcher(content);
+        Matcher usdMatcher = usdPattern.matcher(content);
 
         if (usdMatcher.find()) {
 
-            Double price = Double.parseDouble(
-                    usdMatcher
-                            .group(1)
-                            .replace(",", "")
-            );
+            Double price =
+                    safeParseDouble(usdMatcher.group(1));
 
-            return new HotelPriceDTO(
-                    price,
-                    "USD",
-                    source,
-                    url
-            );
+            if (price != null) {
+                return new HotelPriceDTO(
+                        price,
+                        "USD",
+                        source,
+                        url
+                );
+            }
         }
 
 
-        // €250 / EUR 250
         Pattern eurPattern = Pattern.compile(
                 "(?:€|EUR\\s*)([\\d,]+(?:\\.\\d{1,2})?)",
                 Pattern.CASE_INSENSITIVE
         );
 
-        Matcher eurMatcher =
-                eurPattern.matcher(content);
+        Matcher eurMatcher = eurPattern.matcher(content);
 
         if (eurMatcher.find()) {
 
-            Double price = Double.parseDouble(
-                    eurMatcher
-                            .group(1)
-                            .replace(",", "")
-            );
+            Double price =
+                    safeParseDouble(eurMatcher.group(1));
 
-            return new HotelPriceDTO(
-                    price,
-                    "EUR",
-                    source,
-                    url
-            );
+            if (price != null) {
+                return new HotelPriceDTO(
+                        price,
+                        "EUR",
+                        source,
+                        url
+                );
+            }
         }
 
         return null;
@@ -337,13 +328,12 @@ public class TavilyService {
         Matcher matcher = pattern.matcher(content);
 
         if (matcher.find()) {
-            return Double.parseDouble(
-                    matcher.group(1)
-            );
+            return safeParseDouble(matcher.group(1));
         }
 
         return null;
     }
+
 
 
     // EXTRACT BOOKING.COM REVIEW COUNT
@@ -357,10 +347,7 @@ public class TavilyService {
         Matcher matcher = pattern.matcher(content);
 
         if (matcher.find()) {
-
-            return Integer.parseInt(matcher
-                            .group(1)
-                            .replace(",", ""));
+            return safeParseInteger(matcher.group(1));
         }
 
         return null;
@@ -368,8 +355,7 @@ public class TavilyService {
 
 
     // TRIPADVISOR RATING
-    private Double extractTripadvisorRating(
-            String content) {
+    private Double extractTripadvisorRating(String content) {
 
         Pattern pattern = Pattern.compile(
                 "\\b([1-5](?:\\.\\d)?)\\s+"
@@ -381,9 +367,7 @@ public class TavilyService {
         Matcher matcher = pattern.matcher(content);
 
         if (matcher.find()) {
-            return Double.parseDouble(
-                    matcher.group(1)
-            );
+            return safeParseDouble(matcher.group(1));
         }
 
         return null;
@@ -394,8 +378,7 @@ public class TavilyService {
 
 
     // EXPEDIA RATING
-    private Double extractExpediaRating(
-            String content) {
+    private Double extractExpediaRating(String content) {
 
         Pattern pattern = Pattern.compile(
                 "(\\d+(?:\\.\\d+)?)\\s+out of\\s+10",
@@ -405,9 +388,7 @@ public class TavilyService {
         Matcher matcher = pattern.matcher(content);
 
         if (matcher.find()) {
-            return Double.parseDouble(
-                    matcher.group(1)
-            );
+            return safeParseDouble(matcher.group(1));
         }
 
         return null;
@@ -415,11 +396,14 @@ public class TavilyService {
 
 
     // EXTRACT EXPEDIA REVIEW COUNT
-    private Integer extractExpediaReviewCount(
-            String content) {
+    private Integer extractExpediaReviewCount(String content) {
+
+        if (content == null || content.isBlank()) {
+            return null;
+        }
 
         Pattern pattern = Pattern.compile(
-                "([\\d,]+)\\s+reviews",
+                "(\\d[\\d,]*)\\s+reviews",
                 Pattern.CASE_INSENSITIVE
         );
 
@@ -427,11 +411,20 @@ public class TavilyService {
 
         if (matcher.find()) {
 
-            return Integer.parseInt(
-                    matcher
-                            .group(1)
-                            .replace(",", "")
-            );
+            String reviewCount = matcher
+                    .group(1)
+                    .replace(",", "")
+                    .trim();
+
+            if (reviewCount.isEmpty()) {
+                return null;
+            }
+
+            try {
+                return Integer.parseInt(reviewCount);
+            } catch (NumberFormatException e) {
+                return null;
+            }
         }
 
         return null;
@@ -593,13 +586,21 @@ public class TavilyService {
             return null;
         }
 
+        String cleanedContent = content
+                .replace("\\", " ")
+                .replace("\r", " ")
+                .replace("\n", " ")
+                .replace("\t", " ")
+                .replaceAll("\\s+", " ")
+                .trim();
+
         int maxLength = 250;
 
-        if (content.length() <= maxLength) {
-            return content;
+        if (cleanedContent.length() <= maxLength) {
+            return cleanedContent;
         }
 
-        return content.substring(0, maxLength);
+        return cleanedContent.substring(0, maxLength);
     }
 
     // EXTRACT TRIPADVISOR REVIEW COUNT
@@ -614,14 +615,55 @@ public class TavilyService {
         Matcher matcher = pattern.matcher(content);
 
         if (matcher.find()) {
-
-            return Integer.parseInt(
-                    matcher
-                            .group(1)
-                            .replace(",", "")
+            return safeParseInteger(
+                    matcher.group(1)
             );
         }
 
         return null;
+    }
+
+    private Integer safeParseInteger(String value) {
+
+        if (value == null) {
+            return null;
+        }
+
+        String cleaned = value
+                .replace(",", "")
+                .trim();
+
+        if (cleaned.isEmpty() || !cleaned.matches("\\d+")) {
+            return null;
+        }
+
+        try {
+            return Integer.parseInt(cleaned);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+
+    private Double safeParseDouble(String value) {
+
+        if (value == null) {
+            return null;
+        }
+
+        String cleaned = value
+                .replace(",", "")
+                .trim();
+
+        if (cleaned.isEmpty() ||
+                !cleaned.matches("\\d+(\\.\\d+)?")) {
+            return null;
+        }
+
+        try {
+            return Double.parseDouble(cleaned);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }
