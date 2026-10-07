@@ -19,16 +19,9 @@ public class TransportationService {
             .build();
 
 
-    public JsonObject getRoute(
-            LocationDTO from,
-            LocationDTO to,
-            String mode
-    ) {
+    public JsonObject getRoute(LocationDTO from, LocationDTO to, String mode) {
 
-        try {
-
-            String waypoints =
-                    from.getLatitude() + ","
+        try {String waypoints = from.getLatitude() + ","
                             + from.getLongitude()
                             + "|"
                             + to.getLatitude() + ","
@@ -52,32 +45,20 @@ public class TransportationService {
 
 
             if (response == null) {
-                throw new ApiException(
-                        "empty transportation API response"
-                );
+                throw new ApiException("empty transportation API response");
             }
 
 
-            JsonObject json =
-                    JsonParser
-                            .parseString(response)
-                            .getAsJsonObject();
+            JsonObject json = JsonParser.parseString(response).getAsJsonObject();
 
 
-            if (!json.has("results")
-                    || json.getAsJsonArray("results").isEmpty()) {
+            if (!json.has("results") || json.getAsJsonArray("results").isEmpty()) {
 
-                throw new ApiException(
-                        "no route found for transportation mode: "
-                                + mode
-                );
+                throw new ApiException("no route found for transportation mode: " + mode);
             }
 
 
-            return json
-                    .getAsJsonArray("results")
-                    .get(0)
-                    .getAsJsonObject();
+            return json.getAsJsonArray("results").get(0).getAsJsonObject();
 
 
         } catch (Exception e) {
@@ -86,70 +67,39 @@ public class TransportationService {
                 throw (ApiException) e;
             }
 
-            throw new ApiException(
-                    "failed to get transportation route: "
-                            + e.getMessage()
-            );
+            throw new ApiException("failed to get transportation route: " + e.getMessage());
         }
     }
 
+    /// If the method is Walking
+    public JsonObject getWalkingRoute(LocationDTO from, LocationDTO to) {
 
-    public JsonObject getWalkingRoute(
-            LocationDTO from,
-            LocationDTO to
-    ) {
-
-        return getRoute(
-                from,
-                to,
-                "walk"
-        );
+        return getRoute(from, to, "walk");
     }
 
+    /// If the method is Driving
+    public JsonObject getDrivingRoute(LocationDTO from, LocationDTO to) {
 
-    public JsonObject getDrivingRoute(
-            LocationDTO from,
-            LocationDTO to
-    ) {
-
-        return getRoute(
-                from,
-                to,
-                "drive"
-        );
+        return getRoute(from, to, "drive");
     }
 
-
-    public JsonObject getPublicTransportRoute(
-            LocationDTO from,
-            LocationDTO to
-    ) {
+    /// If the method is to use Public Transportation (Bus, metro, etc.)
+    public JsonObject getPublicTransportRoute(LocationDTO from, LocationDTO to) {
 
         try {
-
-            return getRoute(
-                    from,
-                    to,
-                    "transit"
-            );
+            return getRoute(from, to, "transit");
 
         } catch (ApiException e) {
 
             // Public transportation is optional.
-            // If Geoapify cannot provide transit data,
+            // If Geoapify API cannot provide transit data,
             // do not stop the entire transportation generation.
 
             JsonObject unavailable = new JsonObject();
 
-            unavailable.addProperty(
-                    "available",
-                    false
-            );
+            unavailable.addProperty("available", false);
 
-            unavailable.addProperty(
-                    "message",
-                    "Public transportation route data is unavailable."
-            );
+            unavailable.addProperty("message", "Public transportation route data is unavailable.");
 
             return unavailable;
         }
