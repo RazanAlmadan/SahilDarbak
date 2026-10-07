@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>خطط رحلتك | SahlDarbak</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/flow.css}">
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+
+<main class="flow-page">
+
+    <div class="flow-container">
+
+        <span class="section-tag">
+
+            <span class="material-symbols-rounded">
+                route
+            </span>
+
+            خطط رحلتك
+
+        </span>
+
+
+        <h1>
+            خلنا نعرف رحلتك أكثر ✈️
+        </h1>
+
+        <p>
+            كم خطوة بسيطة وبعدها نبدأ نرتب لك الخيارات المناسبة.
+        </p>
+
+
+        <div id="travelRequestApp"
+             class="flow-card">
+
+            <!-- بنبني الـWizard هنا -->
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+
+<script th:src="@{/js/language.js}"></script>
+
+<script th:src="@{/js/base.js}"></script>
+
+<script th:src="@{/js/travel-request.js}"></script>
+
+</body>
+</html>

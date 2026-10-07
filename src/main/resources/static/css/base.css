@@ -808,3 +808,49 @@ body:not(.home-page) .navbar {
     }
 
 }
+
+.navbar-user-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard-link,
+.logout-btn {
+    min-height: 43px;
+    padding: 0 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    border-radius: 13px;
+
+    font-weight: 700;
+}
+
+.dashboard-link {
+    background: var(--teal-soft);
+    color: var(--primary);
+}
+
+.dashboard-link:hover {
+    background: #DCEEEB;
+}
+
+.logout-btn {
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text-primary);
+}
+
+.logout-btn:hover {
+    background: var(--orange-soft);
+    color: var(--orange);
+}
+
+.dashboard-link .material-symbols-rounded,
+.logout-btn .material-symbols-rounded {
+    font-size: 20px;
+}

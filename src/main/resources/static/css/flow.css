@@ -1,0 +1,79 @@
+.flow-page {
+    min-height: 100vh;
+
+    padding: 65px 0 100px;
+
+    background:
+            radial-gradient(
+                    circle at 10% 10%,
+                    rgba(42, 157, 143, 0.08),
+                    transparent 28%
+            ),
+            radial-gradient(
+                    circle at 90% 20%,
+                    rgba(244, 162, 97, 0.08),
+                    transparent 28%
+            ),
+            var(--background);
+}
+
+
+.flow-container {
+    width: calc(100% - 60px);
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+}
+
+
+.flow-container > h1 {
+    margin-top: 14px;
+    margin-bottom: 8px;
+
+    font-size: 34px;
+}
+
+
+.flow-container > p {
+    margin-bottom: 30px;
+
+    color: var(--text-secondary);
+
+    font-size: 16px;
+}
+
+
+.flow-card {
+    min-height: 350px;
+
+    padding: 35px;
+
+    background: #FFFFFF;
+
+    border: 1px solid rgba(15, 76, 92, 0.08);
+
+    border-radius: 28px;
+
+    box-shadow:
+            0 12px 38px rgba(15, 76, 92, 0.06);
+}
+
+
+@media (max-width: 700px) {
+
+    .flow-container {
+        width: calc(100% - 30px);
+    }
+
+
+    .flow-card {
+        padding: 22px;
+    }
+
+
+    .flow-container > h1 {
+        font-size: 28px;
+    }
+
+}

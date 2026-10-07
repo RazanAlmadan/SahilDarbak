@@ -1,0 +1,516 @@
+.dashboard-main {
+    min-height: 100vh;
+
+    padding: 70px 0 100px;
+
+    background:
+            radial-gradient(
+                    circle at 10% 15%,
+                    rgba(42, 157, 143, 0.08),
+                    transparent 28%
+            ),
+            radial-gradient(
+                    circle at 88% 22%,
+                    rgba(244, 162, 97, 0.08),
+                    transparent 26%
+            ),
+            var(--background);
+}
+
+
+.dashboard-container {
+    width: calc(100% - 70px);
+    max-width: 1500px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.dashboard-header {
+    min-height: 220px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 40px;
+}
+
+
+.dashboard-title {
+    text-align: right;
+}
+
+
+.dashboard-label {
+    width: fit-content;
+
+    margin-bottom: 15px;
+    padding: 7px 13px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    background: var(--teal-soft);
+
+    color: var(--primary);
+
+    border-radius: 25px;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.dashboard-title h1 {
+    margin-bottom: 8px;
+
+    font-size: 36px;
+    font-weight: 800;
+
+    color: var(--text-primary);
+}
+
+
+.dashboard-title p {
+    color: var(--text-secondary);
+
+    font-size: 16px;
+}
+
+
+.dashboard-new-trip {
+    min-width: 205px;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================
+   OVERVIEW
+========================= */
+
+.dashboard-overview {
+    margin-bottom: 65px;
+
+    display: grid;
+
+    grid-template-columns:
+        1.6fr 1fr 1fr 1fr;
+
+    gap: 16px;
+}
+
+
+.overview-card {
+    min-height: 135px;
+
+    padding: 25px;
+
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    background: #FFFFFF;
+
+    border: 1px solid rgba(15, 76, 92, 0.07);
+
+    border-radius: 25px;
+
+    box-shadow:
+            0 12px 35px rgba(15, 76, 92, 0.07);
+}
+
+
+.overview-icon {
+    width: 54px;
+    height: 54px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+}
+
+
+.overview-icon .material-symbols-rounded {
+    font-size: 27px;
+}
+
+
+.profile-icon {
+    background: var(--teal-soft);
+
+    color: var(--primary);
+}
+
+
+.total-icon {
+    background: var(--teal-soft);
+
+    color: var(--secondary);
+}
+
+
+.draft-icon {
+    background: #FFF7DA;
+
+    color: #B8902D;
+}
+
+
+.planned-icon {
+    background: #FFF0E7;
+
+    color: var(--orange);
+}
+
+
+.overview-card strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 24px;
+    font-weight: 800;
+
+    color: var(--text-primary);
+}
+
+
+.overview-card span:not(.material-symbols-rounded),
+.overview-card small {
+    color: var(--text-secondary);
+
+    font-size: 14px;
+}
+
+
+.profile-card strong {
+    font-size: 16px;
+}
+
+
+.profile-card small {
+    display: block;
+
+    color: var(--secondary);
+}
+
+
+.profile-note {
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--secondary) !important;
+
+    font-size: 12px !important;
+}
+
+
+/* =========================
+   PLANS
+========================= */
+
+.travel-plans-section {
+    padding: 38px;
+
+    background: rgba(255, 255, 255, 0.85);
+
+    border: 1px solid rgba(15, 76, 92, 0.07);
+
+    border-radius: 30px;
+
+    box-shadow:
+            0 12px 40px rgba(15, 76, 92, 0.05);
+}
+
+
+.travel-plans-heading {
+    margin-bottom: 28px;
+}
+
+
+.travel-plans-heading h2 {
+    margin-bottom: 5px;
+
+    font-size: 28px;
+}
+
+
+.travel-plans-heading p {
+    color: var(--text-secondary);
+}
+
+
+/* =========================
+   TRIP CARDS
+========================= */
+
+.trips-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(310px, 1fr));
+
+    gap: 18px;
+}
+
+
+.trip-card {
+    padding: 23px;
+
+    background: #FFFFFF;
+
+    border: 1px solid rgba(15, 76, 92, 0.08);
+
+    border-radius: 22px;
+
+    box-shadow:
+            0 8px 25px rgba(15, 76, 92, 0.05);
+
+    transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+}
+
+
+.trip-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+            0 14px 35px rgba(15, 76, 92, 0.09);
+}
+
+
+.trip-card-header {
+    margin-bottom: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.trip-card-icon {
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--teal-soft);
+
+    color: var(--primary);
+
+    border-radius: 16px;
+}
+
+
+.trip-status {
+    padding: 6px 11px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.status-draft {
+    background: #FFF7DA;
+
+    color: #9B771B;
+}
+
+
+.status-open {
+    background: #E8F5F2;
+
+    color: var(--secondary);
+}
+
+
+.status-trip {
+    background: #FFF0E7;
+
+    color: #C87939;
+}
+
+
+.trip-card h3 {
+    margin-bottom: 17px;
+
+    font-size: 20px;
+}
+
+
+.trip-info {
+    margin-bottom: 22px;
+
+    display: grid;
+    gap: 10px;
+}
+
+
+.trip-info-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 14px;
+}
+
+
+.trip-info-row .material-symbols-rounded {
+    color: var(--secondary);
+
+    font-size: 20px;
+}
+
+
+.trip-card .btn {
+    width: 100%;
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.dashboard-loading {
+    min-height: 280px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    color: var(--text-secondary);
+}
+
+
+.dashboard-error {
+    min-height: 200px;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    color: #C94A4A;
+}
+
+
+.empty-trips {
+    min-height: 330px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+
+.empty-trip-icon {
+    width: 82px;
+    height: 82px;
+
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--teal-soft);
+
+    color: var(--primary);
+
+    border-radius: 26px;
+}
+
+
+.empty-trip-icon .material-symbols-rounded {
+    font-size: 40px;
+}
+
+
+.empty-trips h3 {
+    margin-bottom: 8px;
+
+    font-size: 23px;
+}
+
+
+.empty-trips p {
+    margin-bottom: 22px;
+
+    color: var(--text-secondary);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1050px) {
+
+    .dashboard-overview {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .dashboard-container {
+        width: calc(100% - 30px);
+    }
+
+
+    .dashboard-header {
+        padding: 30px 0;
+
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .dashboard-new-trip {
+        width: 100%;
+    }
+
+
+    .dashboard-overview {
+        grid-template-columns: 1fr;
+    }
+
+
+    .travel-plans-section {
+        padding: 25px 20px;
+    }
+
+
+    .trips-grid {
+        grid-template-columns: 1fr;
+    }
+
+}

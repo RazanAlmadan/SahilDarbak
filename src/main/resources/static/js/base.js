@@ -110,8 +110,53 @@ function setupActiveNavbar() {
 
 }
 
+function setupLogout() {
+
+    const logoutButton =
+        document.getElementById("logoutBtn");
+
+    if (!logoutButton) return;
+
+    logoutButton.addEventListener("click", () => {
+
+        localStorage.removeItem("userId");
+        localStorage.removeItem("userEmail");
+
+        window.location.href = "/login";
+    });
+}
 
 
+
+function setupNavbarAuthState() {
+
+    const userId =
+        localStorage.getItem("userId");
+
+    const guestNavbar =
+        document.getElementById("guestNavbar");
+
+    const userNavbar =
+        document.getElementById("userNavbar");
+
+
+    if (!guestNavbar || !userNavbar) {
+        return;
+    }
+
+
+    if (userId) {
+
+        guestNavbar.style.display = "none";
+        userNavbar.style.display = "flex";
+
+    } else {
+
+        guestNavbar.style.display = "flex";
+        userNavbar.style.display = "none";
+
+    }
+}
 // =========================
 // INITIALIZE
 // =========================
@@ -125,6 +170,10 @@ document.addEventListener(
         setupNavbarScrollEffect();
 
         setupActiveNavbar();
+        setupLogout();
+        setupNavbarAuthState();
+
+
 
     }
 );

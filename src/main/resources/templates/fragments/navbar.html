@@ -57,12 +57,54 @@
             EN
         </button>
 
-        <a th:href="@{/login}"
-           href="/login"
-           class="login-btn"
-           data-i18n="login">
-            تسجيل الدخول
-        </a>
+
+        <div id="guestNavbar"
+             class="navbar-user-actions">
+
+            <a th:href="@{/login}"
+               href="/login"
+               class="login-btn"
+               data-i18n="login">
+                تسجيل الدخول
+            </a>
+
+        </div>
+
+
+        <div id="userNavbar"
+             class="navbar-user-actions"
+             style="display: none;">
+
+            <a th:href="@{/dashboard}"
+               href="/dashboard"
+               class="dashboard-link">
+
+                <span class="material-symbols-rounded">
+                    dashboard
+                </span>
+
+                <span data-i18n="dashboard">
+                    رحلاتي
+                </span>
+
+            </a>
+
+
+            <button id="logoutBtn"
+                    class="logout-btn"
+                    type="button">
+
+                <span class="material-symbols-rounded">
+                    logout
+                </span>
+
+                <span data-i18n="logout">
+                    تسجيل الخروج
+                </span>
+
+            </button>
+
+        </div>
 
     </div>
 
