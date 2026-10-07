@@ -164,6 +164,16 @@ public class TripBudgetEstimateAIService {
                     - children when present
                     - trip duration
                     - food preferences when relevant
+                    Food preferences may be used to estimate likely food spending,
+                    but they do NOT prove that compliant restaurants or food options
+                    are available at the destination.
+                    
+                    Never claim or imply in the summary that halal food, seafood-free food,
+                    allergy-safe food, or any other restricted food option is available
+                    or verified unless verified availability data was explicitly supplied.
+                    
+                    When discussing food in the summary, use neutral wording such as
+                    "food expenses", "meal costs" or "your food preferences".
 
                     ========================
                     TRANSPORTATION ESTIMATE

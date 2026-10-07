@@ -260,11 +260,7 @@ public class TripService {
 
 
     // after AI suggest countries the user can select one
-    public void selectDestination(
-            Integer user_id,
-            Integer travel_request_id,
-            SelectDestinationDTO dto
-    ) {
+    public void selectDestination(Integer user_id, Integer travel_request_id, SelectDestinationDTO dto) {
 
         User user = userRepository.findUserById(user_id);
 
@@ -272,23 +268,18 @@ public class TripService {
             throw new ApiException("user not found");
         }
 
-        TravelRequest travelRequest =
-                travelRequestRepository.findTravelRequestById(travel_request_id);
+        TravelRequest travelRequest = travelRequestRepository.findTravelRequestById(travel_request_id);
 
         if (travelRequest == null) {
             throw new ApiException("travel request not found");
         }
 
         if (!travelRequest.getUser().getId().equals(user_id)) {
-            throw new ApiException(
-                    "this travel request does not belong to this user"
-            );
+            throw new ApiException("this travel request does not belong to this user");
         }
 
         if (travelRequest.getTrip() != null) {
-            throw new ApiException(
-                    "a trip has already been created for this travel request"
-            );
+            throw new ApiException("a trip has already been created for this travel request");
         }
         // create new Trip with the country the user chose and TravelRequest info
         Trip trip = new Trip();

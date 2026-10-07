@@ -258,12 +258,20 @@ public class SmartItineraryAIService {
         =========================
         USER PREFERENCES
         =========================
-
+        
         20. REQUIRED food preferences and REQUIRED travel restrictions
-            are HARD CONSTRAINTS.
+          are HARD CONSTRAINTS for places scheduled inside days[].places.
+                
+          The only exception is restaurantRecommendations fallback
+          explicitly allowed by the HALAL RULES below.
+                
+        21. Never schedule a place inside days[].places if it is known
+            to violate a required restriction.
+                
+            Fallback restaurantRecommendations may contain unverified
+            alternatives only when explicitly allowed by the HALAL RULES,
+            and they must never be described as satisfying the restriction.
 
-        21. Never recommend a place that is known to violate
-            a required restriction.
 
         22. If compliance with a required restriction cannot be verified
             from the supplied candidate data, NEVER claim that the place
@@ -287,24 +295,38 @@ public class SmartItineraryAIService {
 
         26. NOT_VERIFIED means the supplied data does not provide
             enough evidence to verify halal status.
-
+            
         27. If halal food is REQUIRED:
-
-            - ONLY restaurants with:
+                
+            - Inside days[].places:
+              ONLY restaurants with
               halalInfo.halalStatus = "FULLY_HALAL"
               may be selected.
+                
+            - PARTIAL_HALAL and NOT_VERIFIED restaurants
+              MUST NEVER be scheduled inside days[].places.
+                
+            - If no FULLY_HALAL restaurant is available for a meal,
+              leave the meal slot without a restaurant.
+                
+            - For restaurantRecommendations:
+                
+            - Prefer FULLY_HALAL restaurants.
+                
+            - If no unused FULLY_HALAL restaurant is available,
+              PARTIAL_HALAL and NOT_VERIFIED restaurants MAY be returned
+              as fallback alternatives only.
+                
+            - These fallback restaurants are NOT confirmed halal.
+                
+            - Their reason MUST clearly tell the traveler that the halal
+              status is not fully verified and that they should verify
+              directly with the restaurant before visiting or ordering.
+                
+            - Never describe a PARTIAL_HALAL or NOT_VERIFIED restaurant
+               as halal or fully halal.
 
-            - PARTIAL_HALAL restaurants MUST NOT be selected.
-
-            - NOT_VERIFIED restaurants MUST NOT be selected.
-
-            - This applies to:
-              days[].places
-              AND restaurantRecommendations.
-
-            - If no FULLY_HALAL restaurant is available,
-              leave the meal slot without a restaurant rather than
-              selecting PARTIAL_HALAL or NOT_VERIFIED.
+  
 
         28. If halal food is NOT required:
 
@@ -453,11 +475,24 @@ public class SmartItineraryAIService {
             MUST NOT appear in restaurantRecommendations.
 
         63. Recommend a maximum of 5 additional restaurants.
+        
+        64. If halal is REQUIRED:
+                
+           - Prefer FULLY_HALAL restaurants.
+                
+           - If no unused FULLY_HALAL restaurant is available,
+             restaurantRecommendations MAY contain
+             PARTIAL_HALAL or NOT_VERIFIED restaurants
+             as fallback alternatives only.
+                
+           - Fallback recommendations MUST clearly state in reason
+             that halal status is not fully verified and the traveler
+             should verify directly with the restaurant.
+                
+           - Fallback restaurants MUST NEVER be added to days[].places
+              unless their halalStatus is FULLY_HALAL.
 
-        64. If halal is REQUIRED,
-            restaurantRecommendations may contain ONLY:
-
-            halalInfo.halalStatus = "FULLY_HALAL"
+ 
 
         65. halalInfo MUST be copied EXACTLY from the selected
             restaurant candidate.
@@ -602,7 +637,12 @@ public class SmartItineraryAIService {
             - every selected externalId exists in candidate data
             - selected names exactly match candidate names
             - all required restrictions are respected
-            - halal-required restaurants are FULLY_HALAL only
+            - restaurants scheduled inside days[].places are FULLY_HALAL only when halal is required
+                
+            - restaurantRecommendations may use PARTIAL_HALAL or NOT_VERIFIED
+              only as fallback alternatives when no unused FULLY_HALAL option is available
+                
+            - fallback restaurant reasons clearly warn that halal status is not fully verified
             - activity priorities influence selection
             - hotel ratings are copied exactly
             - hotel prices are copied exactly
@@ -643,7 +683,7 @@ public class SmartItineraryAIService {
                   "estimatedPrice": null,
 
                   "halalInfo": {
-                    "halalStatus": "FULLY_HALAL",
+                    "halalStatus": "exact candidate halalStatus",
                     "evidence": "exact candidate evidence",
                     "source": "exact candidate source",
                     "sourceUrl": "exact candidate sourceUrl"
@@ -698,7 +738,7 @@ public class SmartItineraryAIService {
               "estimatedPrice": null,
 
               "halalInfo": {
-                "halalStatus": "FULLY_HALAL",
+                "halalStatus": "exact candidate halalStatus",
                 "evidence": "exact candidate evidence",
                 "source": "exact candidate source",
                 "sourceUrl": "exact candidate sourceUrl"

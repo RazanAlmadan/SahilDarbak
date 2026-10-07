@@ -75,6 +75,7 @@ public class ItineraryService {
                     tripPlace.setScheduledAt(day.getDate());
                     tripPlace.setCity(day.getCity());
                     tripPlace.setItinerary(itinerary);
+                    tripPlace.setOfficialWebsite(place.getOfficialWebsite());
 
                     tripPlaces.add(tripPlace);
                 }

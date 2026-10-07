@@ -59,4 +59,9 @@ public class TravelRequestController {
 
         return ResponseEntity.status(200).body(travelRequestService.getTravelRequestsByUser(userId));
     }
+
+    @GetMapping("/get-by-id/{travelRequestId}")
+    public ResponseEntity<?> getTravelRequestById(@PathVariable Integer travelRequestId) {
+        return ResponseEntity.status(200).body(travelRequestService.getTravelRequestById(travelRequestId));
+    }
 }

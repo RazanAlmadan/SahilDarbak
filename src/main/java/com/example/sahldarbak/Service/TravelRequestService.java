@@ -209,4 +209,15 @@ public class TravelRequestService {
 
         return travelRequests;
     }
+
+    public TravelRequest getTravelRequestById(Integer travelRequestId) {
+
+        TravelRequest travelRequest = travelRequestRepository.findTravelRequestById(travelRequestId);
+
+        if (travelRequest == null) {
+            throw new ApiException("travel request not found");
+        }
+
+        return travelRequest;
+    }
 }
