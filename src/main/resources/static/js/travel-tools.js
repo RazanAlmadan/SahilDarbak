@@ -3,560 +3,609 @@
 // TRAVEL TOOLS
 // =====================================================
 
-
-// =====================================================
-// GET TRIP ID
-// =====================================================
-
-const urlParams =
-    new URLSearchParams(
-        window.location.search
-    );
+let tripId = null;
+let currentTrip = null;
 
 
-const tripId =
-    urlParams.get("tripId");
+document.addEventListener("DOMContentLoaded", async () => {
 
+    setupButtons();
+
+    await loadTrips();
+
+});
 
 
 // =====================================================
-// CHECK TRIP ID
+// SETUP
 // =====================================================
 
-if (!tripId) {
+function setupButtons() {
 
-    console.error(
-        "No tripId was found in the URL."
-    );
+    document
+        .getElementById("getWeatherButton")
+        ?.addEventListener("click", getWeather);
+
+    document
+        .getElementById("getHolidaysButton")
+        ?.addEventListener("click", getHolidays);
+
+    document
+        .getElementById("generatePackingButton")
+        ?.addEventListener("click", generatePackingList);
+
+    document
+        .getElementById("generateTransportationButton")
+        ?.addEventListener("click", generateTransportation);
 
 }
 
 
-
 // =====================================================
-// DOM READY
+// LOAD ALL USER TRIPS
 // =====================================================
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+async function loadTrips() {
 
-        setupPackingButton();
+    const tripChoices = document.getElementById("tripChoices");
+    const userId = localStorage.getItem("userId");
 
-        setupTransportationButton();
-
-        setupTransportationEmailButton();
-
+    if (!userId) {
+        showNoTripState();
+        return;
     }
-);
 
+    try {
 
+        tripChoices?.classList.remove("hidden");
 
-// =====================================================
-// PACKING BUTTON
-// =====================================================
-
-function setupPackingButton() {
-
-    const button =
-        document.getElementById(
-            "generatePackingButton"
+        const travelRequests = await apiRequest(
+            `/api/v1/travel-request/get-by-user/${userId}`,
+            "GET"
         );
 
+        const trips = (Array.isArray(travelRequests) ? travelRequests : [])
+            .map(request => request?.trip)
+            .filter(trip => trip && trip.id != null);
 
-    if (!button) {
-
-        return;
-
-    }
-
-
-    button.addEventListener(
-        "click",
-        generatePackingList
-    );
-
-}
-
-
-
-// =====================================================
-// TRANSPORTATION BUTTON
-// =====================================================
-
-function setupTransportationButton() {
-
-    const button =
-        document.getElementById(
-            "generateTransportationButton"
+        const uniqueTrips = Array.from(
+            new Map(trips.map(trip => [String(trip.id), trip])).values()
         );
 
+        if (!uniqueTrips.length) {
+            showNoTripState();
+            return;
+        }
 
-    if (!button) {
+        renderTripChoices(uniqueTrips);
 
-        return;
+        const params = new URLSearchParams(window.location.search);
+        const queryTripId = params.get("tripId");
+        const storedTripId = localStorage.getItem("tripId");
+
+        const preferredTripId = queryTripId || storedTripId;
+
+        const preferredTrip =
+            uniqueTrips.find(trip => String(trip.id) === String(preferredTripId))
+            || uniqueTrips[0];
+
+        await selectTrip(preferredTrip.id);
+
+    } catch (error) {
+
+        console.error("Error loading trips:", error);
+
+        if (tripChoices) {
+            tripChoices.innerHTML = `
+                <div class="tools-state error-state">
+                    <span class="material-symbols-rounded">error</span>
+                    <p>${escapeHtml(error.message || "تعذر تحميل رحلاتك.")}</p>
+                </div>
+            `;
+        }
 
     }
-
-
-    button.addEventListener(
-        "click",
-        generateTransportation
-    );
 
 }
 
 
+// =====================================================
+// RENDER TRIP CHOICES
+// =====================================================
+
+function renderTripChoices(trips) {
+
+    const tripChoices = document.getElementById("tripChoices");
+
+    if (!tripChoices) {
+        return;
+    }
+
+    tripChoices.innerHTML = trips.map(trip => `
+        <button
+            type="button"
+            class="trip-choice"
+            data-trip-id="${escapeHtml(trip.id)}"
+        >
+            <strong>
+                ${escapeHtml(trip.country || "رحلتك")}
+            </strong>
+
+            <span>
+                ${escapeHtml(trip.city || "وجهتك")}
+            </span>
+        </button>
+    `).join("");
+
+    tripChoices.querySelectorAll(".trip-choice").forEach(button => {
+
+        button.addEventListener("click", () => {
+            selectTrip(button.dataset.tripId);
+        });
+
+    });
+
+}
+
 
 // =====================================================
-// EMAIL BUTTON
+// SELECT TRIP
 // =====================================================
 
-function setupTransportationEmailButton() {
+async function selectTrip(selectedTripId) {
 
-    const button =
-        document.getElementById(
-            "sendTransportationEmailButton"
+    tripId = selectedTripId;
+
+    localStorage.setItem("tripId", String(selectedTripId));
+
+    document
+        .querySelectorAll(".trip-choice")
+        .forEach(button => {
+            button.classList.toggle(
+                "active",
+                String(button.dataset.tripId) === String(selectedTripId)
+            );
+        });
+
+    await loadTrip();
+
+}
+
+
+// =====================================================
+// LOAD SELECTED TRIP
+// =====================================================
+
+async function loadTrip() {
+
+    try {
+
+        currentTrip = await apiRequest(
+            `/api/v1/trip/get-by-id/${tripId}`,
+            "GET"
         );
 
+        document
+            .getElementById("selectedTripHeader")
+            .classList.remove("hidden");
 
-    if (!button) {
+        document
+            .getElementById("toolsGrid")
+            .classList.remove("hidden");
 
-        return;
+        document
+            .getElementById("tripTitle")
+            .textContent =
+            currentTrip?.city
+                ? `${currentTrip.city}، ${currentTrip.country}`
+                : currentTrip?.country || "رحلتك";
+
+        document
+            .getElementById("tripDetails")
+            .textContent =
+            currentTrip?.status
+                ? `حالة الرحلة: ${currentTrip.status}`
+                : "أدوات مخصصة لرحلتك";
+
+        localStorage.setItem(
+            "tripId",
+            String(tripId)
+        );
+
+    } catch (error) {
+
+        showError(
+            error.message ||
+            "تعذر تحميل معلومات الرحلة."
+        );
 
     }
-
-
-    button.addEventListener(
-        "click",
-        sendTransportationEmail
-    );
 
 }
 
 
+// =====================================================
+// WEATHER
+// =====================================================
+
+async function getWeather() {
+
+    if (!tripId) {
+        showError("لم يتم العثور على رقم الرحلة.");
+        return;
+    }
+
+    const button =
+        document.getElementById("getWeatherButton");
+
+    const result =
+        document.getElementById("weatherResult");
+
+    setButtonLoading(
+        button,
+        "جاري جلب الطقس..."
+    );
+
+    result.classList.remove("hidden");
+
+    result.innerHTML = `
+        <div class="result-placeholder">
+            <span class="material-symbols-rounded spin">
+                progress_activity
+            </span>
+            جاري جلب حالة الطقس...
+        </div>
+    `;
+
+    try {
+
+        const data = await apiRequest(
+            `/api/v1/trip/weather/${tripId}`,
+            "GET"
+        );
+
+        const temperature =
+            data?.temperatureCelsius !== undefined
+                ? `${data.temperatureCelsius}°C`
+                : "غير متوفر";
+
+        const condition =
+            data?.condition || "غير متوفر";
+
+        result.innerHTML = `
+            <div class="weather-result-main">
+
+                <span class="material-symbols-rounded"
+                      style="font-size:42px;color:#f4a261;">
+                    partly_cloudy_day
+                </span>
+
+                <div>
+                    <div class="weather-temp">
+                        ${escapeHtml(temperature)}
+                    </div>
+
+                    <div class="weather-condition">
+                        ${escapeHtml(condition)}
+                    </div>
+                </div>
+
+            </div>
+        `;
+
+    } catch (error) {
+
+        result.innerHTML = `
+            <div class="result-placeholder error-state">
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+
+    } finally {
+
+        resetButton(
+            button,
+            "partly_cloudy_day",
+            "اعرض الطقس"
+        );
+
+    }
+
+}
+
 
 // =====================================================
-// PACKING LIST
+// HOLIDAYS
+// =====================================================
+
+async function getHolidays() {
+
+    if (!tripId) {
+        showError("لم يتم العثور على رقم الرحلة.");
+        return;
+    }
+
+    const button =
+        document.getElementById("getHolidaysButton");
+
+    const result =
+        document.getElementById("holidaysResult");
+
+    setButtonLoading(
+        button,
+        "جاري البحث..."
+    );
+
+    result.classList.remove("hidden");
+
+    result.innerHTML = `
+        <div class="result-placeholder">
+            <span class="material-symbols-rounded spin">
+                progress_activity
+            </span>
+            جاري البحث عن العطلات...
+        </div>
+    `;
+
+    try {
+
+        const data = await apiRequest(
+            `/api/v1/trip/holidays/${tripId}`,
+            "GET"
+        );
+
+        const holidays =
+            Array.isArray(data?.holidays)
+                ? data.holidays
+                : [];
+
+        if (!holidays.length) {
+
+            result.innerHTML = `
+                <div class="holiday-summary">
+                    <span class="material-symbols-rounded">
+                        event_available
+                    </span>
+
+                    لا توجد عطلات رسمية خلال فترة رحلتك.
+                </div>
+            `;
+
+            return;
+        }
+
+        result.innerHTML = `
+
+            <div class="holiday-summary">
+
+                <span class="material-symbols-rounded">
+                    celebration
+                </span>
+
+                ${data.holidayCount || holidays.length}
+                عطلة خلال الرحلة
+
+            </div>
+
+
+            <div class="holiday-list">
+
+                ${holidays.map(holiday => `
+
+                    <div class="holiday-item">
+
+                        <strong>
+                            ${escapeHtml(holiday?.name || "عطلة")}
+                        </strong>
+
+                        <small>
+                            ${escapeHtml(holiday?.date || "")}
+                        </small>
+
+                    </div>
+
+                `).join("")}
+
+            </div>
+
+        `;
+
+    } catch (error) {
+
+        result.innerHTML = `
+            <div class="result-placeholder error-state">
+                ${escapeHtml(error.message)}
+            </div>
+        `;
+
+    } finally {
+
+        resetButton(
+            button,
+            "event",
+            "اعرض العطلات"
+        );
+
+    }
+
+}
+
+
+// =====================================================
+// PACKING
 // =====================================================
 
 async function generatePackingList() {
 
     if (!tripId) {
-
-        showError(
-            "لم يتم العثور على رقم الرحلة."
-        );
-
+        showError("لم يتم العثور على رقم الرحلة.");
         return;
-
     }
 
-
     const button =
-        document.getElementById(
-            "generatePackingButton"
-        );
+        document.getElementById("generatePackingButton");
 
+    const result =
+        document.getElementById("packingResult");
 
-    const loading =
-        document.getElementById(
-            "packingLoading"
-        );
+    setButtonLoading(
+        button,
+        "جاري التجهيز..."
+    );
 
+    result.classList.remove("hidden");
 
-    const results =
-        document.getElementById(
-            "packingResults"
-        );
-
+    result.innerHTML = `
+        <div class="result-placeholder">
+            <span class="material-symbols-rounded spin">
+                progress_activity
+            </span>
+            الذكاء الاصطناعي يجهز قائمتك...
+        </div>
+    `;
 
     try {
 
-        button.disabled = true;
-
-
-        button.innerHTML = `
-            <span class="material-symbols-rounded">
-                progress_activity
-            </span>
-
-            جاري التجهيز...
-        `;
-
-
-        results.classList.remove(
-            "show"
+        const data = await apiRequest(
+            `/api/v1/trip/generate-packing-list/${tripId}`,
+            "POST"
         );
-
-
-        loading.classList.add(
-            "show"
-        );
-
-
-        loading.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-
-
-        const response =
-            await fetch(
-                `/api/v1/trip/generate-packing-list/${tripId}`,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-
-                        "Accept":
-                            "application/json"
-                    }
-                }
-            );
-
-
-        const data =
-            await readResponse(
-                response
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data?.message ||
-                "تعذر إنشاء قائمة التجهيز."
-            );
-
-        }
-
 
         renderPackingList(
-            data
+            data,
+            result
         );
-
-
-        loading.classList.remove(
-            "show"
-        );
-
-
-        results.classList.add(
-            "show"
-        );
-
-
-        results.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
 
     } catch (error) {
 
-        loading.classList.remove(
-            "show"
-        );
-
-
-        showError(
-            error.message
-        );
-
+        result.innerHTML = `
+            <div class="result-placeholder error-state">
+                ${escapeHtml(error.message)}
+            </div>
+        `;
 
     } finally {
 
-        button.disabled = false;
-
-
-        button.innerHTML = `
-            <span class="material-symbols-rounded">
-                auto_awesome
-            </span>
-
-            أنشئ قائمة التجهيز
-        `;
+        resetButton(
+            button,
+            "auto_awesome",
+            "أنشئ قائمة التجهيز"
+        );
 
     }
 
 }
 
 
-
-// =====================================================
-// RENDER PACKING LIST
-// =====================================================
-
-function renderPackingList(
-    data
-) {
-
-    const summary =
-        document.getElementById(
-            "packingSummary"
-        );
-
-
-    const grid =
-        document.getElementById(
-            "packingGrid"
-        );
-
-
-    const tips =
-        document.getElementById(
-            "packingTips"
-        );
-
-
-    const country =
-        data?.country || "";
-
-
-    const city =
-        data?.city || "";
-
-
-    const weather =
-        data?.weatherSummary || "";
-
-
-    summary.innerHTML = `
-
-        <div class="packing-summary-card">
-
-            <div>
-
-                <span class="material-symbols-rounded">
-                    luggage
-                </span>
-
-            </div>
-
-
-            <div>
-
-                <h2>
-                    🎒 قائمة تجهيز رحلتك
-                </h2>
-
-
-                <p>
-
-                    ${
-        city
-            ? `${escapeHtml(city)}, `
-            : ""
-    }
-
-                    ${escapeHtml(country)}
-
-                </p>
-
-
-                ${
-        weather
-            ? `
-                            <span class="packing-weather">
-
-                                <span class="material-symbols-rounded">
-                                    partly_cloudy_day
-                                </span>
-
-                                ${escapeHtml(weather)}
-
-                            </span>
-                        `
-            : ""
-    }
-
-            </div>
-
-        </div>
-
-    `;
-
+function renderPackingList(data, container) {
 
     const categories = [
 
         {
             title: "👕 الملابس",
-            icon: "checkroom",
             items: data?.clothing
         },
 
         {
             title: "👟 الأحذية",
-            icon: "steps",
             items: data?.shoes
         },
 
         {
             title: "🌦️ مستلزمات الطقس",
-            icon: "umbrella",
             items: data?.weatherEssentials
         },
 
         {
             title: "🏕️ مستلزمات الأنشطة",
-            icon: "hiking",
             items: data?.activityEssentials
         },
 
         {
             title: "🧳 مستلزمات السفر",
-            icon: "travel",
             items: data?.travelEssentials
         },
 
         {
             title: "🩺 الصحة والعناية الشخصية",
-            icon: "health_and_safety",
             items: data?.healthAndPersonal
         }
 
     ];
 
+    const visibleCategories =
+        categories
+            .map(category => ({
+                ...category,
+                items: normalizeItems(category.items)
+            }))
+            .filter(category => category.items.length > 0);
 
-    grid.innerHTML = "";
+    container.innerHTML = `
 
+        ${
+            data?.weatherSummary
+                ? `
+                    <div class="holiday-summary">
+                        <span class="material-symbols-rounded">
+                            partly_cloudy_day
+                        </span>
+                        ${escapeHtml(data.weatherSummary)}
+                    </div>
+                `
+                : ""
+        }
 
-    categories.forEach(
-        category => {
+        <div class="packing-list">
 
-            const items =
-                normalizeItems(
-                    category.items
-                );
+            ${visibleCategories.map(category => `
 
-
-            if (
-                items.length === 0
-            ) {
-
-                return;
-
-            }
-
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "packing-category";
-
-
-            card.innerHTML = `
-
-                <div class="packing-category-header">
-
-                    <span class="material-symbols-rounded">
-                        ${category.icon}
-                    </span>
-
+                <div class="packing-category">
 
                     <h3>
                         ${category.title}
                     </h3>
 
-                </div>
+                    <ul>
 
+                        ${category.items.map(item => `
+                            <li>
+                                ${escapeHtml(item)}
+                            </li>
+                        `).join("")}
 
-                <div class="packing-items">
-
-                    ${items
-                .map(
-                    item => `
-
-                                <label class="packing-item">
-
-                                    <input
-                                        type="checkbox"
-                                    >
-
-                                    <span>
-                                        ${escapeHtml(item)}
-                                    </span>
-
-                                </label>
-
-                            `
-                )
-                .join("")}
+                    </ul>
 
                 </div>
 
-            `;
+            `).join("")}
+
+        </div>
 
 
-            grid.appendChild(
-                card
-            );
+        ${
+            normalizeItems(data?.tips).length
+                ? `
+                    <div class="packing-category">
 
-        }
-    );
+                        <h3>💡 نصائح لرحلتك</h3>
 
-
-    const tipsList =
-        normalizeItems(
-            data?.tips
-        );
-
-
-    if (
-        tipsList.length > 0
-    ) {
-
-        tips.innerHTML = `
-
-            <div class="packing-tips-card">
-
-                <div class="packing-category-header">
-
-                    <span class="material-symbols-rounded">
-                        lightbulb
-                    </span>
-
-
-                    <h3>
-                        💡 نصائح لرحلتك
-                    </h3>
-
-                </div>
-
-
-                <ul>
-
-                    ${tipsList
-            .map(
-                tip => `
+                        <ul>
+                            ${normalizeItems(data.tips).map(tip => `
                                 <li>
                                     ${escapeHtml(tip)}
                                 </li>
-                            `
-            )
-            .join("")}
+                            `).join("")}
+                        </ul>
 
-                </ul>
+                    </div>
+                `
+                : ""
+        }
 
-            </div>
-
-        `;
-
-    } else {
-
-        tips.innerHTML = "";
-
-    }
+    `;
 
 }
-
 
 
 // =====================================================
@@ -566,432 +615,214 @@ function renderPackingList(
 async function generateTransportation() {
 
     if (!tripId) {
-
-        showError(
-            "لم يتم العثور على رقم الرحلة."
-        );
-
+        showError("لم يتم العثور على رقم الرحلة.");
         return;
-
     }
-
 
     const button =
         document.getElementById(
             "generateTransportationButton"
         );
 
-
-    const loading =
+    const result =
         document.getElementById(
-            "transportationLoading"
+            "transportationResult"
         );
 
+    setButtonLoading(
+        button,
+        "جاري البحث..."
+    );
 
-    const results =
-        document.getElementById(
-            "transportationResults"
-        );
+    result.classList.remove("hidden");
 
-
-    const emailSection =
-        document.getElementById(
-            "transportationEmailSection"
-        );
-
+    result.innerHTML = `
+        <div class="result-placeholder">
+            <span class="material-symbols-rounded spin">
+                progress_activity
+            </span>
+            نبحث عن أفضل طرق التنقل...
+        </div>
+    `;
 
     try {
 
-        button.disabled = true;
-
-
-        button.innerHTML = `
-            <span class="material-symbols-rounded">
-                progress_activity
-            </span>
-
-            جاري البحث...
-        `;
-
-
-        results.classList.remove(
-            "show"
+        const data = await apiRequest(
+            `/api/v1/trip/generate-transportation/${tripId}`,
+            "POST"
         );
-
-
-        emailSection.classList.remove(
-            "show"
-        );
-
-
-        loading.classList.add(
-            "show"
-        );
-
-
-        loading.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
-
-
-        const response =
-            await fetch(
-                `/api/v1/trip/generate-transportation/${tripId}`,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json",
-
-                        "Accept":
-                            "application/json"
-                    }
-                }
-            );
-
-
-        const data =
-            await readResponse(
-                response
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data?.message ||
-                "تعذر إنشاء اقتراحات التنقل."
-            );
-
-        }
-
 
         renderTransportation(
-            data
+            data,
+            result
         );
-
-
-        loading.classList.remove(
-            "show"
-        );
-
-
-        results.classList.add(
-            "show"
-        );
-
-
-        /*
-         * Only show the email button after
-         * transportation has been generated.
-         */
-
-        emailSection.classList.add(
-            "show"
-        );
-
-
-        results.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
 
     } catch (error) {
 
-        loading.classList.remove(
-            "show"
-        );
-
-
-        showError(
-            error.message
-        );
-
+        result.innerHTML = `
+            <div class="result-placeholder error-state">
+                ${escapeHtml(error.message)}
+            </div>
+        `;
 
     } finally {
 
-        button.disabled = false;
-
-
-        button.innerHTML = `
-            <span class="material-symbols-rounded">
-                route
-            </span>
-
-            اقترح طريقة التنقل
-        `;
+        resetButton(
+            button,
+            "route",
+            "اقترح طريقة التنقل"
+        );
 
     }
 
 }
 
 
+function renderTransportation(data, container) {
 
-// =====================================================
-// RENDER TRANSPORTATION
-// =====================================================
-
-function renderTransportation(
-    data
-) {
-
-    const container =
-        document.getElementById(
-            "transportationResultsContent"
-        );
-
-
-    container.innerHTML = "";
-
-
-    /*
-     * TransportationService responses can be
-     * represented by the returned object.
-     *
-     * We first try the common collection names.
-     */
-
-    let suggestions = [];
-
-
-    if (
+    const suggestions =
         Array.isArray(data)
-    ) {
+            ? data
+            : [];
 
-        suggestions = data;
-
-    } else if (
-        Array.isArray(data?.suggestions)
-    ) {
-
-        suggestions =
-            data.suggestions;
-
-    } else if (
-        Array.isArray(data?.routes)
-    ) {
-
-        suggestions =
-            data.routes;
-
-    } else if (
-        Array.isArray(data?.transportation)
-    ) {
-
-        suggestions =
-            data.transportation;
-
-    } else if (
-        data &&
-        typeof data === "object"
-    ) {
-
-        suggestions = [
-            data
-        ];
-
-    }
-
-
-    if (
-        suggestions.length === 0
-    ) {
+    if (!suggestions.length) {
 
         container.innerHTML = `
-
-            <div class="transportation-empty">
-
+            <div class="result-placeholder">
                 <span class="material-symbols-rounded">
                     info
                 </span>
-
-
-                <h3>
-                    لم نجد اقتراحات للتنقل
-                </h3>
-
-
-                <p>
-                    حاول إنشاء الاقتراحات مرة أخرى.
-                </p>
-
+                لم نجد اقتراحات للتنقل.
             </div>
-
         `;
 
         return;
-
     }
 
+    container.innerHTML = `
 
-    suggestions.forEach(
-        suggestion => {
+        <div class="transport-list">
 
-            const method =
-                suggestion?.recommendedMethod ||
-                suggestion?.method ||
-                "TRANSPORT";
+            ${suggestions.map(suggestion => {
 
+                const method =
+                    suggestion?.recommendedMethod ||
+                    "TRANSPORT";
 
-            const from =
-                suggestion?.from ||
-                suggestion?.origin ||
-                suggestion?.start ||
-                "";
+                const from =
+                    suggestion?.from || "";
 
+                const to =
+                    suggestion?.to || "";
 
-            const to =
-                suggestion?.to ||
-                suggestion?.destination ||
-                suggestion?.end ||
-                "";
+                const distance =
+                    suggestion?.distanceKm !== undefined
+                        ? `${suggestion.distanceKm} كم`
+                        : "";
 
+                const duration =
+                    suggestion?.durationMinutes !== undefined
+                        ? `${suggestion.durationMinutes} دقيقة`
+                        : "";
 
-            const description =
-                suggestion?.description ||
-                suggestion?.recommendation ||
-                suggestion?.details ||
-                "";
+                const reason =
+                    suggestion?.reason ||
+                    suggestion?.instructions ||
+                    "";
 
+                return `
 
-            const distance =
-                suggestion?.distance ||
-                "";
+                    <div class="transport-item">
 
+                        <div>
 
-            const duration =
-                suggestion?.duration ||
-                "";
+                            <strong>
+                                ${escapeHtml(from)}
+                                ${
+                                    from && to
+                                        ? " → "
+                                        : ""
+                                }
+                                ${escapeHtml(to)}
+                            </strong>
 
+                            ${
+                                reason
+                                    ? `
+                                        <small>
+                                            ${escapeHtml(reason)}
+                                        </small>
+                                    `
+                                    : ""
+                            }
 
-            const icon =
-                getTransportationIcon(
-                    method
-                );
-
-
-            const card =
-                document.createElement(
-                    "article"
-                );
-
-
-            card.className =
-                "transportation-result-card";
-
-
-            card.innerHTML = `
-
-                <div class="transportation-result-header">
-
-                    <div class="transportation-result-icon">
-
-                        <span class="material-symbols-rounded">
-                            ${icon}
-                        </span>
-
-                    </div>
+                        </div>
 
 
-                    <div>
-
-                        <span class="transportation-method">
-
+                        <div class="transport-method">
                             ${escapeHtml(
-                formatTransportationMethod(
-                    method
-                )
-            )}
-
-                        </span>
+                                formatTransportationMethod(method)
+                            )}
+                        </div>
 
 
                         ${
-                from || to
-                    ? `
-                                    <h3>
-
-                                        ${escapeHtml(from)}
-
+                            distance || duration
+                                ? `
+                                    <small>
                                         ${
-                        from && to
-                            ? " → "
-                            : ""
-                    }
-
-                                        ${escapeHtml(to)}
-
-                                    </h3>
+                                            distance
+                                                ? escapeHtml(distance)
+                                                : ""
+                                        }
+                                        ${
+                                            distance && duration
+                                                ? " • "
+                                                : ""
+                                        }
+                                        ${
+                                            duration
+                                                ? escapeHtml(duration)
+                                                : ""
+                                        }
+                                    </small>
                                 `
-                    : ""
-            }
+                                : ""
+                        }
 
                     </div>
 
-                </div>
+                `;
+
+            }).join("")}
+
+        </div>
 
 
-                ${
-                distance
-                    ? `
-                            <p>
+        <button
+                id="sendTransportationEmailButton"
+                type="button"
+                class="tool-action-button"
+        >
 
-                                <strong>
-                                    المسافة:
-                                </strong>
+            <span class="material-symbols-rounded">
+                mail
+            </span>
 
-                                ${escapeHtml(distance)}
+            أرسل الاقتراحات إلى بريدي
 
-                            </p>
-                        `
-                    : ""
-            }
+        </button>
 
+    `;
 
-                ${
-                duration
-                    ? `
-                            <p>
-
-                                <strong>
-                                    الوقت:
-                                </strong>
-
-                                ${escapeHtml(duration)}
-
-                            </p>
-                        `
-                    : ""
-            }
-
-
-                ${
-                description
-                    ? `
-                            <p class="transportation-description">
-
-                                ${escapeHtml(description)}
-
-                            </p>
-                        `
-                    : ""
-            }
-
-            `;
-
-
-            container.appendChild(
-                card
-            );
-
-        }
-    );
+    document
+        .getElementById("sendTransportationEmailButton")
+        ?.addEventListener(
+            "click",
+            sendTransportationEmail
+        );
 
 }
-
 
 
 // =====================================================
@@ -1001,217 +832,244 @@ function renderTransportation(
 async function sendTransportationEmail() {
 
     if (!tripId) {
-
-        showError(
-            "لم يتم العثور على رقم الرحلة."
-        );
-
+        showError("لم يتم العثور على رقم الرحلة.");
         return;
-
     }
-
 
     const button =
         document.getElementById(
             "sendTransportationEmailButton"
         );
 
+    if (!button) {
+        return;
+    }
+
+    setButtonLoading(
+        button,
+        "جاري الإرسال..."
+    );
 
     try {
 
-        button.disabled = true;
-
-
-        button.innerHTML = `
-            <span class="material-symbols-rounded">
-                progress_activity
-            </span>
-
-            جاري الإرسال...
-        `;
-
-
-        const response =
-            await fetch(
-                `/api/v1/trip/send-transportation-email/${tripId}`,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Accept":
-                            "application/json"
-                    }
-                }
-            );
-
-
-        const data =
-            await readResponse(
-                response
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                data?.message ||
-                "تعذر إرسال اقتراحات التنقل إلى بريدك."
-            );
-
-        }
-
+        await apiRequest(
+            `/api/v1/trip/send-transportation-email/${tripId}`,
+            "POST"
+        );
 
         button.innerHTML = `
             <span class="material-symbols-rounded">
                 check_circle
             </span>
-
             تم إرسال الاقتراحات إلى بريدك ✓
         `;
 
+        button.disabled = true;
 
     } catch (error) {
 
-        showError(
-            error.message
+        resetButton(
+            button,
+            "mail",
+            "أرسل الاقتراحات إلى بريدي"
         );
 
-
-        button.disabled = false;
-
-
-        button.innerHTML = `
-            <span class="material-symbols-rounded">
-                mail
-            </span>
-
-            أرسل الاقتراحات إلى بريدي
-        `;
+        showError(
+            error.message ||
+            "تعذر إرسال الاقتراحات إلى بريدك."
+        );
 
     }
 
 }
 
 
-
 // =====================================================
-// RESPONSE READER
+// HELPERS
 // =====================================================
 
-async function readResponse(
-    response
+async function apiRequest(
+    url,
+    method = "GET",
+    body = null
 ) {
 
-    const contentType =
-        response.headers.get(
-            "content-type"
-        ) || "";
+    const options = {
+        method,
+        headers: {
+            "Accept": "application/json"
+        }
+    };
 
+    if (body !== null) {
 
-    if (
-        contentType.includes(
-            "application/json"
-        )
-    ) {
+        options.headers["Content-Type"] =
+            "application/json";
 
-        return await response.json();
+        options.body =
+            JSON.stringify(body);
 
     }
 
+    const response =
+        await fetch(url, options);
 
     const text =
         await response.text();
 
+    let data = null;
 
-    if (!text) {
+    if (text) {
 
-        return null;
+        try {
+            data = JSON.parse(text);
+        } catch (_) {
+            data = text;
+        }
 
     }
 
+    if (!response.ok) {
 
-    return {
-        message: text
-    };
+        throw new Error(
+            data?.message ||
+            data ||
+            "صار خطأ أثناء تنفيذ الطلب"
+        );
+
+    }
+
+    return data;
 
 }
 
 
-
-// =====================================================
-// TRANSPORTATION ICON
-// =====================================================
-
-function getTransportationIcon(
-    method
+function setButtonLoading(
+    button,
+    text
 ) {
 
-    const normalized =
-        String(method)
-            .toUpperCase();
+    if (!button) {
+        return;
+    }
+
+    button.disabled = true;
+
+    button.innerHTML = `
+        <span class="material-symbols-rounded spin">
+            progress_activity
+        </span>
+        ${text}
+    `;
+
+}
 
 
-    const icons = {
+function resetButton(
+    button,
+    icon,
+    text
+) {
 
-        WALK:
-            "directions_walk",
+    if (!button) {
+        return;
+    }
 
-        PUBLIC_TRANSPORT:
-            "directions_transit",
+    button.disabled = false;
 
-        CAR:
-            "directions_car",
+    button.innerHTML = `
+        <span class="material-symbols-rounded">
+            ${icon}
+        </span>
+        ${text}
+    `;
 
-        TAXI:
-            "local_taxi",
-
-        BICYCLE:
-            "directions_bike"
-
-    };
+}
 
 
-    return (
-        icons[normalized] ||
-        "route"
+function showNoTripState() {
+
+    document
+        .getElementById("toolsState")
+        .classList.remove("hidden");
+
+}
+
+
+function showError(message) {
+
+    console.error(message);
+
+    const errorBox =
+        document.getElementById("pageError");
+
+    if (errorBox) {
+
+        errorBox.textContent =
+            message ||
+            "حدث خطأ. حاول مرة أخرى.";
+
+        errorBox.classList.remove("hidden");
+
+        errorBox.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+        return;
+    }
+
+    alert(
+        message ||
+        "حدث خطأ. حاول مرة أخرى."
     );
 
 }
 
 
+function normalizeItems(value) {
 
-// =====================================================
-// TRANSPORTATION METHOD NAME
-// =====================================================
+    if (Array.isArray(value)) {
 
-function formatTransportationMethod(
-    method
-) {
+        return value
+            .map(item => String(item))
+            .filter(item => item.trim() !== "");
+
+    }
+
+    if (typeof value === "string") {
+
+        return value
+            .split(/\r?\n/)
+            .map(item =>
+                item
+                    .replace(/^[-•*]\s*/, "")
+                    .trim()
+            )
+            .filter(item => item !== "");
+
+    }
+
+    return [];
+
+}
+
+
+function formatTransportationMethod(method) {
 
     const normalized =
         String(method)
             .toUpperCase();
 
-
     const names = {
 
-        WALK:
-            "المشي",
-
-        PUBLIC_TRANSPORT:
-            "النقل العام",
-
-        CAR:
-            "السيارة",
-
-        TAXI:
-            "تاكسي",
-
-        BICYCLE:
-            "الدراجة"
+        WALK: "المشي",
+        PUBLIC_TRANSPORT: "النقل العام",
+        CAR: "السيارة",
+        TAXI: "تاكسي",
+        BICYCLE: "الدراجة"
 
     };
-
 
     return (
         names[normalized] ||
@@ -1221,116 +1079,14 @@ function formatTransportationMethod(
 }
 
 
+function escapeHtml(value) {
 
-// =====================================================
-// PACKING ITEMS NORMALIZER
-// =====================================================
+    return String(value ?? "")
 
-function normalizeItems(
-    value
-) {
-
-    if (
-        Array.isArray(value)
-    ) {
-
-        return value
-            .map(
-                item =>
-                    String(item)
-            )
-            .filter(
-                item =>
-                    item.trim() !== ""
-            );
-
-    }
-
-
-    if (
-        typeof value === "string"
-    ) {
-
-        return value
-            .split(/\r?\n/)
-            .map(
-                item =>
-                    item
-                        .replace(
-                            /^[-•*]\s*/,
-                            ""
-                        )
-                        .trim()
-            )
-            .filter(
-                item =>
-                    item !== ""
-            );
-
-    }
-
-
-    return [];
-
-}
-
-
-
-// =====================================================
-// ESCAPE HTML
-// =====================================================
-
-function escapeHtml(
-    value
-) {
-
-    return String(value)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
-
-}
-
-
-
-// =====================================================
-// ERROR
-// =====================================================
-
-function showError(
-    message
-) {
-
-    console.error(
-        message
-    );
-
-
-    alert(
-        message ||
-        "حدث خطأ. حاول مرة أخرى."
-    );
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 
 }
