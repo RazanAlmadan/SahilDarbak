@@ -86,4 +86,7 @@ public class PageController {
     @GetMapping("/community")
     public String community() {return "community";}
 
+    @GetMapping("/travel-tools")
+    public String travelTools() {return "travel-tools";}
+
 }
