@@ -29,6 +29,7 @@ public class BlockedUserService {
 
     public List<BlockedUser> get(){ return blockedUserRepository.findAll();}
 
+
     public void add(Integer blockerId, Integer blockedId) {
         if (blockerId.equals(blockedId))
             throw new ApiException("you cannot block yourself");
@@ -49,16 +50,18 @@ public class BlockedUserService {
         blockedUser.setBlocked(blocked);
         blockedUser.setBlockedAt(LocalDate.now());
 
-        // cancel pending invites between the two users, in both directions
-        TravelMatch sent = travelMatchRepository
-                .findTravelMatchBySenderIdAndReceiverIdAndStatus(blockerId, blockedId, "pending");
-        if (sent != null)
-            travelMatchRepository.delete(sent);
+        // end every connection between the two users (pending and accepted, both directions)
+        for (String status : List.of("pending", "accepted")) {
+            TravelMatch sent = travelMatchRepository
+                    .findTravelMatchBySenderIdAndReceiverIdAndStatus(blockerId, blockedId, status);
+            if (sent != null)
+                travelMatchRepository.delete(sent);
 
-        TravelMatch received = travelMatchRepository
-                .findTravelMatchBySenderIdAndReceiverIdAndStatus(blockedId, blockerId, "pending");
-        if (received != null)
-            travelMatchRepository.delete(received);
+            TravelMatch received = travelMatchRepository
+                    .findTravelMatchBySenderIdAndReceiverIdAndStatus(blockedId, blockerId, status);
+            if (received != null)
+                travelMatchRepository.delete(received);
+        }
 
         blockedUserRepository.save(blockedUser);
     }
