@@ -19,10 +19,15 @@ public class CommunityController {
 
     private final CommunityService communityService;
 
+    @GetMapping("/get")
+    public ResponseEntity<?> getAllPosts(){
+        return ResponseEntity.status(200).body(communityService.getAllPosts());
+    }
+
 
     // CREATE POST
     @PostMapping("/post/{tripId}")
-    public ResponseEntity<ApiResponse> addPost(@PathVariable Integer tripId, @Valid @RequestBody CreateCommunityPostDTO dto) {
+    public ResponseEntity<?> addPost(@PathVariable Integer tripId, @Valid @RequestBody CreateCommunityPostDTO dto) {
         communityService.addPost(tripId, dto);
         return ResponseEntity.status(200).body(new ApiResponse("Community post added successfully"));
     }
@@ -30,14 +35,14 @@ public class CommunityController {
 
     // SEARCH BY COUNTRY
     @GetMapping("/country/{country}")
-    public ResponseEntity<List<CommunityPost>> getPostsByCountry(@PathVariable String country) {
+    public ResponseEntity<?> getPostsByCountry(@PathVariable String country) {
         return ResponseEntity.status(200).body(communityService.getPostsByCountry(country));
     }
 
 
     // GET ONE POST
     @GetMapping("/post/{postId}")
-    public ResponseEntity<CommunityPost> getPost(@PathVariable Integer postId) {
+    public ResponseEntity<?> getPost(@PathVariable Integer postId) {
         return ResponseEntity.status(200).body(communityService.getPost(postId));
     }
 }
