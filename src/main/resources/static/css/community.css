@@ -28,18 +28,14 @@
 
     overflow: hidden;
 
-    padding:
-            70px 0 65px;
+    padding: 70px 0 65px;
 
-    background:
-            linear-gradient(
-                    135deg,
-                    var(--primary),
-                    #146879
-            );
+    background-image: url('../images/community-hero.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
-    color:
-            var(--white);
+    color: var(--white);
 }
 
 
