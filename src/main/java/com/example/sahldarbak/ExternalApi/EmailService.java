@@ -1,5 +1,6 @@
 package com.example.sahldarbak.ExternalApi;
 
+import com.example.sahldarbak.Api.ApiException;
 import com.example.sahldarbak.DTO.SmartItinerary.ItineraryDayDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.PlaceRecommendationDTO;
 import com.example.sahldarbak.DTO.SmartItinerary.SmartItineraryDTO;
@@ -47,41 +48,21 @@ public class EmailService {
 
         try {
 
-            Map<String, Object> sender = Map.of(
-                    "name", senderName,
-                    "email", senderEmail
-            );
+            MimeMessage message = javaMailSender.createMimeMessage();
 
-            List<Map<String, String>> receivers = List.of(
-                    Map.of("email", toEmail)
-            );
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            Map<String, Object> requestBody = Map.of(
-                    "sender", sender,
-                    "to", receivers,
-                    "subject", subject,
-                    "htmlContent", htmlContent
-            );
+            helper.setFrom(senderEmail, senderName);
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true);
 
-
-            restClient.post()
-                    .uri("/v3/smtp/email")
-                    .header("api-key", apiKey)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(requestBody)
-                    .retrieve()
-                    .toBodilessEntity();
-
+            javaMailSender.send(message);
 
         } catch (Exception e) {
-
-            // EMAIL FAILURE SHOULD NOT STOP THE MAIN BUSINESS FLOW
-            System.out.println(
-                    "failed to send email: " + e.getMessage()
-            );
+            throw new ApiException("failed to send email: " + e.getMessage());
         }
     }
-
 
     // SEND FULL ITINERARY - BACKWARD COMPATIBLE
     public void sendFullItineraryEmail(
