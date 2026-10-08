@@ -378,6 +378,7 @@ const translations = {
         country2: "الدولة الثانية",
         finalRecommendation: "التوصية النهائية",
         comparisonReason: "سبب التوصية",
+        imHomeCityGuide: "دليل مدينتك",
     },
 
 
@@ -808,6 +809,7 @@ const translations = {
         country2: "Second Country",
         finalRecommendation: "Final Recommendation",
         comparisonReason: "Reason for Recommendation",
+        imHomeCityGuide: "Your city guide",
     }
 
 };
