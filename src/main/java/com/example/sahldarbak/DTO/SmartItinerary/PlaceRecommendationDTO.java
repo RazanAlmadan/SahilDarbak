@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @NoArgsConstructor
 public class PlaceRecommendationDTO {
 
-    private String externalId;
     private String name;
     private String type;
+    private String city;
     private LocalTime suggestedTime;
     private String reason;
 

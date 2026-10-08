@@ -83,4 +83,13 @@ public class PageController {
         return "blocked";
     }
 
+    @GetMapping("/community")
+    public String community() {return "community";}
+
+    @GetMapping("/travel-tools")
+    public String travelTools() {return "travel-tools";}
+
+    @GetMapping("/country-compare")
+    public String countryCompare() {return "country-compare";}
+
 }

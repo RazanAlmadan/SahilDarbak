@@ -72,6 +72,10 @@ public class AIDestinationRecommendationService {
                 - capital
 
                 The countryCode must be the ISO 3166-1 alpha-2 code.
+                
+                Respond entirely in Arabic.
+                Return the response in the required JSON format.
+                Do not add any extra text outside the JSON.
 
                 Return ONLY valid JSON.
 
@@ -573,6 +577,10 @@ public class AIDestinationRecommendationService {
                 ==============================
                 REQUIRED JSON RESPONSE
                 ==============================
+
+                Respond entirely in Arabic.
+                Return the response in the required JSON format.
+                Do not add any extra text outside the JSON.
 
                 Your ENTIRE response MUST be valid JSON.
 

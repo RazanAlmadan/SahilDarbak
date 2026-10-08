@@ -139,8 +139,7 @@ async function loadTravelRequests(userId) {
         }
 
 
-        renderTrips(requests);
-
+        await renderTrips(requests);
         updateStatistics(requests);
 
 
@@ -158,34 +157,73 @@ async function loadTravelRequests(userId) {
 }
 
 
-function renderTrips(requests) {
+async function renderTrips(requests) {
 
     const grid =
         document.getElementById("tripsGrid");
 
-
     grid.innerHTML = "";
 
+    for (const request of requests) {
 
-    requests.forEach(request => {
+        let itineraryStatus = null;
+
+        if (request.trip?.id) {
+            itineraryStatus =
+                await getItineraryStatus(
+                    request.trip.id
+                );
+        }
 
         grid.insertAdjacentHTML(
             "beforeend",
-            createTripCard(request)
+            createTripCard(
+                request,
+                itineraryStatus
+            )
         );
-
-    });
-
+    }
 
     setupTripButtons();
+}
+async function getItineraryStatus(tripId) {
 
+    try {
+
+        const response =
+            await fetch(
+                `/api/v1/itinerary/get-by-trip/${tripId}`
+            );
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const data =
+            await response.json();
+
+        return data?.status || null;
+
+    } catch (_) {
+
+        return null;
+    }
 }
 
 
-function createTripCard(request) {
+function createTripCard(
+    request,
+    itineraryStatus
+) {
 
     const trip =
         request.trip;
+
+    const hasAcceptedCities =
+        Array.isArray(trip?.tripCities) &&
+        trip.tripCities.some(
+            city => city.status === "accepted"
+        );
 
 
     let title;
@@ -203,7 +241,62 @@ function createTripCard(request) {
 
     if (trip) {
 
-        if (
+        // ITINERARY ACCEPTED
+        if (itineraryStatus === "accepted") {
+
+            title =
+                request.cityPlanMode === "single_city" &&
+                trip.city
+
+                    ? `${trip.country} - ${trip.city}`
+
+                    : trip.country || "رحلتي";
+
+            statusClass =
+                "status-trip";
+
+            statusText =
+                "الرحلة جاهزة";
+
+            buttonText =
+                "عرض الرحلة";
+
+            buttonIcon =
+                "route";
+
+            action =
+                "view-trip";
+        }
+
+        // ITINERARY GENERATED BUT NOT ACCEPTED
+        else if (itineraryStatus === "suggested") {
+
+            title =
+                request.cityPlanMode === "single_city" &&
+                trip.city
+
+                    ? `${trip.country} - ${trip.city}`
+
+                    : trip.country || "رحلتي";
+
+            statusClass =
+                "status-trip";
+
+            statusText =
+                "البرنامج جاهز للمراجعة";
+
+            buttonText =
+                "راجع البرنامج";
+
+            buttonIcon =
+                "route";
+
+            action =
+                "review-itinerary";
+        }
+
+        // MULTI CITY BEFORE ITINERARY
+        else if (
             request.cityPlanMode === "multi_city_ai" ||
             request.cityPlanMode === "multi_city_manual"
         ) {
@@ -214,23 +307,42 @@ function createTripCard(request) {
             statusClass =
                 "status-trip";
 
-            statusText =
-                "جاهزة لترتيب المدن";
+            if (hasAcceptedCities) {
 
-            buttonText =
-                request.cityPlanMode === "multi_city_ai"
-                    ? "رتب لي المدن ✨"
-                    : "أضف مدن رحلتك";
+                statusText =
+                    "خطة المدن جاهزة";
 
-            buttonIcon =
-                request.cityPlanMode === "multi_city_ai"
-                    ? "auto_awesome"
-                    : "location_city";
+                buttonText =
+                    "كمل رحلتك";
 
-            action =
-                "city-plan";
+                buttonIcon =
+                    "route";
 
-        } else {
+                action =
+                    "trip";
+
+            } else {
+
+                statusText =
+                    "جاهزة لترتيب المدن";
+
+                buttonText =
+                    request.cityPlanMode === "multi_city_ai"
+                        ? "رتب لي المدن ✨"
+                        : "أضف مدن رحلتك";
+
+                buttonIcon =
+                    request.cityPlanMode === "multi_city_ai"
+                        ? "auto_awesome"
+                        : "location_city";
+
+                action =
+                    "city-plan";
+            }
+        }
+
+        // SINGLE CITY BEFORE ITINERARY
+        else {
 
             title =
                 trip.country && trip.city
@@ -252,8 +364,7 @@ function createTripCard(request) {
             action =
                 "trip";
         }
-
-    } else if (
+    }else if (
         request.status &&
         request.status.toLowerCase() === "open"
     ) {
@@ -458,6 +569,21 @@ function setupTripButtons() {
 
 
 
+            if (
+                action === "view-trip" ||
+                action === "review-itinerary"
+            ) {
+
+                localStorage.setItem(
+                    "tripId",
+                    tripId
+                );
+
+                window.location.href =
+                    `/trip?tripId=${tripId}&tab=itinerary`;
+
+                return;
+            }
 
 
             if (action === "trip") {

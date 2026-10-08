@@ -39,7 +39,8 @@ public class SmartItineraryAIService {
             LocalDate endDate,
             List<PlaceOptionDTO> hotels,
             List<PlaceOptionDTO> activities,
-            List<PlaceOptionDTO> restaurants) {
+            List<PlaceOptionDTO> restaurants, String lang) {
+
 
         try {
 
@@ -50,7 +51,7 @@ public class SmartItineraryAIService {
                     endDate,
                     hotels,
                     activities,
-                    restaurants
+                    restaurants,lang
             );
 
             Map<String, Object> generationConfig = new HashMap<>();
@@ -106,11 +107,14 @@ public class SmartItineraryAIService {
             String json =
                     (String) parts.get(0).get("text");
 
+            json = normalizeSuggestedTimes(json);
 
             return objectMapper.readValue(
                     json,
                     SmartItineraryDTO.class
             );
+
+
 
 
         } catch (ApiException e) {
@@ -134,7 +138,12 @@ public class SmartItineraryAIService {
             LocalDate endDate,
             List<PlaceOptionDTO> hotels,
             List<PlaceOptionDTO> activities,
-            List<PlaceOptionDTO> restaurants) throws Exception {
+            List<PlaceOptionDTO> restaurants,String lang) throws Exception {
+
+        String outputLanguage =
+                "en".equalsIgnoreCase(lang)
+                        ? "English"
+                        : "Arabic";
 
 
         String travelRequestJson = objectMapper.writeValueAsString(
@@ -258,6 +267,11 @@ public class SmartItineraryAIService {
         =========================
         USER PREFERENCES
         =========================
+                If the user selected "local" as a food preference:
+                
+                - Prefer restaurants that represent the local cuisine of the destination.
+                - The restaurant reason must explain how it matches the user's local food preference.
+                - Do NOT mention halal status in the reason unless halal food was explicitly selected as a required preference or restriction.
         
         20. REQUIRED food preferences and REQUIRED travel restrictions
           are HARD CONSTRAINTS for places scheduled inside days[].places.
@@ -532,6 +546,9 @@ public class SmartItineraryAIService {
         =========================
         REASONS
         =========================
+                If halal food is NOT required by the traveler,
+                do NOT mention halalStatus, halal evidence,
+                or halal verification in the user-facing reason.
 
         73. Every reason must explain WHY the selected place
             suits this traveler.
@@ -623,6 +640,7 @@ public class SmartItineraryAIService {
 
             "suggestedTime": "null"
 
+
         =========================
         OUTPUT VALIDATION
         =========================
@@ -660,6 +678,37 @@ public class SmartItineraryAIService {
         Do not return explanation outside the JSON.
         Do not wrap the JSON in ```.
 
+
+
+
+                ========================
+                OUTPUT LANGUAGE
+                ========================
+                
+                The selected UI language is: %s
+                
+                Write all user-facing descriptive text in %s.
+                
+                For Arabic:
+                - Use clear, natural and friendly Arabic.
+                - Keep the tone warm and concise.
+                - Do not use overly formal language.
+                
+                IMPORTANT:
+                Do NOT translate or modify:
+                - place names
+                - hotel names
+                - restaurant names
+                - attraction names
+                - city names
+                - URLs
+                - source names
+                - external IDs
+                - enum/status values
+                - JSON keys
+                - factual evidence copied from external sources
+                
+                Do NOT change the required JSON structure.
         =========================
         REQUIRED JSON STRUCTURE
         =========================
@@ -770,6 +819,10 @@ public class SmartItineraryAIService {
         NEVER output 0.0 unless the selected candidate actually contains 0.0.
         Copy the candidate values exactly.
         If candidate data is absent, use actual JSON null.
+                The response MUST be strictly valid JSON.
+                Never output raw backslashes inside string values.
+                Do not use invalid escape sequences.
+                All text values must be JSON-safe.
 
         TRAVEL REQUEST:
         %s
@@ -783,6 +836,8 @@ public class SmartItineraryAIService {
         REAL RESTAURANT CANDIDATES:
         %s
         """.formatted(
+                outputLanguage,
+                outputLanguage,
                 travelRequestJson,
                 hotelsJson,
                 activitiesJson,
@@ -969,5 +1024,24 @@ public class SmartItineraryAIService {
 
 
         return context;
+    }
+
+    private String normalizeSuggestedTimes(String json) {
+
+        if (json == null) {
+            return null;
+        }
+
+        json = json.replaceAll(
+                "(?i)\"suggestedTime\"\\s*:\\s*\"null\"",
+                "\"suggestedTime\": null"
+        );
+
+        json = json.replaceAll(
+                "(\"suggestedTime\"\\s*:\\s*\"\\d{2}:\\d{2}:\\d{2})\\d+(\")",
+                "$1$2"
+        );
+
+        return json;
     }
 }

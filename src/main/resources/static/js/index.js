@@ -11,7 +11,9 @@ const routes = {
 
     travelRequest: "/travel-request",
 
-    destinationRecommendation: "/destination-recommendation",
+    destinationRecommendation: "/trip-start",
+
+    countryComparison: "/country-compare",
 
     myTrips: "/trips",
 
@@ -252,6 +254,30 @@ function setupHomeButtons() {
 
     }
 
+    // Country Comparison
+
+    const comparisonButton =
+        document.querySelector(
+            "[data-action='country-comparison']"
+        );
+
+    if (comparisonButton) {
+
+        comparisonButton.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                navigateTo(
+                    routes.countryComparison
+                );
+
+            }
+        );
+
+    }
+
 
 
     // TravelMatch
@@ -356,21 +382,21 @@ async function loadHomeData() {
 
     try {
 
-        /*
-        لاحقاً لو احتجنا بيانات حقيقية للـHome:
-
         const posts =
             await apiRequest(
-                "/api/v1/post/get-latest"
+                "/api/v1/community/get"
             );
 
-        displayPosts(posts);
-        */
+
+        displayCommunityPosts(
+            posts
+        );
+
 
     } catch (error) {
 
         console.error(
-            "Failed to load home data:",
+            "Failed to load community posts:",
             error
         );
 
@@ -380,6 +406,185 @@ async function loadHomeData() {
 
 
 
+// =====================================================
+// DISPLAY COMMUNITY POSTS ON HOME
+// =====================================================
+
+function displayCommunityPosts(posts) {
+
+    const postsGrid =
+        document.querySelector(
+            ".community-section .posts-grid"
+        );
+
+
+    if (!postsGrid) {
+
+        console.error(
+            "Community posts grid was not found."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Remove the fake/demo posts.
+     */
+
+    postsGrid.innerHTML = "";
+
+
+    if (
+        !Array.isArray(posts) ||
+        posts.length === 0
+    ) {
+
+        console.log(
+            "No community posts found."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Home shows the first 3 real posts.
+     */
+
+    posts
+        .slice(0, 3)
+        .forEach(
+            post => {
+
+                const card =
+                    document.createElement(
+                        "article"
+                    );
+
+
+                card.className =
+                    "post-card";
+
+
+                const rating =
+                    Number(post.rating) || 0;
+
+
+                const stars =
+                    "★".repeat(rating) +
+                    "☆".repeat(5 - rating);
+
+
+                card.innerHTML = `
+
+                    <div class="post-user">
+
+                        <div class="post-avatar">
+
+                            <span class="material-symbols-rounded">
+                                public
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                ${escapeHomeHtml(
+                    post.title ||
+                    "Travel Experience"
+                )}
+                            </strong>
+
+
+                            <small>
+
+                                ${escapeHomeHtml(
+                    post.country || ""
+                )}
+
+                                ${
+                    post.city
+                        ? ` · ${escapeHomeHtml(post.city)}`
+                        : ""
+                }
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+                    <p>
+                        ${escapeHomeHtml(
+                    post.content || ""
+                )}
+                    </p>
+
+
+                    <span class="post-like">
+
+                        ★ ${rating}/5
+
+                        <span class="home-post-stars">
+                            ${stars}
+                        </span>
+
+                    </span>
+
+                `;
+
+
+                postsGrid.appendChild(
+                    card
+                );
+
+            }
+        );
+
+}
+
+
+
+// =====================================================
+// SAFE HTML
+// =====================================================
+
+function escapeHomeHtml(value) {
+
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
 // =====================================================
 // INITIALIZE HOME PAGE
 // =====================================================

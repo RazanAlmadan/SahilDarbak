@@ -1828,3 +1828,15 @@ html[lang="en"] .preference:hover {
     }
 
 }
+
+.home-post-stars {
+
+    margin-right: 6px;
+
+    color: var(--orange);
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+
+}

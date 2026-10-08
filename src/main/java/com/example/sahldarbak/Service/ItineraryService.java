@@ -137,7 +137,7 @@ public class ItineraryService {
         }
     }
 
-    public void sendItineraryToEmail(Integer tripId) {
+    public void sendItineraryToEmail(Integer tripId, String lang) {
 
         Itinerary itinerary = itineraryRepository.findItineraryByTrip_Id(tripId);
 
@@ -149,15 +149,15 @@ public class ItineraryService {
 
             SmartItineraryDTO smartItinerary = objectMapper.readValue(itinerary.getPlanJson(), SmartItineraryDTO.class);
 
-            emailService.sendFullItineraryEmail(itinerary.getTrip().getUser().getEmail(), itinerary.getTrip().getCountry(), smartItinerary);
-
+            emailService.sendFullItineraryEmail(itinerary.getTrip().getUser().getEmail(), itinerary.getTrip().getCountry(), smartItinerary, lang);
         } catch (Exception e) {
 
             throw new ApiException("failed to send itinerary email: " + e.getMessage());
         }
     }
 
-    // SEND TODAY'S PLAN TO WHATSAPP
+    // SEND TODAY'S CURRENT PLAN TO WHATSAPP
+    @Transactional(readOnly = true)
     public void sendTodayPlanToWhatsApp(Integer tripId) {
 
         Itinerary itinerary = itineraryRepository.findItineraryByTrip_Id(tripId);
@@ -170,66 +170,64 @@ public class ItineraryService {
             throw new ApiException("itinerary must be accepted before sending today's plan");
         }
 
-        try {
 
-            SmartItineraryDTO smartItinerary =objectMapper.readValue(itinerary.getPlanJson(), SmartItineraryDTO.class);
-
-            LocalDate today = LocalDate.now();
-
-            ItineraryDayDTO todayPlan = smartItinerary.getDays().stream().filter(day -> day.getDate().equals(today)).findFirst().orElseThrow(() -> new ApiException("no itinerary plan found for today"));
+        LocalDate today = LocalDate.now();
 
 
-            StringBuilder message = new StringBuilder();
+        List<TripPlace> todayPlaces = tripPlaceRepository.findAll().stream().filter(place -> place.getItinerary() != null
+                                        && place.getItinerary().getId().equals(itinerary.getId())
+                                        && today.equals(place.getScheduledAt())).toList();
 
-            message.append("Your SahlDarbak plan for today ✈️\n\n");
 
-            message.append("📅 ").append(todayPlan.getDate()).append("\n");
+        if (todayPlaces.isEmpty()) {
 
-            if (todayPlan.getCity() != null) {
-                message.append("📍 ").append(todayPlan.getCity()).append("\n");
+            throw new ApiException("no itinerary plan found for today");
+        }
+
+
+        StringBuilder message = new StringBuilder();
+
+
+        message.append("Your SahlDarbak plan for today ✈️\n\n");
+
+        message.append("📅 ").append(today).append("\n\n");
+
+
+        String currentCity = null;
+
+
+        for (TripPlace place : todayPlaces) {
+
+            if (place.getCity() != null && !place.getCity().equals(currentCity)) {
+
+                currentCity = place.getCity();
+
+                message.append("📍 ").append(currentCity).append("\n");
             }
+
+
+            message.append("• ").append(place.getName());
+
+
+            if (place.getPlaceType() != null) {
+
+                message.append(" (").append(place.getPlaceType()).append(")");
+            }
+
+
+            if (place.getNotes() != null && !place.getNotes().isBlank()) {
+
+                message.append(" - ").append(place.getNotes());
+            }
+
 
             message.append("\n");
-
-
-            if (todayPlan.getPlaces() != null) {
-
-                for (PlaceRecommendationDTO place :
-                        todayPlan.getPlaces()) {
-
-                    if (place.getSuggestedTime() != null) {
-
-                        message.append("🕐 ").append(place.getSuggestedTime()).append(" - ");
-                    } else {
-
-                        message.append("• ");
-                    }
-
-
-                    message.append(place.getName());
-
-                    if (place.getType() != null) {
-                        message.append(" (").append(place.getType()).append(")");
-                    }
-
-                    message.append("\n");
-                }
-            }
-
-
-            message.append("\nHave a great day! 💛");
-
-
-            whatsAppService.sendText(itinerary.getTrip().getUser().getPhoneNumber(), message.toString());
-
-
-        } catch (ApiException e) {
-
-            throw e;
-
-        } catch (Exception e) {
-
-            throw new ApiException("failed to prepare today's WhatsApp plan: " + e.getMessage());
         }
+
+
+        message.append("\nHave a great day! 💛");
+
+
+        whatsAppService.sendText(itinerary.getTrip().getUser().getPhoneNumber(), message.toString());
     }
 }

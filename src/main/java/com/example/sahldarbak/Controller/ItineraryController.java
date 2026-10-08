@@ -37,8 +37,10 @@ public class ItineraryController {
     }
 
     @PostMapping("/send-email/{tripId}")
-    public ResponseEntity<?> sendItineraryToEmail(@PathVariable Integer tripId) {
-        itineraryService.sendItineraryToEmail(tripId);
+    public ResponseEntity<?> sendItineraryToEmail(@PathVariable Integer tripId, @RequestParam(defaultValue = "ar") String lang) {
+
+        itineraryService.sendItineraryToEmail(tripId, lang);
+
         return ResponseEntity.status(200).body(new ApiResponse("itinerary sent to email successfully"));
     }
 

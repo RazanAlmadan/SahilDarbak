@@ -50,9 +50,9 @@ public class TripBudgetEstimateController {
 
     // GENERATE AI BUDGET ESTIMATE
     @PostMapping("/generate/{tripId}")
-    public ResponseEntity<?> generateBudgetEstimate(@PathVariable Integer tripId, @RequestBody @Valid BudgetEstimateRequestDTO requestDTO) {
+    public ResponseEntity<?> generateBudgetEstimate(@PathVariable Integer tripId, @RequestBody @Valid BudgetEstimateRequestDTO requestDTO, @RequestParam(defaultValue = "ar") String lang) {
 
-        return ResponseEntity.status(200).body(tripBudgetEstimateService.generateBudgetEstimate(tripId, requestDTO));
+        return ResponseEntity.status(200).body(tripBudgetEstimateService.generateBudgetEstimate(tripId, requestDTO,lang));
     }
 
 
@@ -66,8 +66,8 @@ public class TripBudgetEstimateController {
 
     // REFRESH AI BUDGET ESTIMATE
     @PutMapping("/refresh/{tripId}")
-    public ResponseEntity<?> refreshBudgetEstimate(@PathVariable Integer tripId, @RequestBody @Valid BudgetEstimateRequestDTO requestDTO) {
+    public ResponseEntity<?> refreshBudgetEstimate(@PathVariable Integer tripId, @RequestBody @Valid BudgetEstimateRequestDTO requestDTO, @RequestParam(defaultValue = "ar") String lang) {
 
-        return ResponseEntity.status(200).body(tripBudgetEstimateService.refreshBudgetEstimate(tripId, requestDTO));
+        return ResponseEntity.status(200).body(tripBudgetEstimateService.refreshBudgetEstimate(tripId, requestDTO,lang));
     }
 }

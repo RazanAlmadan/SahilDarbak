@@ -13,38 +13,1217 @@
     <title>رحلتي | SahlDarbak</title>
 
     <link rel="stylesheet"
-          th:href="@{/css/base.css}">
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
 
     <link rel="stylesheet"
-          th:href="@{/css/flow.css}">
+          th:href="@{/css/flow.css}"
+          href="/css/flow.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/trip.css}"
+          href="/css/trip.css">
 
 </head>
+
 
 <body>
 
 <div th:replace="~{fragments/navbar.html :: navbar}"></div>
 
 
-<main class="flow-page">
+<main class="trip-page">
 
-    <div class="flow-container">
+    <div class="trip-container">
 
-        <span class="section-tag">
 
-            <span class="material-symbols-rounded">
-                flight_takeoff
-            </span>
+        <!-- =========================
+             HERO
+        ========================== -->
 
-            رحلتي
+        <section class="trip-hero">
 
+            <div class="trip-hero-content">
+
+                <span class="section-tag">
+
+                    <span class="material-symbols-rounded">
+                        travel
+                    </span>
+
+                    رحلتك
+
+                </span>
+
+
+                <h1 id="tripTitle">
+                    رحلتك جاهزة نكملها ✈️
+                </h1>
+
+
+                <p id="tripSubtitle">
+                    هنا تلقى تفاصيل الرحلة وخطتك اليومية وميزانيتك.
+                </p>
+
+            </div>
+
+
+            <div class="trip-status-badge"
+                 id="tripStatus">
+
+                <span class="material-symbols-rounded">
+                    check_circle
+                </span>
+
+                مخططة
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             MESSAGE
+        ========================== -->
+
+        <div id="tripMessage"
+             class="trip-message">
+        </div>
+
+
+
+        <!-- =========================
+             SUMMARY
+        ========================== -->
+
+        <section class="trip-summary-grid">
+
+
+            <article class="trip-summary-card">
+
+                <div class="summary-icon">
+
+                    <span class="material-symbols-rounded">
+                        public
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <small>
+                        الوجهة
+                    </small>
+
+                    <strong id="tripCountry">
+                        —
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+
+            <article class="trip-summary-card">
+
+                <div class="summary-icon">
+
+                    <span class="material-symbols-rounded">
+                        calendar_month
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <small>
+                        تاريخ الرحلة
+                    </small>
+
+                    <strong id="tripDates">
+                        —
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+
+            <article class="trip-summary-card">
+
+                <div class="summary-icon">
+
+                    <span class="material-symbols-rounded">
+                        payments
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <small>
+                        الميزانية
+                    </small>
+
+                    <strong id="tripBudget">
+                        —
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+
+            <article class="trip-summary-card">
+
+                <div class="summary-icon">
+
+                    <span class="material-symbols-rounded">
+                        group
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <small>
+                        نوع الرحلة
+                    </small>
+
+                    <strong id="tripType">
+                        —
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             TABS
+        ========================== -->
+
+        <section class="trip-tabs">
+
+            <button type="button"
+                    class="trip-tab active"
+                    data-tab="overview">
+
+                <span class="material-symbols-rounded">
+                    dashboard
+                </span>
+
+                نظرة عامة
+
+            </button>
+
+
+            <button type="button"
+                    class="trip-tab"
+                    data-tab="itinerary">
+
+                <span class="material-symbols-rounded">
+                    route
+                </span>
+
+                البرنامج
+
+            </button>
+            <button type="button"
+                    class="trip-tab"
+                    data-tab="places">
+
+    <span class="material-symbols-rounded">
+        location_on
+    </span>
+
+                أماكن الرحلة
+
+            </button>
+
+
+            <button type="button"
+                    class="trip-tab"
+                    data-tab="budget">
+
+                <span class="material-symbols-rounded">
+                    account_balance_wallet
+                </span>
+
+                الميزانية
+
+            </button>
+
+        </section>
+
+
+
+        <!-- =================================================
+             OVERVIEW
+        ================================================== -->
+
+        <section id="overviewTab"
+                 class="trip-tab-content active">
+
+
+            <div class="trip-section-card">
+
+                <div class="section-card-heading">
+
+                    <div>
+
+                        <span class="section-small-label">
+                            مسار الرحلة
+                        </span>
+
+                        <h2>
+                            مدن رحلتك 🗺️
+                        </h2>
+
+                    </div>
+
+
+                    <span class="material-symbols-rounded heading-icon">
+                        location_city
+                    </span>
+
+                </div>
+
+
+                <div id="tripCities"
+                     class="trip-cities">
+
+                    <div class="trip-placeholder">
+
+                        <span class="material-symbols-rounded">
+                            progress_activity
+                        </span>
+
+                        جاري تحميل المدن...
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="trip-section-card">
+
+                <div class="section-card-heading">
+
+                    <div>
+
+                        <span class="section-small-label">
+                            الخطوة التالية
+                        </span>
+
+                        <h2>
+                            جهز برنامج رحلتك ✨
+                        </h2>
+
+                    </div>
+
+
+                    <span class="material-symbols-rounded heading-icon">
+                        auto_awesome
+                    </span>
+
+                </div>
+
+
+                <p class="section-description">
+                    نخلي الذكاء الاصطناعي يرتب لك الفنادق والمطاعم
+                    والأنشطة حسب مدن الرحلة وتفضيلاتك.
+                </p>
+
+
+                <button id="goToItineraryButton"
+                        type="button"
+                        class="btn btn-primary">
+
+                    <span class="material-symbols-rounded">
+                        route
+                    </span>
+
+                    روح للبرنامج
+
+                </button>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+             ITINERARY
+        ================================================== -->
+
+        <section id="itineraryTab"
+                 class="trip-tab-content">
+
+
+            <!-- EMPTY -->
+
+            <div id="itineraryEmpty"
+                 class="trip-section-card empty-section">
+
+                <div class="empty-section-icon">
+
+                    <span class="material-symbols-rounded">
+                        auto_awesome
+                    </span>
+
+                </div>
+
+
+                <h2>
+                    نرتب لك برنامج الرحلة؟
+                </h2>
+
+
+                <p>
+                    بنختار لك أماكن حقيقية ونرتبها يوم بيوم
+                    حسب تفضيلاتك ومدن رحلتك.
+                </p>
+
+
+                <button id="generateItineraryButton"
+                        type="button"
+                        class="btn btn-primary">
+
+                    <span class="material-symbols-rounded">
+                        auto_awesome
+                    </span>
+
+                    أنشئ برنامجي
+
+                </button>
+
+            </div>
+
+
+
+            <!-- LOADING -->
+
+            <div id="itineraryLoading"
+                 class="trip-section-card loading-section">
+
+                <span class="material-symbols-rounded loading-icon">
+                    progress_activity
+                </span>
+
+                <h3>
+                    قاعدين نرتب برنامج رحلتك...
+                </h3>
+
+                <p>
+                    نختار الأماكن ونوزعها على الأيام ✨
+                </p>
+
+            </div>
+
+
+
+            <!-- RESULT -->
+
+            <div id="itineraryResult"
+                 class="itinerary-result">
+
+
+                <div class="trip-section-card">
+
+                    <div class="section-card-heading">
+
+                        <div>
+
+                            <span class="section-small-label">
+                                خطتك اليومية
+                            </span>
+
+                            <h2>
+                                برنامج الرحلة
+                            </h2>
+
+                        </div>
+
+
+                        <span class="material-symbols-rounded heading-icon">
+                            calendar_view_day
+                        </span>
+
+                    </div>
+
+
+                    <div id="itineraryDays"
+                         class="itinerary-days">
+                    </div>
+
+                </div>
+
+
+
+                <!-- HOTELS -->
+
+                <div class="trip-section-card">
+
+                    <div class="section-card-heading">
+
+                        <div>
+
+                            <span class="section-small-label">
+                                للإقامة
+                            </span>
+
+                            <h2>
+                                فنادق مقترحة
+                            </h2>
+
+                        </div>
+
+                        <span class="material-symbols-rounded heading-icon">
+                            hotel
+                        </span>
+
+                    </div>
+
+
+                    <div id="hotelRecommendations"
+                         class="recommendation-grid">
+                    </div>
+
+                </div>
+
+
+
+                <!-- RESTAURANTS -->
+
+                <div class="trip-section-card">
+
+                    <div class="section-card-heading">
+
+                        <div>
+
+                            <span class="section-small-label">
+                                للأكل
+                            </span>
+
+                            <h2>
+                                مطاعم مقترحة
+                            </h2>
+
+                        </div>
+
+                        <span class="material-symbols-rounded heading-icon">
+                            restaurant
+                        </span>
+
+                    </div>
+
+
+                    <div id="restaurantRecommendations"
+                         class="recommendation-grid">
+                    </div>
+
+                </div>
+
+
+
+                <div class="itinerary-actions">
+
+                    <button id="regenerateItineraryButton"
+                            type="button"
+                            class="btn btn-light">
+
+        <span class="material-symbols-rounded">
+            refresh
         </span>
 
+                        أعد ترتيب البرنامج
 
-        <div id="tripApp">
+                    </button>
 
-            <!-- Trip center -->
 
-        </div>
+                    <button id="cancelItineraryButton"
+                            type="button"
+                            class="btn btn-light">
+
+        <span class="material-symbols-rounded">
+            close
+        </span>
+
+                        إلغاء الاقتراح
+
+                    </button>
+
+
+                    <button id="sendItineraryEmailButton"
+                            type="button"
+                            class="btn btn-light">
+
+        <span class="material-symbols-rounded">
+            mail
+        </span>
+
+                        إرسال للإيميل
+
+                    </button>
+
+
+                    <button id="sendTodayWhatsAppButton"
+                            type="button"
+                            class="btn btn-light"
+                            style="display:none;">
+
+        <span class="material-symbols-rounded">
+            chat
+        </span>
+
+                        إرسال خطة اليوم للواتساب
+
+                    </button>
+
+
+                    <button id="acceptItineraryButton"
+                            type="button"
+                            class="btn btn-primary">
+
+        <span class="material-symbols-rounded">
+            check_circle
+        </span>
+
+                        اعتمد البرنامج
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================================
+     TRIP PLACES
+================================================== -->
+
+        <section id="placesTab"
+                 class="trip-tab-content">
+
+
+            <!-- LOCKED BEFORE ACCEPTING ITINERARY -->
+
+            <div id="tripPlacesLocked"
+                 class="trip-section-card empty-section">
+
+                <div class="empty-section-icon">
+
+            <span class="material-symbols-rounded">
+                lock
+            </span>
+
+                </div>
+
+                <h2>
+                    اعتمد برنامج الرحلة أول ✨
+                </h2>
+
+                <p>
+                    بعد اعتماد البرنامج تقدر تضيف أماكن من اختيارك،
+                    وتعدل أو تحذف الأماكن الموجودة في خطتك.
+                </p>
+
+                <button id="goToAcceptItineraryButton"
+                        type="button"
+                        class="btn btn-primary">
+
+            <span class="material-symbols-rounded">
+                route
+            </span>
+
+                    روح للبرنامج
+
+                </button>
+
+            </div>
+
+
+            <!-- CONTENT AFTER ACCEPT -->
+
+            <div id="tripPlacesContent"
+                 style="display:none;">
+
+
+                <!-- HEADER -->
+
+                <div class="trip-section-card">
+
+                    <div class="section-card-heading">
+
+                        <div>
+
+                    <span class="section-small-label">
+                        خصص خطتك
+                    </span>
+
+                            <h2>
+                                أماكن رحلتك 📍
+                            </h2>
+
+                        </div>
+
+                        <span class="material-symbols-rounded heading-icon">
+                    map
+                </span>
+
+                    </div>
+
+
+                    <p class="section-description">
+                        هنا تقدر تشوف الأماكن الموجودة في برنامجك،
+                        وتضيف مكان جديد من اختيارك أو تعدل خطتك.
+                    </p>
+
+
+                    <button id="openAddTripPlaceButton"
+                            type="button"
+                            class="btn btn-primary">
+
+                <span class="material-symbols-rounded">
+                    add_location_alt
+                </span>
+
+                        أضف مكان
+
+                    </button>
+
+                </div>
+
+
+                <!-- FILTERS -->
+
+                <div class="trip-section-card">
+
+                    <div class="section-card-heading">
+
+                        <div>
+
+                    <span class="section-small-label">
+                        عرض الأماكن
+                    </span>
+
+                            <h2>
+                                فلترة البرنامج
+                            </h2>
+
+                        </div>
+
+                        <span class="material-symbols-rounded heading-icon">
+                    filter_alt
+                </span>
+
+                    </div>
+
+
+                    <div class="trip-places-filters">
+
+                        <button id="showAllTripPlacesButton"
+                                type="button"
+                                class="btn btn-light">
+
+                    <span class="material-symbols-rounded">
+                        list
+                    </span>
+
+                            كل الأماكن
+
+                        </button>
+
+
+                        <button id="showTodayTripPlacesButton"
+                                type="button"
+                                class="btn btn-light">
+
+                    <span class="material-symbols-rounded">
+                        today
+                    </span>
+
+                            خطة اليوم
+
+                        </button>
+
+
+                        <div class="trip-place-date-filter">
+
+                            <input id="tripPlaceFilterDate"
+                                   type="date">
+
+                            <button id="filterTripPlacesByDateButton"
+                                    type="button"
+                                    class="btn btn-light">
+
+                        <span class="material-symbols-rounded">
+                            calendar_month
+                        </span>
+
+                                عرض اليوم
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LIST -->
+
+                <div class="trip-section-card">
+
+                    <div class="section-card-heading">
+
+                        <div>
+
+                    <span class="section-small-label">
+                        خطتك الحالية
+                    </span>
+
+                            <h2>
+                                الأماكن
+                            </h2>
+
+                        </div>
+
+                        <span class="material-symbols-rounded heading-icon">
+                    location_on
+                </span>
+
+                    </div>
+
+
+                    <div id="tripPlacesLoading"
+                         class="trip-placeholder"
+                         style="display:none;">
+
+                <span class="material-symbols-rounded">
+                    progress_activity
+                </span>
+
+                        جاري تحميل الأماكن...
+
+                    </div>
+
+
+                    <div id="tripPlacesEmpty"
+                         class="trip-placeholder"
+                         style="display:none;">
+
+                <span class="material-symbols-rounded">
+                    location_off
+                </span>
+
+                        ما فيه أماكن في هذا اليوم
+
+                    </div>
+
+
+                    <div id="tripPlacesList"
+                         class="trip-places-list">
+                    </div>
+
+                </div>
+
+
+                <!-- ADD / EDIT FORM -->
+
+                <div id="tripPlaceFormCard"
+                     class="trip-section-card"
+                     style="display:none;">
+
+                    <div class="section-card-heading">
+
+                        <div>
+
+                    <span class="section-small-label">
+                        تخصيص البرنامج
+                    </span>
+
+                            <h2 id="tripPlaceFormTitle">
+                                أضف مكان جديد
+                            </h2>
+
+                        </div>
+
+                        <span class="material-symbols-rounded heading-icon">
+                    edit_location_alt
+                </span>
+
+                    </div>
+
+
+                    <form id="tripPlaceForm"
+                          class="trip-place-form">
+
+
+                        <div class="form-group">
+
+                            <label for="tripPlaceName">
+                                اسم المكان
+                            </label>
+
+                            <input id="tripPlaceName"
+                                   type="text"
+                                   maxlength="50"
+                                   required
+                                   placeholder="مثال: Louvre Museum">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="tripPlaceType">
+                                نوع المكان
+                            </label>
+
+                            <select id="tripPlaceType"
+                                    required>
+
+                                <option value="">
+                                    اختر النوع
+                                </option>
+
+                                <option value="activity">
+                                    نشاط
+                                </option>
+
+                                <option value="restaurant">
+                                    مطعم
+                                </option>
+
+                                <option value="cafe">
+                                    كافيه
+                                </option>
+
+                                <option value="hotel">
+                                    فندق
+                                </option>
+
+                                <option value="other">
+                                    أخرى
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="tripPlaceDate">
+                                التاريخ
+                            </label>
+
+                            <input id="tripPlaceDate"
+                                   type="date"
+                                   required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="tripPlaceCity">
+                                المدينة
+                            </label>
+
+                            <input id="tripPlaceCity"
+                                   type="text"
+                                   maxlength="50"
+                                   required
+                                   placeholder="مثال: Paris">
+
+                        </div>
+
+
+                        <div class="form-group trip-place-notes-group">
+
+                            <label for="tripPlaceNotes">
+                                ملاحظات
+                            </label>
+
+                            <textarea id="tripPlaceNotes"
+                                      maxlength="50"
+                                      rows="3"
+                                      placeholder="ملاحظة اختيارية"></textarea>
+
+                        </div>
+
+
+                        <div class="trip-place-form-actions">
+
+                            <button id="saveTripPlaceButton"
+                                    type="submit"
+                                    class="btn btn-primary">
+
+                        <span class="material-symbols-rounded">
+                            save
+                        </span>
+
+                                حفظ المكان
+
+                            </button>
+
+
+                            <button id="cancelTripPlaceFormButton"
+                                    type="button"
+                                    class="btn btn-light">
+
+                                إلغاء
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+            </div>
+
+        </section>
+        <!-- =================================================
+             BUDGET
+        ================================================== -->
+
+        <section id="budgetTab"
+                 class="trip-tab-content">
+
+
+            <!-- EMPTY -->
+
+            <div id="budgetEmpty"
+                 class="trip-section-card empty-section">
+
+                <div class="empty-section-icon budget-icon">
+
+                    <span class="material-symbols-rounded">
+                        payments
+                    </span>
+
+                </div>
+
+
+                <h2>
+                    نحسب لك ميزانية الرحلة؟
+                </h2>
+
+
+                <p>
+                    نعطيك تقدير تقريبي للطيران والسكن والأكل
+                    والمواصلات والأنشطة.
+                </p>
+
+
+                <button id="generateBudgetButton"
+                        type="button"
+                        class="btn btn-primary">
+
+                    <span class="material-symbols-rounded">
+                        calculate
+                    </span>
+
+                    احسب ميزانيتي
+
+                </button>
+
+            </div>
+
+
+
+            <!-- LOADING -->
+
+            <div id="budgetLoading"
+                 class="trip-section-card loading-section">
+
+                <span class="material-symbols-rounded loading-icon">
+                    progress_activity
+                </span>
+
+                <h3>
+                    نحسب ميزانية رحلتك...
+                </h3>
+
+            </div>
+
+
+
+            <!-- RESULT -->
+
+            <div id="budgetResult"
+                 class="budget-result">
+
+
+                <div class="budget-total-card">
+
+                    <small>
+                        التقدير الإجمالي
+                    </small>
+
+                    <strong id="budgetTotal">
+                        —
+                    </strong>
+
+                    <span id="budgetCurrencyDisplay">
+                            SAR
+                    </span>
+
+
+
+                </div>
+
+
+
+                <div class="budget-breakdown">
+
+
+                    <article class="budget-item">
+
+                        <span class="material-symbols-rounded">
+                            flight
+                        </span>
+
+                        <small>
+                            الطيران
+                        </small>
+
+                        <strong id="flightEstimate">
+                            —
+                        </strong>
+
+                    </article>
+
+
+
+                    <article class="budget-item">
+
+                        <span class="material-symbols-rounded">
+                            hotel
+                        </span>
+
+                        <small>
+                            السكن
+                        </small>
+
+                        <strong id="accommodationEstimate">
+                            —
+                        </strong>
+
+                    </article>
+
+
+
+                    <article class="budget-item">
+
+                        <span class="material-symbols-rounded">
+                            restaurant
+                        </span>
+
+                        <small>
+                            الأكل
+                        </small>
+
+                        <strong id="foodEstimate">
+                            —
+                        </strong>
+
+                    </article>
+
+
+
+                    <article class="budget-item">
+
+                        <span class="material-symbols-rounded">
+                            directions_car
+                        </span>
+
+                        <small>
+                            المواصلات
+                        </small>
+
+                        <strong id="transportationEstimate">
+                            —
+                        </strong>
+
+                    </article>
+
+
+
+                    <article class="budget-item">
+
+                        <span class="material-symbols-rounded">
+                            local_activity
+                        </span>
+
+                        <small>
+                            الأنشطة
+                        </small>
+
+                        <strong id="activitiesEstimate">
+                            —
+                        </strong>
+
+                    </article>
+
+
+                </div>
+
+
+
+                <div id="budgetSummary"
+                     class="budget-summary">
+                </div>
+
+
+
+                <div class="budget-actions">
+
+                    <button id="refreshBudgetButton"
+                            type="button"
+                            class="btn btn-light">
+
+                        <span class="material-symbols-rounded">
+                            refresh
+                        </span>
+
+                        حدث التقدير
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
 
     </div>
 
@@ -54,11 +1233,15 @@
 <div th:replace="~{fragments/footer.html :: footer}"></div>
 
 
-<script th:src="@{/js/language.js}"></script>
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
 
-<script th:src="@{/js/base.js}"></script>
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
 
-<script th:src="@{/js/trip.js}"></script>
+<script th:src="@{/js/trip.js}"
+        src="/js/trip.js"></script>
 
 </body>
+
 </html>

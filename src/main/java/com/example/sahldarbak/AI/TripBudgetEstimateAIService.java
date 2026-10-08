@@ -38,7 +38,11 @@ public class TripBudgetEstimateAIService {
             Trip trip,
             TravelRequest travelRequest,
             BudgetEstimateRequestDTO requestDTO,
-            List<TripCity> tripCities) {
+            List<TripCity> tripCities,String lang) {
+        String outputLanguage =
+                "en".equalsIgnoreCase(lang)
+                        ? "English"
+                        : "Arabic";
 
         try {
 
@@ -61,6 +65,22 @@ public class TripBudgetEstimateAIService {
 
                     The traveler should feel that a helpful travel companion
                     is explaining the expected budget, not a financial report.
+                    
+                    ========================
+                    OUTPUT LANGUAGE
+                    ========================
+                    
+                    The selected UI language is: %s
+                    
+                    Write ONLY the "summary" value in %s.
+                    
+                    Do NOT translate or modify:
+                    - JSON keys
+                    - currency codes
+                    - numeric values
+                    - city/country proper names
+                    
+                    Do not change the required JSON structure.
 
                     ========================
                     IMPORTANT ESTIMATE RULES
@@ -269,7 +289,11 @@ public class TripBudgetEstimateAIService {
 
                     TRIP INFORMATION:
                     %s
-                    """.formatted(tripContext);
+                    """.formatted(
+                    outputLanguage,
+                    outputLanguage,
+                    tripContext
+            );
 
 
             Map<String, Object> generationConfig = new HashMap<>();

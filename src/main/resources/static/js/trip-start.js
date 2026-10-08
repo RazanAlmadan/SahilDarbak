@@ -56,14 +56,7 @@ function setupButtons() {
         .getElementById("aiDestinationButton")
         .addEventListener(
             "click",
-            () => {
-
-                showMessage(
-                    "اقتراح الوجهة بالذكاء الاصطناعي سيتم ربطه قريبًا ✨",
-                    "info"
-                );
-
-            }
+            generateAIDestinations
         );
 
 
@@ -442,4 +435,618 @@ function clearMessage() {
 
     element.className =
         "trip-start-message";
+}
+
+/* =========================================================
+   AI DESTINATION RECOMMENDATION
+   Personal feature logic
+   ========================================================= */
+
+async function generateAIDestinations() {
+
+    clearMessage();
+
+
+    const aiButton =
+        document.getElementById(
+            "aiDestinationButton"
+        );
+
+    const resultsSection =
+        document.getElementById(
+            "aiResultsSection"
+        );
+
+    const loading =
+        document.getElementById(
+            "aiLoading"
+        );
+
+    const resultsContainer =
+        document.getElementById(
+            "aiResultsContainer"
+        );
+
+
+    if (!travelRequestId) {
+
+        showMessage(
+            "ما قدرنا نحدد طلب الرحلة",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        aiButton.disabled = true;
+
+        aiButton.innerHTML = `
+            <span class="material-symbols-rounded">
+                progress_activity
+            </span>
+
+            جاري البحث...
+        `;
+
+
+        resultsSection.classList.add(
+            "show"
+        );
+
+
+        loading.classList.add(
+            "show"
+        );
+
+
+        resultsContainer.innerHTML =
+            "";
+
+
+        resultsSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+
+        const response =
+            await apiRequest(
+                `/api/v1/ai/get/Generated/countries/${travelRequestId}`,
+                "GET"
+            );
+
+
+        loading.classList.remove(
+            "show"
+        );
+
+
+        renderAIDestinations(
+            response
+        );
+
+
+    } catch (error) {
+
+        loading.classList.remove(
+            "show"
+        );
+
+
+        resultsContainer.innerHTML = `
+
+            <div class="ai-results-error">
+
+                <span class="material-symbols-rounded">
+                    error
+                </span>
+
+                ما قدرنا نجيب اقتراحات الوجهات حاليًا.
+                <br>
+
+                ${escapeHtml(error.message)}
+
+            </div>
+
+        `;
+
+    } finally {
+
+        aiButton.disabled = false;
+
+        aiButton.innerHTML = `
+
+            <span class="material-symbols-rounded">
+                auto_awesome
+            </span>
+
+            اقترح لي وجهة
+
+        `;
+    }
+}
+
+
+/* =========================
+   RENDER AI RESULTS
+   ========================= */
+
+function renderAIDestinations(
+    response
+) {
+
+    const container =
+        document.getElementById(
+            "aiResultsContainer"
+        );
+
+
+    const destinations =
+        response?.destinations || [];
+
+
+    const summary =
+        response?.travelSummary;
+
+
+    if (!destinations.length) {
+
+        container.innerHTML = `
+
+            <div class="ai-results-error">
+
+                <span class="material-symbols-rounded">
+                    search_off
+                </span>
+
+                ما لقينا وجهات مناسبة لطلب رحلتك حاليًا.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    const description =
+        document.getElementById(
+            "aiResultsDescription"
+        );
+
+
+    if (
+        summary?.overallRecommendation
+    ) {
+
+        description.textContent =
+            summary.overallRecommendation;
+
+    }
+
+
+    container.innerHTML =
+        destinations
+            .map(
+                (
+                    destination,
+                    index
+                ) =>
+                    createDestinationCard(
+                        destination,
+                        index
+                    )
+            )
+            .join("");
+
+
+    container
+        .querySelectorAll(
+            ".ai-select-button"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        selectAIDestination(
+                            button.dataset.country,
+                            button.dataset.capital
+                        );
+
+                    }
+                );
+
+            }
+        );
+}
+
+
+/* =========================
+   DESTINATION CARD
+   ========================= */
+
+function createDestinationCard(
+    destination,
+    index
+) {
+
+    const country =
+        destination.country ||
+        "وجهة غير معروفة";
+
+
+    const countryCode =
+        destination.countryCode ||
+        "";
+
+
+    const capital =
+        destination.capital ||
+        "";
+
+
+    const score =
+        destination.suitabilityScore ??
+        0;
+
+
+    const recommendation =
+        destination.recommendation ||
+        "هذه الوجهة قد تكون مناسبة لرحلتك.";
+
+
+    const weather =
+        destination.weather ||
+        {};
+
+
+    const holidays =
+        destination.holidays ||
+        {};
+
+
+    const crowd =
+        destination.crowd ||
+        {};
+
+
+    const headsUp =
+        destination.headsUp ||
+        "";
+
+
+    const whyItMatches =
+        Array.isArray(
+            destination.whyItMatches
+        )
+            ? destination.whyItMatches
+            : [];
+
+
+    const isTopMatch =
+        index === 0 ||
+        destination.rank === 1;
+
+
+    const weatherText =
+        weather.temperatureCelsius !==
+        undefined
+            ? `${weather.temperatureCelsius}°C - ${weather.condition || ""}`
+            : weather.condition || "غير متوفر";
+
+
+    const holidayText =
+        holidays.hasHolidayDuringTrip
+            ? `${holidays.holidayCount || 0} عطلة خلال الرحلة`
+            : "ما فيه عطلات مؤثرة خلال الرحلة";
+
+
+    const crowdText =
+        crowd.level ||
+        crowd.risk ||
+        "غير متوفر";
+
+
+    return `
+
+        <article class="
+            ai-destination-card
+            ${isTopMatch ? "top-match" : ""}
+        ">
+
+
+            ${
+        isTopMatch
+            ? `
+                    <span class="ai-top-match">
+                        ⭐ أفضل تطابق
+                    </span>
+                `
+            : ""
+    }
+
+
+            <div class="ai-country-header">
+
+                <div class="ai-country-info">
+
+                    <div class="ai-country-flag">
+
+                        ${
+        escapeHtml(
+            countryCode
+        ) || "🌍"
+    }
+
+                    </div>
+
+
+                    <div>
+
+                        <h3 class="ai-country-name">
+                            ${escapeHtml(country)}
+                        </h3>
+
+                        ${
+        capital
+            ? `
+                                <p class="ai-country-capital">
+                                    ${escapeHtml(capital)}
+                                </p>
+                            `
+            : ""
+    }
+
+                    </div>
+
+                </div>
+
+
+                <div class="ai-score">
+
+                    <strong>
+                        ${escapeHtml(String(score))}
+                    </strong>
+
+                    <span>
+                        تطابق
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="ai-info-list">
+
+                <div class="ai-info-item">
+
+                    <span class="material-symbols-rounded">
+                        partly_cloudy_day
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            الطقس
+                        </strong>
+
+                        <span>
+                            ${escapeHtml(weatherText)}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ai-info-item">
+
+                    <span class="material-symbols-rounded">
+                        event
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            العطلات
+                        </strong>
+
+                        <span>
+                            ${escapeHtml(holidayText)}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ai-info-item">
+
+                    <span class="material-symbols-rounded">
+                        groups
+                    </span>
+
+                    <div>
+
+                        <strong>
+                            الازدحام
+                        </strong>
+
+                        <span>
+                            ${escapeHtml(crowdText)}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <p class="ai-recommendation">
+
+                ${escapeHtml(recommendation)}
+
+            </p>
+
+
+            ${
+        whyItMatches.length
+            ? `
+                    <p class="ai-match-title">
+                        ليش تناسبك؟
+                    </p>
+
+                    <ul class="ai-match-list">
+
+                        ${whyItMatches
+                .slice(0, 3)
+                .map(
+                    reason =>
+                        `
+                                        <li>
+                                            ${escapeHtml(reason)}
+                                        </li>
+                                    `
+                )
+                .join("")}
+
+                    </ul>
+                `
+            : ""
+    }
+
+
+            ${
+        headsUp
+            ? `
+                    <div class="ai-heads-up">
+
+                        <span class="material-symbols-rounded">
+                            warning
+                        </span>
+
+                        <span>
+                            ${escapeHtml(headsUp)}
+                        </span>
+
+                    </div>
+                `
+            : ""
+    }
+
+
+            <button
+                type="button"
+                class="ai-select-button"
+                data-country="${escapeHtml(country)}"
+                data-capital="${escapeHtml(capital)}"
+            >
+
+                اختر هذه الوجهة
+
+                <span class="material-symbols-rounded">
+                    arrow_back
+                </span>
+
+            </button>
+
+        </article>
+
+    `;
+}
+
+
+/* =========================
+   SELECT AI DESTINATION
+   ========================= */
+
+function selectAIDestination(
+    country,
+    capital
+) {
+
+    const countryInput =
+        document.getElementById(
+            "country"
+        );
+
+
+    const cityInput =
+        document.getElementById(
+            "city"
+        );
+
+
+    countryInput.value =
+        country;
+
+
+    if (
+        travelRequest.cityPlanMode ===
+        "single_city"
+    ) {
+
+        cityInput.value =
+            capital || "";
+
+    }
+
+
+    showManualSection();
+
+
+    showMessage(
+        `تم اختيار ${country} ✨ أكمل بيانات الرحلة.`,
+        "info"
+    );
+
+
+    document
+        .getElementById(
+            "manualDestinationSection"
+        )
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+}
+
+
+/* =========================
+   SAFE TEXT
+   ========================= */
+
+function escapeHtml(
+    value
+) {
+
+    return String(value ?? "")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 }

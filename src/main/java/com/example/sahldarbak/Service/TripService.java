@@ -114,7 +114,7 @@ public class TripService {
 
 
     // GENERATE SMART ITINERARY FOR TRIP
-    public SmartItineraryDTO generateSmartItinerary(Integer tripId) {
+    public SmartItineraryDTO generateSmartItinerary(Integer tripId, String lang) {
 
         Trip trip = tripRepository.findTripById(tripId);
 
@@ -147,7 +147,11 @@ public class TripService {
         // SINGLE CITY
         if (travelRequest.getCityPlanMode().equals("single_city")) {
 
-            SmartItineraryDTO cityItinerary = generateItineraryForCity(travelRequest, trip.getCountry(), trip.getCity(), travelRequest.getStartDate(), travelRequest.getEndDate());
+            SmartItineraryDTO cityItinerary = generateItineraryForCity(travelRequest, trip.getCountry(), trip.getCity(), travelRequest.getStartDate(), travelRequest.getEndDate(),lang);
+
+            setRecommendationCity(cityItinerary.getHotelRecommendations(), trip.getCity());
+            setRecommendationCity(cityItinerary.getRestaurantRecommendations(), trip.getCity());
+            setRecommendationCity(cityItinerary.getActivityRecommendations(), trip.getCity());
 
             // ADD CITY TO EACH DAY
             if (cityItinerary.getDays() != null) {
@@ -183,7 +187,13 @@ public class TripService {
 
             for (TripCity tripCity : tripCities) {
 
-                SmartItineraryDTO cityItinerary = generateItineraryForCity(travelRequest, trip.getCountry(), tripCity.getCity(), tripCity.getStartDate(), tripCity.getEndDate());
+                SmartItineraryDTO cityItinerary = generateItineraryForCity(travelRequest, trip.getCountry(), tripCity.getCity(), tripCity.getStartDate(), tripCity.getEndDate(),lang);
+
+                setRecommendationCity(cityItinerary.getHotelRecommendations(), tripCity.getCity());
+
+                setRecommendationCity(cityItinerary.getRestaurantRecommendations(), tripCity.getCity());
+
+                setRecommendationCity(cityItinerary.getActivityRecommendations(), tripCity.getCity());
 
 
                 // ADD CITY TO EACH DAY
@@ -252,7 +262,7 @@ public class TripService {
 
             itineraryRepository.save(itinerary);
             if (firstGeneration) {
-                emailService.sendFullItineraryEmail(trip.getUser().getEmail(), trip.getCountry(), finalItinerary);
+                emailService.sendFullItineraryEmail(trip.getUser().getEmail(), trip.getCountry(), finalItinerary,lang);
             }
 
 
@@ -306,7 +316,7 @@ public class TripService {
     }
 
     // GENERATE AI CITY PLAN
-    public CityPlanDTO generateCityPlan(Integer tripId) {
+    public CityPlanDTO generateCityPlan(Integer tripId,String lang) {
 
         Trip trip = tripRepository.findTripById(tripId);
 
@@ -330,7 +340,7 @@ public class TripService {
         }
 
         // generate new AI city plan
-        CityPlanDTO cityPlan = smartCityPlannerAIService.generateCityPlan(trip, travelRequest);
+        CityPlanDTO cityPlan = smartCityPlannerAIService.generateCityPlan(trip, travelRequest,lang);
 
         if (cityPlan.getCities() == null || cityPlan.getCities().isEmpty()) {
             throw new ApiException("AI did not generate any cities");
@@ -383,7 +393,7 @@ public class TripService {
     }
     //HELPER METHOD
     // GENERATE ITINERARY FOR ONE CITY
-    private SmartItineraryDTO generateItineraryForCity(TravelRequest travelRequest, String country, String city, java.time.LocalDate startDate, java.time.LocalDate endDate) {
+    private SmartItineraryDTO generateItineraryForCity(TravelRequest travelRequest, String country, String city, java.time.LocalDate startDate, java.time.LocalDate endDate,String lang) {
 
 
         LocationDTO location = geoapifyService.getCoordinates(city, country);
@@ -421,7 +431,7 @@ public class TripService {
         }
 
 
-        return smartItineraryAIService.generateSmartItinerary(travelRequest, city, startDate, endDate, hotels, activities, restaurants);
+        return smartItineraryAIService.generateSmartItinerary(travelRequest, city, startDate, endDate, hotels, activities, restaurants,lang);
     }
 
     /// help user create a packing list
@@ -562,6 +572,17 @@ public class TripService {
         transportationEmailService.sendTransportationEmail(tripId, routes);
     }
 
+    //helper method
+    private void setRecommendationCity(List<PlaceRecommendationDTO> recommendations, String city) {
+
+        if (recommendations == null) {
+            return;
+        }
+
+        for (PlaceRecommendationDTO recommendation : recommendations) {
+            recommendation.setCity(city);
+        }
+    }
 
 
 }
