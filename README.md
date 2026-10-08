@@ -8,172 +8,100 @@
 
 ### Plan Smarter, Travel Together ✈️
 
-**SahlDarbak** is a smart travel-planning and traveler-matching web platform that helps travelers discover suitable destinations, build personalized trips, and connect with other travelers throughout their journey.
+**SahlDarbak** is a smart travel-planning and traveler-matching web platform that helps travelers discover suitable destinations, build personalized trips, and explore their journey with greater confidence.
 
 </div>
 
 ---
 
-## About SahlDarbak
+## Project Brief
 
-Planning a trip often requires travelers to move between multiple platforms to search for destinations, cities, hotels, restaurants, activities, transportation, weather, and other travel information.
+**SahlDarbak** is a smart travel platform designed to support travelers before and during their trips.
 
-**SahlDarbak** brings these needs together into one personalized travel-planning experience.
+The platform combines traveler preferences, trip details, artificial intelligence, and external travel data to create a more personalized travel-planning experience.
 
-The platform considers the traveler's preferences, budget, travel dates, travel style, food preferences, and restrictions to provide recommendations and organize the trip from the early planning stage until the traveler arrives at the destination.
+It helps travelers move from choosing a destination to planning cities and daily activities, preparing for the trip, and exploring their destination after arrival.
 
-SahlDarbak is a **travel planning and assistance platform**. It does not provide in-app booking or payment services.
+SahlDarbak is a **travel planning and assistance platform** and does not provide in-app booking or payment services.
 
 ---
 
 ## Problem
 
-Travel planning can be time-consuming and fragmented.
+Planning a trip often requires travelers to use multiple platforms for different needs.
 
-Travelers often face challenges such as:
+Travelers may need to search separately for destinations, weather, cities, accommodation, restaurants, activities, transportation, budgets, and travel experiences.
 
-- Searching across multiple platforms for travel information.
-- Deciding which destination best matches their interests, budget, and travel dates.
-- Choosing which cities to visit during a multi-city trip.
-- Finding suitable hotels, restaurants, and activities.
-- Considering food preferences and travel restrictions.
-- Manually organizing activities into a daily itinerary.
-- Estimating the overall cost of a trip.
-- Preparing for weather conditions and public holidays.
-- Choosing suitable transportation between planned places.
-- Knowing what to pack for the trip.
-- Finding other travelers with similar interests while abroad.
+This can make travel planning:
+
+- Time-consuming and fragmented.
+- Difficult to personalize.
+- Harder when planning multiple cities.
+- Complicated when considering budget, preferences, or restrictions.
+- Less convenient for travelers who want to explore or connect with others after arriving.
 
 ---
 
 ## Solution
 
-SahlDarbak provides one smart platform that supports travelers throughout the travel-planning journey.
+SahlDarbak brings the main stages of the travel journey into one platform.
 
-The platform combines traveler preferences, trip details, artificial intelligence, and external travel data to create a more personalized and organized experience.
+The system uses traveler preferences, trip information, AI, and external data to help users:
 
-SahlDarbak helps travelers:
+- Discover suitable destinations.
+- Build personalized travel plans.
+- Organize single-city or multi-city trips.
+- Generate and customize daily itineraries.
+- Estimate trip expenses and prepare for travel.
+- Explore destination-related community experiences.
+- Access a location-based city guide after arrival.
+- Discover and connect with nearby travelers.
+- Receive selected travel information through Email and WhatsApp.
 
-- Discover destinations that match their preferences.
-- Compare destination options.
-- Plan single-city and multi-city trips.
-- Generate personalized daily itineraries.
-- Discover hotels, restaurants, activities, and other places.
-- Access halal-related restaurant information.
-- Customize an accepted trip plan.
-- Estimate trip expenses.
-- Check weather and holiday information.
-- Receive packing and transportation suggestions.
-- Share selected travel information through Email and WhatsApp.
-- Publish and explore travel experiences through the community.
-- Check in while traveling.
-- Discover nearby travelers with similar interests.
-- Send and manage traveler match invitations.
-- Chat with accepted travel matches.
-- Block unwanted users.
-
-The goal of SahlDarbak is to reduce the time and effort required to plan a trip while giving travelers more control over a personalized travel experience.
+The goal is to reduce the effort required to plan a trip while providing travelers with a more organized and personalized experience.
 
 ---
 
 ## Main Features
 
-### Smart Destination Discovery
-Uses traveler preferences, trip dates, budget, weather, and other travel information to help recommend suitable destinations.
-
-### Personalized Travel Preferences
-Travelers can define their preferred:
-
-- Weather
-- Environment
-- Trip pace
-- Crowd level
-- Food preferences
-- Activities
-- Travel restrictions
-- Travel type
-
-### Single-City & Multi-City Planning
-Travelers can plan a trip to one city or organize multiple cities across their travel dates.
-
-### Smart Itinerary
-Creates a personalized daily itinerary containing suggested places, restaurants, hotels, and activities.
-
-### Trip Customization
-After accepting an itinerary, travelers can add, update, or remove places from their trip plan.
-
-### Budget Estimation
-Provides an estimated trip budget covering major travel expense categories.
-
-### Travel Preparation
-Supports travelers with useful information such as:
-
-- Weather
-- Public holidays
-- Packing suggestions
-- Transportation suggestions
-
-### Community
-Travelers can publish and browse travel experiences and recommendations.
-
-### Traveler Matching
-Travelers can check in to their current destination and discover nearby travelers.
-
-### Communication
-The platform supports Email, WhatsApp, and in-site chat for selected travel features.
+- AI-powered destination recommendations and comparisons.
+- Personalized travel planning based on preferences, budget, and travel dates.
+- Single-city and multi-city trip planning.
+- Smart daily itinerary generation and trip customization.
+- Trip budget estimation and travel preparation support.
+- Community posts and destination-related travel experiences.
+- Location-based city guide after arrival.
+- Traveler matching, invitations, and chat.
+- Email and WhatsApp support for selected travel information.
 
 ---
 
 ## Core User Flow
 
 ```mermaid
-flowchart TD
+flowchart LR
 
-    A[Register / Login]
-    --> B[Create Travel Request]
+    A[Create Travel Request]
+    --> B[Set Travel Preferences]
 
-    B --> C[Add Dates, Budget & Travel Type]
+    B --> C[Choose or Recommend Destination]
 
-    C --> D[Set Travel Preferences]
+    C --> D[Plan Cities & Trip]
 
-    D --> E{Does the traveler know the destination?}
+    D --> E[Generate Smart Itinerary]
 
-    E -->|No| F[AI Destination Recommendation]
+    E --> F[Customize & Prepare Trip]
 
-    E -->|Yes| G[Select Destination]
+    F --> G[Travel & Check In]
 
-    F --> G
-
-    G --> H[Create Trip]
-
-    H --> I{City Planning Mode}
-
-    I -->|Single City| K[Smart Itinerary]
-
-    I -->|Multi-City| J[Plan Trip Cities]
-
-    J --> K
-
-    K --> L[Review Itinerary]
-
-    L --> M[Accept & Customize Trip Places]
-
-    M --> N[Trip Budget & Travel Preparation]
-
-    N --> O[Travel to Destination]
-
-    O --> P[Check In]
-
-    P --> Q[Explore Community & Nearby Travelers]
-
-    Q --> R[TravelMatch & Chat]
+    G --> H[City Guide, Community & TravelMatch]
 ```
 
 ---
 
-# Class Diagram
+## Class Diagram
 
-The following diagram represents the **17 main entities** in SahlDarbak and their relationships.
+The following class diagram represents the **17 main entities** in SahlDarbak and their relationships.
 
 ```mermaid
 classDiagram
@@ -318,49 +246,30 @@ classDiagram
 
 
     User "1" --> "0..1" Profile : has
-
-    User "1" --> "0..*" TravelRequest : creates
-
-    User "1" --> "0..*" Trip : owns
-
     User "1" --> "0..1" TravelPresence : checks in
-
+    User "1" --> "0..*" TravelRequest : creates
+    User "1" --> "0..*" Trip : owns
     User "1" --> "0..*" CommunityPost : publishes
 
-
     TravelRequest "1" --> "0..1" GeneralPreference : has
-
     TravelRequest "1" --> "0..*" FoodPreference : has
-
     TravelRequest "1" --> "0..*" ActivityPreference : has
-
     TravelRequest "1" --> "0..*" TravelRestriction : has
-
     TravelRequest "1" --> "0..*" Child : includes
-
     TravelRequest "1" --> "0..1" Trip : creates
 
-
     Trip "1" --> "0..*" TripCity : contains
-
     Trip "1" --> "0..1" Itinerary : has
-
     Trip "1" --> "0..1" TripBudgetEstimate : has
-
-    Trip "1" --> "0..1" TravelPresence : active presence
-
+    Trip "1" --> "0..1" TravelPresence : current presence
 
     Itinerary "1" --> "0..*" TripPlace : contains
 
+    User "1" --> "0..*" TravelMatch : sends
+    User "1" --> "0..*" TravelMatch : receives
 
-    User "1" --> "0..*" TravelMatch : sender
-
-    User "1" --> "0..*" TravelMatch : receiver
-
-
-    User "1" --> "0..*" BlockedUser : blocker
-
-    User "1" --> "0..*" BlockedUser : blocked user
+    User "1" --> "0..*" BlockedUser : blocks
+    User "1" --> "0..*" BlockedUser : is blocked
 ```
 
 ---
