@@ -201,6 +201,10 @@ public class TransportationAIService {
                    accessibility restriction or another restriction
                    that makes long walking unsuitable.
 
+                Respond entirely in Arabic.
+                Return the response in the required JSON format.
+                Do not add any extra text outside the JSON.
+                
                 9. Return ONLY valid JSON.
 
                 10. Do not use Markdown.

@@ -328,6 +328,56 @@ const translations = {
         imBlEmpty: "ما حظرت أحد",
         imBlUnblock: "فك الحظر",
         imBlUnblockDone: "تم فك الحظر",
+
+        // =========================
+        // SAHIL DARBAK FEATURES
+        // =========================
+
+        tripTitle: "رحلتي",
+        aiTravelAssistant: "مساعد السفر بالذكاء الاصطناعي",
+
+        packingTitle: "🎒 جهز حقيبتك بذكاء",
+        packingDescription:
+            "خل الذكاء الاصطناعي يجهز لك قائمة مخصصة بناءً على وجهتك والطقس والأنشطة وتفضيلات رحلتك.",
+        generatePacking: "أنشئ قائمة التجهيز",
+        packingLoading: "نجهز حقيبتك 🎒",
+        packingLoadingDescription:
+            "نحلل وجهتك والطقس وأنشطتك عشان نطلع لك قائمة مناسبة لرحلتك.",
+        packingSummaryTitle: "🎒 قائمة تجهيز رحلتك",
+        packingSummaryDescription:
+            "قائمة مخصصة لرحلتك بالذكاء الاصطناعي.",
+
+        clothing: "👕 الملابس",
+        shoes: "👟 الأحذية",
+        weatherEssentials: "🌦️ مستلزمات الطقس",
+        activityEssentials: "🏕️ مستلزمات الأنشطة",
+        travelEssentials: "🧳 مستلزمات السفر",
+        healthAndPersonal: "🩺 الصحة والعناية الشخصية",
+        packingTips: "💡 نصائح لرحلتك",
+
+        transportationTitle: "🚗 مساعد التنقل",
+        generateTransportation: "اقترح طريقة التنقل",
+        transportationLoading: "نبحث عن أفضل طريقة للتنقل...",
+        sendTransportationEmail: "أرسل الاقتراحات إلى بريدي",
+        sendingTransportationEmail: "جاري الإرسال...",
+        transportationEmailSent: "تم إرسال الاقتراحات إلى بريدك ✓",
+        transportationEmailError:
+            "تعذر إرسال الاقتراحات إلى بريدك.",
+
+        destinationRecommendation: "اقترح لي وجهة",
+        chooseDestination: "اختر هذه الوجهة",
+        destinationRecommendationLoading:
+            "نبحث عن أفضل الوجهات لك...",
+
+        countryComparison: "مقارنة الدول",
+        countryComparisonTitle: "محتار وين تسافر؟",
+        countryComparisonDescription:
+            "خل الذكاء الاصطناعي يقارن لك بين وجهتين ويساعدك تختار الأنسب.",
+        compareCountries: "قارن الدول",
+        country1: "الدولة الأولى",
+        country2: "الدولة الثانية",
+        finalRecommendation: "التوصية النهائية",
+        comparisonReason: "سبب التوصية",
     },
 
 
@@ -703,6 +753,61 @@ const translations = {
         imBlEmpty: "You haven't blocked anyone",
         imBlUnblock: "Unblock",
         imBlUnblockDone: "Unblocked",
+
+        // =========================
+        // SAHIL DARBAK FEATURES
+        // =========================
+
+        tripTitle: "My Trip",
+        aiTravelAssistant: "AI Travel Assistant",
+
+        packingTitle: "🎒 Pack Smart",
+        packingDescription:
+            "Let AI prepare a personalized packing list based on your destination, weather, activities, and trip preferences.",
+        generatePacking: "Generate Packing List",
+        packingLoading: "Preparing your packing list 🎒",
+        packingLoadingDescription:
+            "We're analyzing your destination, weather, and activities to create a suitable list for your trip.",
+        packingSummaryTitle: "🎒 Your Trip Packing List",
+        packingSummaryDescription:
+            "A personalized AI-generated packing list for your trip.",
+
+        clothing: "👕 Clothing",
+        shoes: "👟 Shoes",
+        weatherEssentials: "🌦️ Weather Essentials",
+        activityEssentials: "🏕️ Activity Essentials",
+        travelEssentials: "🧳 Travel Essentials",
+        healthAndPersonal: "🩺 Health & Personal Care",
+        packingTips: "💡 Trip Tips",
+
+        transportationTitle: "🚗 Transportation Assistant",
+        generateTransportation: "Suggest Transportation",
+        transportationLoading:
+            "Finding the best transportation option...",
+        sendTransportationEmail:
+            "Send Suggestions to My Email",
+        sendingTransportationEmail: "Sending...",
+        transportationEmailSent:
+            "Suggestions sent to your email ✓",
+        transportationEmailError:
+            "Unable to send the suggestions to your email.",
+
+        destinationRecommendation:
+            "Recommend a Destination",
+        chooseDestination: "Choose this destination",
+        destinationRecommendationLoading:
+            "Finding the best destinations for you...",
+
+        countryComparison: "Compare Countries",
+        countryComparisonTitle:
+            "Not Sure Where to Travel?",
+        countryComparisonDescription:
+            "Let AI compare two destinations and help you choose the best one.",
+        compareCountries: "Compare Countries",
+        country1: "First Country",
+        country2: "Second Country",
+        finalRecommendation: "Final Recommendation",
+        comparisonReason: "Reason for Recommendation",
     }
 
 };

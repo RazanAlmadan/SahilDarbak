@@ -89,4 +89,7 @@ public class PageController {
     @GetMapping("/travel-tools")
     public String travelTools() {return "travel-tools";}
 
+    @GetMapping("/country-compare")
+    public String countryCompare() {return "country-compare";}
+
 }
