@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-            window.location.href = "/dashboard";
+            window.location.href = "/";
 
 
         } catch (error) {

@@ -1,350 +1,293 @@
 <div align="center">
 
+<img src="./src/main/resources/static/images/logo.png"
+     alt="SahlDarbak Logo"
+     width="280">
+
 # SahlDarbak | سهل دربك
 
-**Plan Smarter ... Travel Together**
+### Plan Smarter, Travel Together ✈️
 
-A travel companion backend that helps travelers choose a country, plan the cities and places inside it, and connect with other travelers while on the trip.
+**SahlDarbak** is a smart travel-planning and traveler-matching web platform that helps travelers discover suitable destinations, build personalized trips, and explore their journey with greater confidence.
 
 </div>
 
 ---
 
-## About SahlDarbak
+## Project Brief
 
-**SahlDarbak** is a travel-planning and traveler-matching system built for every stage of a trip: before you know where to go, while you plan the details, and once you have arrived. It brings AI recommendations, live weather and holiday data, place search, halal verification, WhatsApp, and Email together in one backend.
+**SahlDarbak** is a smart travel platform designed to support travelers before and during their trips.
 
----
+The platform combines traveler preferences, trip details, artificial intelligence, and external travel data to create a more personalized travel-planning experience.
 
-## Table of Contents
+It helps travelers move from choosing a destination to planning cities and daily activities, preparing for the trip, and exploring their destination after arrival.
 
-- [Problem](#problem)
-- [Solution](#solution)
-- [System Architecture](#system-architecture)
-- [Database Models](#database-models)
-- [Flows Overview](#flows-overview)
-- [Flow 1: Discover](#flow-1-discover-i-dont-know-which-country)
-- [Flow 2: Plan](#flow-2-plan-i-dont-know-the-cities-and-places)
-- [Flow 3: On the Trip](#flow-3-on-the-trip-im-already-in-the-city)
-- [Project Structure](#project-structure)
-- [Running the Project](#running-the-project)
-- [Team](#team)
+SahlDarbak is a **travel planning and assistance platform** and does not provide in-app booking or payment services.
 
 ---
 
 ## Problem
 
-Planning a trip usually means juggling many sources, and traveling alone can feel isolated.
+Planning a trip often requires travelers to use multiple platforms for different needs.
 
-This creates practical problems such as:
+Travelers may need to search separately for destinations, weather, cities, accommodation, restaurants, activities, transportation, budgets, and travel experiences.
 
-- Not knowing which country fits your interests, season, and budget.
-- Missing weather conditions or public holidays at the destination.
-- Not knowing which cities to visit, or how many days each deserves.
-- Building an itinerary by hand, with no check on hotels or halal food.
-- Unclear transport between places.
-- Forgetting important items to pack, such as warm clothes or medication.
-- Having no easy way to meet other travelers who are in the same city.
+This can make travel planning:
+
+- Time-consuming and fragmented.
+- Difficult to personalize.
+- Harder when planning multiple cities.
+- Complicated when considering budget, preferences, or restrictions.
+- Less convenient for travelers who want to explore or connect with others after arriving.
 
 ---
 
 ## Solution
 
-SahlDarbak guides the traveler through the whole journey, depending on what they already know.
+SahlDarbak brings the main stages of the travel journey into one platform.
 
-The system allows travelers to:
+The system uses traveler preferences, trip information, AI, and external data to help users:
 
-- Get AI-recommended countries based on interests, weather, and holidays.
-- Compare two countries and see which fits better.
-- Let AI split a trip across cities and days.
-- Generate a daily itinerary with hotels, restaurants, and halal verification.
-- Get the best transport option between planned places.
-- Estimate the trip budget.
-- Receive a personalized packing list.
-- Publish and browse community posts about trips and countries.
-- Check in to a city and get a local guide.
-- Find nearby travelers, send invites, and chat after acceptance.
-- Block unwanted users.
-- Receive notifications through WhatsApp and Email.
+- Discover suitable destinations.
+- Build personalized travel plans.
+- Organize single-city or multi-city trips.
+- Generate and customize daily itineraries.
+- Estimate trip expenses and prepare for travel.
+- Explore destination-related community experiences.
+- Access a location-based city guide after arrival.
+- Discover and connect with nearby travelers.
+- Receive selected travel information through Email and WhatsApp.
+
+The goal is to reduce the effort required to plan a trip while providing travelers with a more organized and personalized experience.
 
 ---
 
-## System Architecture
+## Main Features
 
-SahlDarbak is a layered **Spring Boot** application. Controllers receive requests, services hold the business logic, repositories talk to MySQL, and AI and external-API services reach out to third-party providers. Errors from any layer are returned in one format by a global exception handler.
+- AI-powered destination recommendations and comparisons.
+- Personalized travel planning based on preferences, budget, and travel dates.
+- Single-city and multi-city trip planning.
+- Smart daily itinerary generation and trip customization.
+- Trip budget estimation and travel preparation support.
+- Community posts and destination-related travel experiences.
+- Location-based city guide after arrival.
+- Traveler matching, invitations, and chat.
+- Email and WhatsApp support for selected travel information.
+
+---
+
+## Core User Flow
 
 ```mermaid
 flowchart LR
-    Client["Client<br/>Frontend / Postman"]
- 
-    subgraph App["SahlDarbak Backend (Spring Boot)"]
-        direction LR
-        Controllers["Controllers<br/>REST /api/v1"]
-        Services["Services<br/>business logic"]
-        AI["AI Services<br/>Gemini prompts"]
-        Ext["ExternalApi<br/>API clients"]
-        Repos["Repositories<br/>Spring Data JPA"]
-        Chat["Chat<br/>WebSocket /chat"]
-    end
- 
-    DB[("MySQL")]
-    Providers["Third-party providers<br/>Gemini, OpenWeather, Nager.Date, Geoapify<br/>Tavily, Nominatim, WhatsApp, Brevo"]
- 
-    Client -->|HTTP| Controllers
-    Client <-->|WebSocket| Chat
-    Controllers --> Services
-    Services --> AI
-    Services --> Ext
-    Services --> Repos
-    Chat --> Repos
-    AI --> Providers
-    Ext --> Providers
-    Repos --> DB
+
+    A[Create Travel Request]
+    --> B[Set Travel Preferences]
+
+    B --> C[Choose or Recommend Destination]
+
+    C --> D[Plan Cities & Trip]
+
+    D --> E[Generate Smart Itinerary]
+
+    E --> F[Customize & Prepare Trip]
+
+    F --> G[Travel & Check In]
+
+    G --> H[City Guide, Community & TravelMatch]
 ```
-
-**Layers**
-
-| Layer | Package | Role |
-|-------|---------|------|
-| Controller | `Controller`, `AI` (AIController) | REST endpoints under `/api/v1`. |
-| Service | `Service` | Business rules for each feature. |
-| AI | `AI` | Builds prompts, calls Gemini, parses JSON into DTOs. |
-| External API | `ExternalApi` | One client class per third-party provider. |
-| Repository | `Repository` | JPA data access to MySQL. |
-| Chat | `Chat` | WebSocket handler and config. |
-| DTO / Api / Advice | `DTO`, `Api`, `Advice` | Request and response shapes, `ApiResponse`, `ApiException`, global error handling. |
 
 ---
 
-## Database Models
+## Class Diagram
 
-17 entities. A `User` owns a profile, a live location (`TravelPresence`), travel requests, trips, community posts, and the invite and block relations. A `TravelRequest` holds the traveler's preferences and becomes a `Trip`, which holds cities, an itinerary, places, and a budget estimate.
+The following class diagram represents the **17 main entities** in SahlDarbak and their relationships.
 
 ```mermaid
-erDiagram
-    USER {
-        int id PK
-        string email UK
-        string phoneNumber UK
-        string password
-        datetime createdAt
-    }
-    PROFILE {
-        int id PK
-        string fullName
-        date dateOfBirth
-        string gender
-        string country
-        string city
-        string bio
-    }
-    TRAVELPRESENCE {
-        int id PK
-        string country
-        string city
-        datetime checkedInAt
-        double latitude
-        double longitude
-    }
-    TRAVELMATCH {
-        int id PK
-        string message
-        string status
-        datetime createdAt
-    }
-    BLOCKEDUSER {
-        int id PK
-        datetime blockedAt
-    }
-    COMMUNITYPOST {
-        int id PK
-        string title
-        string content
-        string country
-        string city
-    }
-    TRAVELREQUEST {
-        int id PK
-        date startDate
-        date endDate
-        double budget
-        string travelType
-        int groupSize
-        string status
-        string cityPlanMode
-    }
-    GENERALPREFERENCE {
-        int id PK
-        string weather
-        string environment
-        string crowdPreference
-        string tripPace
-    }
-    FOODPREFERENCE {
-        int id PK
-        string foodType
-        boolean isRequired
-    }
-    ACTIVITYPREFERENCE {
-        int id PK
-        string activityType
-        int priority
-    }
-    TRAVELRESTRICTION {
-        int id PK
-        string restrictionType
-        string description
-        boolean isRequired
-    }
-    CHILD {
-        int id PK
-        int age
-    }
-    TRIP {
-        int id PK
-        string country
-        string city
-        string status
-    }
-    TRIPCITY {
-        int id PK
-        string city
-        date startDate
-        date endDate
-        int cityOrder
-    }
-    ITINERARY {
-        int id PK
-        string status
-        datetime generatedAt
-        text planJson
-    }
-    TRIPPLACE {
-        int id PK
-        string placeType
-        string name
-        string city
-        datetime scheduledAt
-    }
-    TRIPBUDGETESTIMATE {
-        int id PK
-        double totalEstimate
-        string currency
-        string summary
+classDiagram
+
+    class User {
+        +Integer id
+        +String email
+        +String phoneNumber
+        +String password
+        +LocalDate createdAt
     }
 
-    USER ||--o| PROFILE : has
-    USER ||--o| TRAVELPRESENCE : "checks in"
-    USER ||--o{ TRAVELMATCH : sends
-    USER ||--o{ TRAVELMATCH : receives
-    USER ||--o{ BLOCKEDUSER : blocks
-    USER ||--o{ BLOCKEDUSER : "is blocked by"
-    USER ||--o{ COMMUNITYPOST : writes
-    USER ||--o{ TRAVELREQUEST : creates
-    USER ||--o{ TRIP : owns
+    class Profile {
+        +Integer id
+        +String fullName
+        +LocalDate dateOfBirth
+        +String gender
+        +String country
+        +String city
+        +String bio
+    }
 
-    TRAVELREQUEST ||--o| TRIP : becomes
-    TRAVELREQUEST ||--o| GENERALPREFERENCE : has
-    TRAVELREQUEST ||--o{ FOODPREFERENCE : has
-    TRAVELREQUEST ||--o{ ACTIVITYPREFERENCE : has
-    TRAVELREQUEST ||--o{ TRAVELRESTRICTION : has
-    TRAVELREQUEST ||--o{ CHILD : includes
+    class TravelRequest {
+        +Integer id
+        +LocalDate startDate
+        +LocalDate endDate
+        +Double budget
+        +String travelType
+        +Integer groupSize
+        +Integer adultsCount
+        +String status
+        +String cityPlanMode
+    }
 
-    TRIP ||--o{ TRIPCITY : visits
-    TRIP ||--o| ITINERARY : has
-    TRIP ||--o| TRIPBUDGETESTIMATE : estimates
-    TRIP |o--o| TRAVELPRESENCE : "linked to"
-    ITINERARY ||--o{ TRIPPLACE : contains
+    class GeneralPreference {
+        +Integer id
+        +String weather
+        +String environment
+        +String crowdPreference
+        +String tripPace
+    }
+
+    class FoodPreference {
+        +Integer id
+        +String foodType
+        +Boolean isRequired
+    }
+
+    class ActivityPreference {
+        +Integer id
+        +String activityType
+        +Integer priority
+    }
+
+    class TravelRestriction {
+        +Integer id
+        +String restrictionType
+        +String description
+        +Boolean isRequired
+    }
+
+    class Child {
+        +Integer id
+        +Integer age
+    }
+
+    class Trip {
+        +Integer id
+        +String country
+        +String city
+        +String status
+    }
+
+    class TripCity {
+        +Integer id
+        +String city
+        +LocalDate startDate
+        +LocalDate endDate
+        +Integer cityOrder
+        +String status
+    }
+
+    class Itinerary {
+        +Integer id
+        +String status
+        +LocalDateTime generatedAt
+        +String planJson
+    }
+
+    class TripPlace {
+        +Integer id
+        +String placeType
+        +String name
+        +String city
+        +String officialWebsite
+        +LocalDate scheduledAt
+        +String notes
+    }
+
+    class TripBudgetEstimate {
+        +Integer id
+        +Double flightEstimate
+        +Double accommodationEstimate
+        +Double foodEstimate
+        +Double transportationEstimate
+        +Double activitiesEstimate
+        +Double totalEstimate
+        +String currency
+        +String summary
+        +LocalDateTime generatedAt
+    }
+
+    class TravelPresence {
+        +Integer id
+        +String country
+        +String city
+        +LocalDate checkedInAt
+        +Double latitude
+        +Double longitude
+    }
+
+    class TravelMatch {
+        +Integer id
+        +String message
+        +String status
+        +LocalDate createdAt
+    }
+
+    class BlockedUser {
+        +Integer id
+        +LocalDate blockedAt
+    }
+
+    class CommunityPost {
+        +Integer id
+        +String title
+        +String content
+        +String country
+        +String city
+        +Integer rating
+    }
+
+
+    User "1" --> "0..1" Profile : has
+    User "1" --> "0..1" TravelPresence : checks in
+    User "1" --> "0..*" TravelRequest : creates
+    User "1" --> "0..*" Trip : owns
+    User "1" --> "0..*" CommunityPost : publishes
+
+    TravelRequest "1" --> "0..1" GeneralPreference : has
+    TravelRequest "1" --> "0..*" FoodPreference : has
+    TravelRequest "1" --> "0..*" ActivityPreference : has
+    TravelRequest "1" --> "0..*" TravelRestriction : has
+    TravelRequest "1" --> "0..*" Child : includes
+    TravelRequest "1" --> "0..1" Trip : creates
+
+    Trip "1" --> "0..*" TripCity : contains
+    Trip "1" --> "0..1" Itinerary : has
+    Trip "1" --> "0..1" TripBudgetEstimate : has
+    Trip "1" --> "0..1" TravelPresence : current presence
+
+    Itinerary "1" --> "0..*" TripPlace : contains
+
+    User "1" --> "0..*" TravelMatch : sends
+    User "1" --> "0..*" TravelMatch : receives
+
+    User "1" --> "0..*" BlockedUser : blocks
+    User "1" --> "0..*" BlockedUser : is blocked
 ```
-
----
-
-## Flows Overview
-
-SahlDarbak is organized around **what the traveler already knows**. Each flow below is written by the developer who built it.
-
-| Flow | Traveler's situation | What it does |
-|------|----------------------|--------------|
-| **1. Discover** | "I don't know which country." | AI suggests and compares countries using interests, weather, and holidays. Also covers packing list, transportation, and community posts. |
-| **2. Plan** | "I picked a country, but not the cities and places." | AI chooses cities and splits days, builds the itinerary with hotels, restaurants and halal checks, estimates the budget, and emails the plan. |
-| **3. Explore** | "I'm already in a city." | Check-in, city guide, nearby travelers, invites, block, WhatsApp notifications, and in-site chat. |
-
----
-
-## Flow 1: Discover (I don't know which country)
-
-> Owner: _TBD_
-
-_Goal, Steps, Endpoints, Business Rules, AI / External APIs used._
-
----
-
-## Flow 2: Plan (I don't know the cities and places)
-
-> Owner: _TBD_
-
-_Goal, Steps, Endpoints, Business Rules, AI / External APIs used._
-
----
-
-## Flow 3: On the Trip (I'm already in the city)
-
-> Owner: Mohammed
-
-_Goal, Steps, Endpoints, Business Rules, AI / External APIs used._
-
----
-
-## Project Structure
-
-```text
-com.example.sahldarbak
-├── Advice          # global exception handling
-├── AI              # Gemini-powered services and AIController
-├── Api             # ApiResponse, ApiException
-├── Chat            # WebSocket handler and config
-├── Controller      # REST controllers
-├── DTO             # request/response objects
-├── ExternalApi     # third-party API clients
-├── Model           # JPA entities
-├── Repository      # Spring Data repositories
-├── Service         # business logic
-└── SahlDarbakApplication.java
-```
-
----
-
-## Running the Project
-
-**Requirements:** Java 17, Maven, MySQL.
-
-1. Create the database `SahlDarbak` and set the connection in `application.properties`.
-2. Set these environment variables (never commit real values):
-
-| Variable | Used for |
-|----------|----------|
-| `GEMINI_API_KEY` | Gemini AI |
-| `OPENWEATHER_API_KEY` | Weather |
-| `GEOAPIFY_API_KEY` | Places and routes |
-| `TAVILY_API_KEY` | Hotel and halal search |
-| `BREVO_API_KEY` | Email |
-| `WHATSAPP_PHONE_NUMBER_ID` | WhatsApp |
-| `WHATSAPP_ACCESS_TOKEN` | WhatsApp (temporary tokens expire every 24 hours) |
-
-3. Run the app:
-
-```bash
-mvn spring-boot:run
-```
-
-The API is available at `http://localhost:8080/api/v1`.
 
 ---
 
 ## Team
 
-| Name | Flow |
-|------|------|
-| Razan Almadan | Flow 1: Discover |
-| Lama Alharbi | Flow 2: Plan |
-| Mohammed Aljubaili | Flow 3: Explore | 
+| Team Member | Main Area |
+|---|---|
+| **Razan Almadan** | Discover |
+| **Lama Alharbi** | Plan |
+| **Mohammed Aljubaili** | Explore |
+
+---
+
+<div align="center">
+
+### SahlDarbak | سهل دربك ✈️
+
+**Plan Smarter, Travel Together**
+
+</div>
