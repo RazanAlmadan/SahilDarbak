@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar"
+      dir="rtl"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>سهل دربك | مقارنة الوجهات</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/base.css}"
+          href="/css/base.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/country-compare.css}"
+          href="/css/country-compare.css">
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar.html :: navbar}"></div>
+
+<main class="compare-page">
+
+    <section class="compare-hero">
+        <div class="compare-container">
+            <span class="compare-tag">
+                <span class="material-symbols-rounded">compare_arrows</span>
+                محتار بين وجهتين؟
+            </span>
+
+            <h1>خل الذكاء الاصطناعي يساعدك تختار 🌍</h1>
+
+            <p>
+                اختر رحلتك وقارن بين وجهتين حسب تفضيلاتك،
+                الأنشطة، الطقس، البيئة، الزحمة والميزانية.
+            </p>
+        </div>
+    </section>
+
+    <section class="compare-content">
+        <div class="compare-container">
+
+            <div id="comparePageMessage"
+                 class="compare-message hidden"></div>
+
+            <section class="compare-card">
+
+                <div class="compare-card-heading">
+                    <div>
+                        <span class="mini-label">رحلتك</span>
+                        <h2>اختر طلب الرحلة</h2>
+                    </div>
+
+                    <span class="material-symbols-rounded heading-icon">
+                        luggage
+                    </span>
+                </div>
+
+                <label class="field-label"
+                       for="travelRequestSelect">
+                    الرحلة التي تريد المقارنة بناءً عليها
+                </label>
+
+                <select id="travelRequestSelect"
+                        class="compare-select">
+                    <option value="">
+                        جاري تحميل رحلاتك...
+                    </option>
+                </select>
+
+            </section>
+
+            <section class="compare-card">
+
+                <div class="compare-card-heading">
+                    <div>
+                        <span class="mini-label">قارن</span>
+                        <h2>اختر وجهتين</h2>
+                    </div>
+
+                    <span class="material-symbols-rounded heading-icon">
+                        public
+                    </span>
+                </div>
+
+                <div class="country-fields">
+
+                    <div class="country-field">
+                        <label class="field-label"
+                               for="country1">
+                            الوجهة الأولى
+                        </label>
+
+                        <input id="country1"
+                               class="compare-input"
+                               type="text"
+                               placeholder="مثال: كندا"
+                               autocomplete="off">
+                    </div>
+
+                    <div class="country-vs">
+                        <span>VS</span>
+                    </div>
+
+                    <div class="country-field">
+                        <label class="field-label"
+                               for="country2">
+                            الوجهة الثانية
+                        </label>
+
+                        <input id="country2"
+                               class="compare-input"
+                               type="text"
+                               placeholder="مثال: اليابان"
+                               autocomplete="off">
+                    </div>
+
+                </div>
+
+                <button id="compareButton"
+                        type="button"
+                        class="compare-button">
+
+                    <span class="material-symbols-rounded">
+                        auto_awesome
+                    </span>
+
+                    قارن بين الوجهتين
+                </button>
+
+            </section>
+
+            <section id="comparisonResult"
+                     class="comparison-result hidden">
+            </section>
+
+        </div>
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/footer.html :: footer}"></div>
+
+<script th:src="@{/js/language.js}"
+        src="/js/language.js"></script>
+
+<script th:src="@{/js/base.js}"
+        src="/js/base.js"></script>
+
+<script th:src="@{/js/country-compare.js}"
+        src="/js/country-compare.js"></script>
+
+</body>
+</html>

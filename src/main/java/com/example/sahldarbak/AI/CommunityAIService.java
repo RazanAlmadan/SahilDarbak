@@ -52,6 +52,11 @@ public class CommunityAIService {
                     - It contains dangerous or illegal instructions.
                     - It is spam or clearly unrelated to the travel community.
 
+                    
+                    Respond entirely in Arabic.
+                    Return the response in the required JSON format.
+                    Do not add any extra text outside the JSON.
+
                     Return ONLY valid JSON.
 
                     Use EXACTLY this structure:

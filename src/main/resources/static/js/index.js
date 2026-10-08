@@ -11,7 +11,9 @@ const routes = {
 
     travelRequest: "/travel-request",
 
-    destinationRecommendation: "/destination-recommendation",
+    destinationRecommendation: "/trip-start",
+
+    countryComparison: "/country-compare",
 
     myTrips: "/trips",
 
@@ -245,6 +247,30 @@ function setupHomeButtons() {
 
                 navigateTo(
                     routes.destinationRecommendation
+                );
+
+            }
+        );
+
+    }
+
+    // Country Comparison
+
+    const comparisonButton =
+        document.querySelector(
+            "[data-action='country-comparison']"
+        );
+
+    if (comparisonButton) {
+
+        comparisonButton.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                navigateTo(
+                    routes.countryComparison
                 );
 
             }

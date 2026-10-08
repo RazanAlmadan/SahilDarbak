@@ -282,6 +282,11 @@ public class PackingListAIService {
                 13. Do not use Markdown.
                 14. Do not add explanations outside the JSON.
 
+                
+                Respond entirely in Arabic.
+                Return the response in the required JSON format.
+                Do not add any extra text outside the JSON.
+
                 Use exactly this JSON structure:
 
                 {
