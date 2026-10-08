@@ -328,6 +328,7 @@ const translations = {
         imBlEmpty: "ما حظرت أحد",
         imBlUnblock: "فك الحظر",
         imBlUnblockDone: "تم فك الحظر",
+        imHomeCityGuide: "دليل مدينتك",
     },
 
 
@@ -703,6 +704,7 @@ const translations = {
         imBlEmpty: "You haven't blocked anyone",
         imBlUnblock: "Unblock",
         imBlUnblockDone: "Unblocked",
+        imHomeCityGuide: "Your city guide",
     }
 
 };
