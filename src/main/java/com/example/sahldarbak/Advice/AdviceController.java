@@ -22,11 +22,11 @@ import java.sql.SQLIntegrityConstraintViolationException;
 @ControllerAdvice
 public class AdviceController {
     // Our Exception
-//    @ExceptionHandler(value = ApiException.class)
-//    public ResponseEntity<?> ApiException(ApiException e) {
-//        String message = e.getMessage();
-//        return ResponseEntity.status(400).body(new ApiResponse(message));
-//    }
+    @ExceptionHandler(value = ApiException.class)
+    public ResponseEntity<?> ApiException(ApiException e) {
+        String message = e.getMessage();
+        return ResponseEntity.status(400).body(new ApiResponse(message));
+    }
 
     // Server Validation Exception
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -80,10 +80,10 @@ public class AdviceController {
         return ResponseEntity.status(400).body(new ApiResponse(e.getMessage()));
     }
 
-//    @ExceptionHandler(value = RuntimeException.class)
-//    public ResponseEntity<ApiResponse> RuntimeException(RuntimeException e) {
-//        return ResponseEntity.status(400).body(new ApiResponse(e.getMessage()));
-//    }
+    @ExceptionHandler(value = RuntimeException.class)
+    public ResponseEntity<ApiResponse> RuntimeException(RuntimeException e) {
+        return ResponseEntity.status(400).body(new ApiResponse(e.getMessage()));
+    }
 
 
     // wrong path
@@ -106,22 +106,7 @@ public class AdviceController {
         String message = e.getMessage();
         return ResponseEntity.status(400).body(message);
     }
-    @ExceptionHandler(value = ApiException.class)
-    public ResponseEntity<?> ApiException(ApiException e) {
 
-        e.printStackTrace();
 
-        String message = e.getMessage();
-        return ResponseEntity.status(400)
-                .body(new ApiResponse(message));
-    }
 
-    @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<ApiResponse> RuntimeException(RuntimeException e) {
-
-        e.printStackTrace();
-
-        return ResponseEntity.status(400)
-                .body(new ApiResponse(e.getMessage()));
-    }
 }
